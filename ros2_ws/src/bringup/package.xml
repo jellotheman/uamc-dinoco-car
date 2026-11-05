@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>uamc_bringup</name><version>0.1.0</version><description>Round 1 launch and localization configuration.</description>
+  <maintainer email="team@example.com">UAMC Team</maintainer><license>Apache-2.0</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>launch</exec_depend><exec_depend>launch_ros</exec_depend><exec_depend>ament_index_python</exec_depend>
+  <exec_depend>uamc_control</exec_depend><exec_depend>uamc_io</exec_depend><exec_depend>uamc_perception</exec_depend><exec_depend>uamc_sim</exec_depend><exec_depend>robot_localization</exec_depend><exec_depend>joy</exec_depend>
+  <test_depend>python3-pytest</test_depend><test_depend>python3-yaml</test_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

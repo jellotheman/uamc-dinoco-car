@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="uamc">
+  <!-- Dimensions and sensor poses are provisional, not hardware calibration. -->
+  <link name="base_link">
+    <inertial><origin xyz="0.116 0 0.04"/><mass value="2.0"/>
+      <inertia ixx="0.008" ixy="0" ixz="0" iyy="0.024" iyz="0" izz="0.028"/></inertial>
+    <visual><origin xyz="0.116 0 0.055"/><geometry><box size="0.32 0.14 0.06"/></geometry><material name="body"><color rgba="0.05 0.18 0.65 1"/></material></visual>
+    <collision><origin xyz="0.116 0 0.055"/><geometry><box size="0.32 0.14 0.06"/></geometry></collision>
+  </link>
+  <xacro:macro name="wheel" params="name x y front">
+    <xacro:if value="${front}">
+      <link name="${name}_knuckle">
+        <inertial><mass value="0.03"/><inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/></inertial>
+      </link>
+      <joint name="${name}_steer_joint" type="revolute">
+        <parent link="base_link"/><child link="${name}_knuckle"/><origin xyz="${x} ${y} 0"/>
+        <axis xyz="0 0 1"/><limit lower="-0.65" upper="0.65" effort="10" velocity="5"/>
+      </joint>
+    </xacro:if>
+    <link name="${name}_wheel">
+      <inertial><mass value="0.10"/><inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00010" iyz="0" izz="0.00006"/></inertial>
+      <visual><origin rpy="1.57079632679 0 0"/><geometry><cylinder radius="0.045" length="0.03"/></geometry><material name="tire"><color rgba="0.08 0.08 0.08 1"/></material></visual>
+      <collision><origin rpy="1.57079632679 0 0"/><geometry><cylinder radius="0.045" length="0.03"/></geometry></collision>
+    </link>
+    <joint name="${name}_wheel_joint" type="continuous">
+      <xacro:if value="${front}"><parent link="${name}_knuckle"/><origin xyz="0 0 0"/></xacro:if>
+      <xacro:unless value="${front}"><parent link="base_link"/><origin xyz="${x} ${y} 0"/></xacro:unless>
+      <child link="${name}_wheel"/><axis xyz="0 1 0"/><limit effort="10" velocity="30"/>
+    </joint>
+    <gazebo reference="${name}_wheel"><mu1>1.0</mu1><mu2>1.0</mu2></gazebo>
+  </xacro:macro>
+  <xacro:wheel name="front_left" x="0.232" y="0.0825" front="${True}"/>
+  <xacro:wheel name="front_right" x="0.232" y="-0.0825" front="${True}"/>
+  <xacro:wheel name="rear_left" x="0" y="0.0825" front="${False}"/>
+  <xacro:wheel name="rear_right" x="0" y="-0.0825" front="${False}"/>
+  <link name="camera_link"/><joint name="camera_mount" type="fixed"><parent link="base_link"/><child link="camera_link"/><origin xyz="0.20 0 0.17" rpy="0 0.30 0"/></joint>
+  <link name="camera_optical_frame"/><joint name="camera_optical_joint" type="fixed"><parent link="camera_link"/><child link="camera_optical_frame"/><origin rpy="-1.57079632679 0 -1.57079632679"/></joint>
+  <link name="laser_link"/><joint name="laser_mount" type="fixed"><parent link="base_link"/><child link="laser_link"/><origin xyz="0.23 0 0.13"/></joint>
+  <link name="imu_link"/><joint name="imu_mount" type="fixed"><parent link="base_link"/><child link="imu_link"/><origin xyz="0.10 0 0.10"/></joint>
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera"><always_on>true</always_on><update_rate>20</update_rate>
+      <topic>/camera/image_raw</topic><gz_frame_id>camera_optical_frame</gz_frame_id>
+      <camera><camera_info_topic>/camera/camera_info</camera_info_topic><horizontal_fov>1.2</horizontal_fov>
+        <image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>0.03</near><far>15</far></clip></camera>
+    </sensor>
+  </gazebo>
+  <gazebo reference="laser_link">
+    <sensor name="lidar" type="gpu_lidar"><always_on>true</always_on><update_rate>10</update_rate><topic>/scan</topic><gz_frame_id>laser_link</gz_frame_id>
+      <lidar><scan><horizontal><samples>720</samples><resolution>1</resolution><min_angle>-3.14159265</min_angle><max_angle>3.14159265</max_angle></horizontal></scan><range><min>0.05</min><max>12</max><resolution>0.01</resolution></range></lidar>
+    </sensor>
+  </gazebo>
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu"><always_on>true</always_on><update_rate>50</update_rate><topic>/imu/data</topic><gz_frame_id>imu_link</gz_frame_id></sensor>
+  </gazebo>
+  <gazebo>
+    <plugin filename="gz-sim-ackermann-steering-system" name="gz::sim::systems::AckermannSteering">
+      <left_joint>rear_left_wheel_joint</left_joint><right_joint>rear_right_wheel_joint</right_joint>
+      <left_steering_joint>front_left_steer_joint</left_steering_joint><right_steering_joint>front_right_steer_joint</right_steering_joint>
+      <wheel_separation>0.165</wheel_separation><kingpin_width>0.165</kingpin_width><wheel_base>0.232</wheel_base><wheel_radius>0.045</wheel_radius><steering_limit>0.5</steering_limit>
+      <topic>/model/uamc/cmd_vel</topic><odom_topic>/odometry/wheel</odom_topic><frame_id>odom</frame_id><child_frame_id>base_link</child_frame_id>
+      <min_velocity>-0.1</min_velocity><max_velocity>0.3</max_velocity><min_acceleration>-1.0</min_acceleration><max_acceleration>1.0</max_acceleration>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"><topic>/joint_states</topic></plugin>
+  </gazebo>
+</robot>

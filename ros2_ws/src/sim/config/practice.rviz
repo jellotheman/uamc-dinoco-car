@@ -1,0 +1,26 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Fixed Frame: base_link
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+    - Class: rviz_default_plugins/RobotModel
+      Name: Robot
+      Description Topic:
+        Value: /robot_description
+    - Class: rviz_default_plugins/LaserScan
+      Name: Scan
+      Topic:
+        Value: /scan
+        Reliability Policy: Best Effort
+    - Class: rviz_default_plugins/Path
+      Name: Lane
+      Topic:
+        Value: /perception/lane
+    - Class: rviz_default_plugins/Path
+      Name: Plan
+      Topic:
+        Value: /planning/path
