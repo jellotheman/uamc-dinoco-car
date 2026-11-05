@@ -7,7 +7,7 @@ RViz configuration, launch selection interface or runtime tuning is implemented
 by this document. It describes the current `v1` code after commit `69201a0`.
 
 For primary-source details and the reference project comparison, see
-[world-selection-research.md](../development/world-selection-research.md).
+[world-selection-research.md](world-selection-research.md).
 
 ## Findings from the current code
 

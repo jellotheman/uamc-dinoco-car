@@ -10,19 +10,19 @@ Physical actuation and real sensor integration remain incomplete. Simulator resu
 - [Vehicle observations](reference/vehicle-observations.md): what the supplied images show and what they cannot establish.
 - [Embedded platform](../ros2_ws/src/Embedded_Platform/README.md): board identification, transport and bench integration; its firmware folder is a placeholder.
 - [Vehicle I/O](../ros2_ws/src/io/README.md): manual input and disabled/fake transport behavior.
+- [ROS module guides](../ros2_ws/src/README.md): package-by-package purpose and ROS 2 architecture.
 
 ## Development and evidence
 
-- [Round 1 implementation plan](../ROUND1_PLAN.md): original specification and acceptance targets; use the guide and evidence below for current status.
 - [Scenario implementation](development/scenario-implementation.md): selected worlds, usage and current validation status.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
-- [World-selection research](development/world-selection-research.md): upstream and launch-configuration background, based on an earlier snapshot.
-- [Documentation audit](development/documentation-audit.md): each file's purpose, disposition and confidence.
+- [Documentation audit](development/documentation-audit.md): document purpose and disposition.
 
-## Historical planning
+## Archive
 
-[WSL and RViz investigation](archive/launch-troubleshooting.md) preserves a dated incident, mitigation and verification record.
-
-[World-selection scope](archive/world-selection-scope.md) records a proposal and code snapshot, not a current runtime guide. Some work may have changed since it was written; the current guide and implementation evidence take precedence.
+- [Round 1 implementation plan](archive/ROUND1_PLAN.md): original specification and acceptance targets. It records intended scope; current implementation and validation are described in the guide and evidence files.
+- [World-selection research](archive/world-selection-research.md): dated upstream research based on the pre-scenario implementation snapshot. The current [scenario notes](development/scenario-implementation.md) describe what was implemented.
+- [World-selection scope](archive/world-selection-scope.md): superseded proposal preserved for design rationale.
+- [WSL and RViz investigation](archive/launch-troubleshooting.md): dated incident and verification record; use the current guide and runbook for operation.
 
 A previous session handoff may exist locally under `docs/archive/HANDOFF.md`. It is ignored by Git and is not part of repository clones.

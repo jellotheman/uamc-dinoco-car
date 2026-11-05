@@ -28,13 +28,13 @@ Ctrl+P to open a file by name, and Terminal > New Terminal for a shell.
 
 ```text
 uamc/
-  ROUND1_PLAN.md                  implementation plan and acceptance targets
   docs/
     README.md                     documentation index
     guides/                       user guide and developer runbook
     reference/                    hardware research and vehicle observations
     development/                  validation, investigations and audit
-    archive/                      historical planning and local-only handoff
+    archive/                      original plan, historical research and local-only handoff
+      ROUND1_PLAN.md              original implementation plan and acceptance targets
   ros2_ws/
     src/
       interfaces/                 message and action definitions

@@ -1,6 +1,6 @@
 # UAMC Round 1 implementation plan
 
-> Original implementation specification and acceptance targets. This plan records intended work; see the [documentation index](docs/README.md) for current operation, evidence, and outstanding hardware work.
+> Original implementation specification and acceptance targets. This plan records intended work; see the [documentation index](../README.md) for current operation, evidence, and outstanding hardware work.
 
 ## Scope and deliverables
 
