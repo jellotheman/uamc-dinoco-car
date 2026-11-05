@@ -82,3 +82,31 @@ def test_publish_failure_with_live_context_propagates(monkeypatch):
 
     node.destroy_node.assert_called_once()
     shutdown.assert_called_once()
+
+
+@pytest.mark.parametrize('context_active,error,should_raise', [
+    (False, RuntimeError("Unable to convert call argument '0' to Python object"), False),
+    (True, RuntimeError("Unable to convert call argument '0' to Python object"), True),
+    (False, RuntimeError('unexpected executor failure'), True),
+])
+def test_vehicle_subscription_take_race_during_shutdown(monkeypatch, context_active,
+                                                        error, should_raise):
+    # The Jazzy executor can be interrupted between taking a subscription and
+    # converting its result. Suppress only this known error after context exit.
+    node = Mock()
+    monkeypatch.setattr(vehicle_io, 'VehicleIO', Mock(return_value=node))
+    monkeypatch.setattr(vehicle_io.rclpy, 'init', Mock())
+    monkeypatch.setattr(vehicle_io.rclpy, 'spin', Mock(side_effect=error))
+    monkeypatch.setattr(vehicle_io.rclpy, 'ok', Mock(return_value=context_active))
+    shutdown = Mock()
+    monkeypatch.setattr(vehicle_io.rclpy, 'try_shutdown', shutdown)
+
+    if should_raise:
+        with pytest.raises(RuntimeError) as raised:
+            vehicle_io.main()
+        assert str(raised.value) == str(error)
+    else:
+        vehicle_io.main()
+
+    node.destroy_node.assert_called_once()
+    shutdown.assert_called_once()

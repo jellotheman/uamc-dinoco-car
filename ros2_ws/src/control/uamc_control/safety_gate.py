@@ -6,6 +6,7 @@ from functools import wraps
 
 import rclpy
 from rclpy.executors import ExternalShutdownException
+from rclpy.impl.implementation_singleton import rclpy_implementation as _rclpy
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.clock import Clock, ClockType
@@ -267,8 +268,16 @@ def main():
         pass
     finally:
         node.armed = False
-        if rclpy.ok():
-            node.tick()
-        executor.shutdown()
-        node.destroy_node()
-        rclpy.try_shutdown()
+        try:
+            if rclpy.ok():
+                try:
+                    node.tick()
+                except _rclpy.RCLError:
+                    # A signal can invalidate the context after the guard.
+                    # A publisher failure with a live context is still an error.
+                    if rclpy.ok():
+                        raise
+        finally:
+            executor.shutdown()
+            node.destroy_node()
+            rclpy.try_shutdown()

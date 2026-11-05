@@ -75,3 +75,16 @@ Gazebo truth rather than treating odometry as a global map.
 The run logs and CSV probes were temporary host artifacts under
 `/tmp/uamc-dimensions-*`; media and recordings were not added to Git. No new
 GUI visual assessment or physical-car test is claimed by these runs.
+
+
+### Shutdown regression found during these checks
+
+After successful runs, Ctrl+C exposed two teardown races: the safety gate
+could publish its final stop after the ROS context closed, and vehicle I/O
+could be interrupted while its executor converted a subscription message.
+The fixes tolerate only the observed shutdown conditions; live-context errors
+and unrelated failures still propagate. Regression cases failed before the
+fixes and passed afterward. A fresh headless launch then stopped with all
+nodes exiting cleanly and no traceback. The affected five packages built, and
+`colcon test-result --verbose` reported 107 tests with no errors or failures.
+No GUI tests were run for this update.

@@ -68,6 +68,10 @@ def main(args=None):
         rclpy.spin(node)
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
+    except RuntimeError as exc:
+        # Jazzy's executor may take a subscription as a signal closes context.
+        if rclpy.ok() or not str(exc).startswith("Unable to convert call argument '0' to Python object"):
+            raise
     finally:
         try:
             if node is not None:
