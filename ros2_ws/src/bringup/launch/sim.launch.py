@@ -33,4 +33,4 @@ def generate_launch_description():
         RegisterEventHandler(OnProcessExit(target_action=gate, on_exit=[EmitEvent(event=Shutdown(reason='Safety gate exited'))])),
     ]
     return LaunchDescription([DeclareLaunchArgument('mode', default_value='auto'), DeclareLaunchArgument('rviz', default_value='false'), DeclareLaunchArgument('gui', default_value='false'),
-                              DeclareLaunchArgument('gz_extra_args', default_value='-s'), sim] + nodes)
+                              DeclareLaunchArgument('gz_extra_args', default_value=''), sim] + nodes)

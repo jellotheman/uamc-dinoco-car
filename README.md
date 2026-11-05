@@ -3,6 +3,7 @@
 A ROS 2 Jazzy / Gazebo Harmonic implementation for developing lane following,
 obstacle stopping, and safe manual control of the team's RC car. Source folders
 are in `ros2_ws/src`; their ROS package names retain the `uamc_` namespace.
+Start with [the project guide](docs/guide.md) for navigation and simulation.
 See [the runbook](docs/runbook.md) for build, simulation, and the current
 hardware limitations, and [hardware research](docs/hardware-research.md) for
 sources and the car-identification work.
