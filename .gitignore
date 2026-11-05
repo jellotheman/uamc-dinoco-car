@@ -11,3 +11,6 @@ simulation/log/
 simulation/.gz/
 
 .vscode/
+
+# Local session handoffs
+*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*.[Mm][Dd]
