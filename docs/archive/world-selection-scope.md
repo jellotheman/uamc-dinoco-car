@@ -1,11 +1,13 @@
 # Scope: selectable simulator worlds and a longer U-turn course
 
+> Archived proposal and snapshot. It may not describe the current implementation; use the [documentation index](../README.md) for current guidance and evidence.
+
 This is an investigation and proposed implementation scope. No new world,
 RViz configuration, launch selection interface or runtime tuning is implemented
 by this document. It describes the current `v1` code after commit `69201a0`.
 
 For primary-source details and the reference project comparison, see
-[world-selection-research.md](world-selection-research.md).
+[world-selection-research.md](../development/world-selection-research.md).
 
 ## Findings from the current code
 

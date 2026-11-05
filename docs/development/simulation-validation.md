@@ -38,4 +38,4 @@ Gazebo GUI + RViz run with these corrections completed the obstacle-stop
 action at approximately (3.413 m, 0.336 m), near-zero measured wheel speed,
 and 1 m detector clearance. The earlier three-run table above records the
 earlier configuration, not a repeated acceptance result for the new camera.
-See `launch-troubleshooting.md` for restart, RViz and shutdown verification.
+See [launch troubleshooting](../archive/launch-troubleshooting.md) for restart, RViz and shutdown verification.

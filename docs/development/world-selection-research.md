@@ -1,6 +1,6 @@
 # World selection research
 
-Checked 2026-11-05. This note is research only; no simulator was launched and no launch implementation was changed.
+Checked 2026-11-05 against a pre-implementation code snapshot. This note records research, not current implementation status; see the [documentation index](../README.md). No simulator was launched during the research.
 
 ## What the reference actually does
 

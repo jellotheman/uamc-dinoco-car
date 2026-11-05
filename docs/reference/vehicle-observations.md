@@ -17,5 +17,6 @@ Consequently the simulator uses provisional chassis dimensions and sensor
 poses. The images do not establish the exact controller or ESP32 variant,
 firmware, protocol, electrical levels, wheel-speed sensing, neutral outputs,
 E-stop circuit or stopping performance. Follow the identification and
-wheels-lifted procedures in `runbook.md` and `hardware-research.md` before
+wheels-lifted procedures in the [runbook](../guides/runbook.md) and
+[hardware research](hardware-research.md) before
 any hardware actuation is enabled.

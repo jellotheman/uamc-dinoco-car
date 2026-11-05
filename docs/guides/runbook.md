@@ -41,8 +41,16 @@ Close the launch with Ctrl+C and wait for its terminal prompt before restarting.
 Closing its RViz or Gazebo GUI also ends the session. A duplicate simulator
 launch is rejected while an existing session holds the OS lock.
 
-Optional launch arguments: `rviz:=true`, `gui:=true` (or set
-`gz_extra_args:=-v4`), and `mode:=manual`. Manual mode launches `joy` and the
+Optional launch arguments: `scenario:=practice` (default) or
+`scenario:=hairpin`, `rviz:=true`, `gui:=true`, `gz_extra_args:=-v4` for
+verbose Gazebo output, and `mode:=manual`. Two fresh headless hairpin runs
+completed both U-turns and the final obstacle stop; see the
+[technical record](../development/scenario-implementation.md) for evidence and
+limits. Physical-car validation remains separate. An optional
+`params_file:=/absolute/path/to/file.yaml` selects a named-node parameter
+file at startup; simulation time, mode, fake transport and simulated ground
+height are fixed by launch. Watchdog and speed limits are tunable, so change
+them only with a specific validated reason. See the [guide](guide.md). Manual mode launches `joy` and the
 manual adapter rather than accepting autonomous drive requests. It requires a
 supported joystick, centered controls, arm, and a fresh held deadman; reverse
 is disabled. Verify joystick axes and the button mapping in `manual_joy` for
@@ -69,7 +77,8 @@ connected by this launch. No firmware is flashed or supplied. Determine the
 controller and its existing firmware/protocol, steering and ESC wiring and
 neutral, real speed feedback, sensor mounting and the independently working
 cutoff before implementing and enabling hardware. See
-`ros2_ws/src/Embedded_Platform/README.md` and `hardware-research.md`. Stock
+[embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md) and
+[hardware research](../reference/hardware-research.md). Stock
 chassis wiring is a reference, not a verification of this modified car.
 
 Calibrate the webcam with ROS camera calibration, record the actual camera

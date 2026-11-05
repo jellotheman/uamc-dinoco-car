@@ -4,7 +4,7 @@ This guide is for the current `v1` branch in the `Ubuntu-24.04` WSL
 distribution. It walks through the simulator first. The physical-car transport
 is **disabled and incomplete**: this software cannot yet drive the car or
 read its actual sensors. See [runbook.md](runbook.md) and
-[hardware-research.md](hardware-research.md) for what remains.
+[hardware-research.md](../reference/hardware-research.md) for what remains.
 
 ## 1. Open the correct project
 
@@ -30,11 +30,11 @@ Ctrl+P to open a file by name, and Terminal > New Terminal for a shell.
 uamc/
   ROUND1_PLAN.md                  implementation plan and acceptance targets
   docs/
-    guide.md                      this guide
-    runbook.md                    build, hardware checks, recording/replay
-    hardware-research.md          manufacturer sources and unverified details
-    vehicle-observations.md       evidence from the supplied photo and videos
-    simulation-validation.md      measured simulator results and limitations
+    README.md                     documentation index
+    guides/                       user guide and developer runbook
+    reference/                    hardware research and vehicle observations
+    development/                  validation, investigations and audit
+    archive/                      historical planning and local-only handoff
   ros2_ws/
     src/
       interfaces/                 message and action definitions
@@ -108,6 +108,33 @@ memory in WSL, and opens RViz with the Gazebo server. To also open Gazebo's
 `./scripts/sim.sh rviz:=false`. The full ROS launch remains available as
 `ros2 launch uamc_bringup sim.launch.py gui:=true rviz:=true` in a prepared
 terminal. The helper is the recommended entry point on this Windows machine.
+
+### Select a simulation scenario
+
+The default `practice` scenario remains the short qualification-style
+course. The source also provides a provisional longer `hairpin` scenario:
+
+```bash
+./scripts/sim.sh scenario:=practice
+./scripts/sim.sh scenario:=hairpin gui:=true
+```
+
+Run one command at a time. Each scenario selects a packaged world, RViz view
+and starting pose; invalid names and missing or malformed assets are rejected
+before launching processes. Rebuild after changing scenario assets. The
+hairpin includes broad left and right U-turns and a final obstacle. Its RViz
+view shows local sensors and paths, not a full-course SDF map. Two fresh
+headless runs completed both U-turns and stopped at the final obstacle. These
+checks are simulator evidence, not physical qualification; see the
+[technical record](../development/scenario-implementation.md) for measured
+results and the limits of sampled checks and wheel odometry.
+
+The optional `params_file:=/absolute/path/to/file.yaml` argument selects a
+ROS 2 named-node parameter file at startup. Use only validated tuning:
+simulation time, fake vehicle transport, mode and simulated ground height stay
+fixed by launch. The action has no lap counter and ends on obstacle stop,
+fault, cancellation or disarm. Long courses need longer client wait times, not
+longer safety watchdogs.
 
 Wait for Gazebo to load the track and car. The simulation starts automatically,
 but the car starts **disarmed**. Gazebo shows the simulated car, lane and box;
@@ -228,14 +255,14 @@ For one package, use `colcon test --packages-select uamc_control` and then
 `colcon test-result --verbose`. Rebuild after changing code or configuration.
 A passing unit test means its specific synthetic case passed; it is not proof
 of the full car's behavior. The three simulator runs described in
-`simulation-validation.md` used live ROS messages, Gazebo positions and
+[simulation validation](../development/simulation-validation.md) used live ROS messages, Gazebo positions and
 sampled odometry as well as logs. They were not continuous proof of lane
 clearance and did not test the physical E-stop or real stopping distance.
 
 ## 8. Physical-car next steps
 
-Read `Embedded_Platform/README.md`, `docs/hardware-research.md`, and the
-runbook with the car available. Identify the board and its existing firmware,
+Read the [embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md),
+[hardware research](../reference/hardware-research.md), and the runbook with the car available. Identify the board and its existing firmware,
 trace the servo, ESC, power and independent cutoff, find a genuine wheel-speed
 source, mount and calibrate the sensors, and perform the specified
 wheels-lifted checks. Do not assume the reference project's STM32 firmware or
@@ -259,5 +286,5 @@ lock file. For RViz, the supplied configuration explicitly enables displays
 and provides a close camera view. A blank window is not the expected view:
 check the Displays panel status and `/robot_description`, `/scan`, and TF.
 
-See [the incident and verification notes](launch-troubleshooting.md) for the
+See [the incident and verification notes](../archive/launch-troubleshooting.md) for the
 evidence gathered, fixes, and limits of the investigation.

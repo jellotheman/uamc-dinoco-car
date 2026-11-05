@@ -1,5 +1,7 @@
 # UAMC Round 1 implementation plan
 
+> Original implementation specification and acceptance targets. This plan records intended work; see the [documentation index](docs/README.md) for current operation, evidence, and outstanding hardware work.
+
 ## Scope and deliverables
 
 **Software handoff.** Deliver the runnable Python ROS 2 Jazzy application for the team's existing, assembled car. Basic physical testing has already been done. Use the team's working firmware, controls, calibration, and test results as starting inputs where available. The handoff includes autonomous lane keeping and obstacle stopping, basic manual RC controls for testing, the hardware integration, the stock Gazebo Harmonic and RViz2 setup, and a short runbook. Use section 13 of the pasted explanation as the development order and the car manual for the stock chassis.
