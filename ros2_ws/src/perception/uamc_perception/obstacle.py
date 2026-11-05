@@ -3,6 +3,8 @@ import math
 import numpy as np
 
 
+# Conservative 0.40 x 0.26 m envelope around rear-axle base_link;
+# contains the supplied 0.345 x 0.205 m car and steered tires.
 def swept_obstacle(ranges, angle_min, angle_increment, range_min, range_max,
                    rotation, translation, curvature, *, front=0.30, rear=0.10,
                    half_width=0.13, lookahead=1.0):

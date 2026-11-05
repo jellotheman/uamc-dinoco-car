@@ -39,3 +39,39 @@ action at approximately (3.413 m, 0.336 m), near-zero measured wheel speed,
 and 1 m detector clearance. The earlier three-run table above records the
 earlier configuration, not a repeated acceptance result for the new camera.
 See [launch troubleshooting](../archive/launch-troubleshooting.md) for restart, RViz and shutdown verification.
+
+
+## Supplied dimensions and 45 cm clear lanes: 2026-11-05
+
+The model now uses the team's stock dimensions (345 x 205 x 160 mm nominal,
+232 mm wheelbase, 165 mm wheel-center track and 90 x 38 mm tires). Body shape,
+axle overhang distribution, sensor mounts and dynamics remain assumptions;
+see the [description module](../../ros2_ws/src/description/README.md). Both
+courses were narrowed to 450 mm nominal clear width between the inner edges
+of 35 mm markings, with 485 mm between line centers. Earlier results in this
+file and the earlier scenario trials used wider lanes.
+
+One fresh headless run per course used the updated Xacro and worlds, live
+rendered camera and LiDAR, the unchanged 0.30 m/s speed cap, and the existing
+watchdogs and conservative 0.40 x 0.26 m obstacle envelope. Both actions
+returned success after obstacle detection and measured standstill; final
+wheel speed was zero. No lane-detector or controller retuning was needed.
+
+| Course | Final Gazebo x, y (m) | Reported clearance | Maximum sampled centerline error | Samples |
+| --- | --- | --- | --- | ---: |
+| Practice | 3.425, 0.360 | 0.96 m | 0.0136 m | 64 |
+| Hairpin | 4.431, 14.161 | 0.94 m | 0.0306 m | 673 |
+
+The hairpin run completed both U-turns and the S-bend in about 138 seconds.
+Ground-truth poses were sampled about every 0.2 seconds and compared with a
+centerline discretized at at most 2 mm. The largest sampled distance of any
+corner of the conservative vehicle envelope from the centerline was 0.164 m
+on practice and 0.176 m on hairpin, inside the 0.225 m nominal inner edge.
+These samples do not prove continuous boundary clearance. Each recorded
+sample retained a 20-point perceived lane. Wheel odometry still drifted from
+ground truth by about 1.37 m at the end of hairpin; the course checks used
+Gazebo truth rather than treating odometry as a global map.
+
+The run logs and CSV probes were temporary host artifacts under
+`/tmp/uamc-dimensions-*`; media and recordings were not added to Git. No new
+GUI visual assessment or physical-car test is claimed by these runs.

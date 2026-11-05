@@ -1,150 +1,1252 @@
-<?xml version="1.0"?>
-<sdf version="1.9"><world name="practice">
-<physics name="physics" type="ignored"><max_step_size>0.002</max_step_size><real_time_factor>1</real_time_factor></physics>
-<plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
-<plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
-<plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
-<plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"><render_engine>ogre2</render_engine></plugin>
-<plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
-<light name="sun" type="directional"><pose>0 0 10 0 0 0</pose><diffuse>0.9 0.9 0.9 1</diffuse><specular>0.1 0.1 0.1 1</specular><direction>-0.4 0.1 -0.9</direction></light>
-<model name="ground"><static>true</static><link name="ground_link"><collision name="collision"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry></collision><visual name="surface"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry><material><ambient>0.12 0.12 0.12 1</ambient><diffuse>0.12 0.12 0.12 1</diffuse></material></visual></link></model>
-<model name="lane"><static>true</static><link name="markings">
-<visual name="straight_-1_0"><pose>0.05 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_1"><pose>0.15000000000000002 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_2"><pose>0.25 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_3"><pose>0.35000000000000003 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_4"><pose>0.45 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_5"><pose>0.55 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_6"><pose>0.65 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_7"><pose>0.75 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_8"><pose>0.8500000000000001 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_9"><pose>0.9500000000000001 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_10"><pose>1.05 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_11"><pose>1.1500000000000001 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_12"><pose>1.25 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_13"><pose>1.35 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_14"><pose>1.4500000000000002 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_15"><pose>1.55 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_16"><pose>1.6500000000000001 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_17"><pose>1.75 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_18"><pose>1.85 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_-1_19"><pose>1.9500000000000002 -0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_0"><pose>2.042498893237813 -0.3997343784586409 0.002 0 0 0.0125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_1"><pose>2.127470119288565 -0.3976096551382353 0.002 0 0 0.037500000000000006</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_2"><pose>2.2123616806640927 -0.3933615363803371 0.002 0 0 0.0625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_3"><pose>2.2971205229018765 -0.3869926771208876 0.002 0 0 0.08750000000000001</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_4"><pose>2.381693674484537 -0.3785070576896077 0.002 0 0 0.1125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_5"><pose>2.4660282799453106 -0.3679099813224247 0.002 0 0 0.1375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_6"><pose>2.5500716329009934 -0.35520807084711725 0.002 0 0 0.1625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_7"><pose>2.6337712089917176 -0.340409264544268 0.002 0 0 0.1875</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_8"><pose>2.7170746987069654 -0.3235228111860935 0.002 0 0 0.21250000000000002</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_9"><pose>2.7999300400773106 -0.304559264256266 0.002 0 0 0.23750000000000002</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_10"><pose>2.8822854512114544 -0.2835304753543251 0.002 0 0 0.2625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_11"><pose>2.964089462658222 -0.26044958678881924 0.002 0 0 0.28750000000000003</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_12"><pose>3.045290949573295 -0.23533102336378553 0.002 0 0 0.3125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_13"><pose>3.125839163670574 -0.2081904833637207 0.002 0 0 0.3375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_14"><pose>3.2056837649382057 -0.1790449287426612 0.002 0 0 0.36250000000000004</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_15"><pose>3.284774853099451 -0.14791257452351791 0.002 0 0 0.3875</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_16"><pose>3.3630629987987373 -0.1148128774142747 0.002 0 0 0.41250000000000003</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_17"><pose>3.4404992744933893 -0.07976652364818371 0.002 0 0 0.4375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_0"><pose>0.05 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_1"><pose>0.15000000000000002 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_2"><pose>0.25 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_3"><pose>0.35000000000000003 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_4"><pose>0.45 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_5"><pose>0.55 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_6"><pose>0.65 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_7"><pose>0.75 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_8"><pose>0.8500000000000001 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_9"><pose>0.9500000000000001 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_10"><pose>1.05 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_11"><pose>1.1500000000000001 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_12"><pose>1.25 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_13"><pose>1.35 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_14"><pose>1.4500000000000002 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_15"><pose>1.55 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_16"><pose>1.6500000000000001 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_17"><pose>1.75 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_18"><pose>1.85 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="straight_1_19"><pose>1.9500000000000002 0.4 0.002 0 0 0</pose><geometry><box><size>0.102 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_0"><pose>2.0324991536524455 0.400203122355157 0.002 0 0 0.0125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_1"><pose>2.0974771500441967 0.40182791077664337 0.002 0 0 0.037500000000000006</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_2"><pose>2.1623942263901883 0.4050764721797422 0.002 0 0 0.0625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_3"><pose>2.2272098116308467 0.4099467763193214 0.002 0 0 0.08750000000000001</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_4"><pose>2.2918833981352345 0.41643577941382937 0.002 0 0 0.1125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_5"><pose>2.356374567017002 0.42453942604755746 0.002 0 0 0.1375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_6"><pose>2.4206430133948773 0.4342526517051457 0.002 0 0 0.1625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_7"><pose>2.4846485715819018 0.44556938593673623 0.002 0 0 0.1875</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_8"><pose>2.54835124018768 0.4584825561518109 0.002 0 0 0.21250000000000002</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_9"><pose>2.6117112071179434 0.47298409203932623 0.002 0 0 0.23750000000000002</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_10"><pose>2.674688874455818 0.48906493061139855 0.002 0 0 0.2625</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_11"><pose>2.737244883209229 0.5067150218673735 0.002 0 0 0.28750000000000003</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_12"><pose>2.7993401379089904 0.5259233350747521 0.002 0 0 0.3125</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_13"><pose>2.8609358310422035 0.5466778656630371 0.002 0 0 0.3375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_14"><pose>2.9219934673056867 0.5689656427262002 0.002 0 0 0.36250000000000004</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_15"><pose>2.9824748876642864 0.5927727371290743 0.002 0 0 0.3875</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_16"><pose>3.0423422931990345 0.6180842702126133 0.002 0 0 0.41250000000000003</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_17"><pose>3.1015582687302388 0.6448844230925652 0.002 0 0 0.4375</pose><geometry><box><size>0.08 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_18"><pose>3.517035285031759 -0.04279541605554016 0.002 0 0 0.4625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_19"><pose>3.5926231978986136 -0.003922660375129006 0.002 0 0 0.48750000000000004</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_20"><pose>3.667215773108905 0.03682744918611336 0.002 0 0 0.5125000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_21"><pose>3.740766392731219 0.07942944513618366 0.002 0 0 0.5375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_22"><pose>3.8132290900224683 0.12385670261436887 0.002 0 0 0.5625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_23"><pose>3.884558578155609 0.17008145603091407 0.002 0 0 0.5875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_24"><pose>3.9547102785224317 0.21807481641961513 0.002 0 0 0.6125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_25"><pose>4.023640348593744 0.26780678949248005 0.002 0 0 0.6375000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_26"><pose>4.091305709319522 0.3192462943851839 0.002 0 0 0.6625000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_27"><pose>4.157664072051915 0.37236118308159716 0.002 0 0 0.6875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_28"><pose>4.222673964974273 0.42711826050524815 0.002 0 0 0.7125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_29"><pose>4.286294759019684 0.4834833052651675 0.002 0 0 0.7375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_30"><pose>4.348486693262814 0.5414210910431421 0.002 0 0 0.7625000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_31"><pose>4.409210899769196 0.6008954086090164 0.002 0 0 0.7875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_32"><pose>4.468429427886423 0.6618690884502838 0.002 0 0 0.8125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_33"><pose>4.526105267962067 0.7243040240018233 0.002 0 0 0.8375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_34"><pose>4.5822023744735105 0.7881611954612602 0.002 0 0 0.8625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_35"><pose>4.636685688555225 0.8534006941750727 0.002 0 0 0.8875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_36"><pose>4.6895211599094155 0.9199817475802021 0.002 0 0 0.9125000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_37"><pose>4.740675768086357 0.9878627446855766 0.002 0 0 0.9375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_38"><pose>4.79011754312109 1.0570012620776277 0.002 0 0 0.9625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_39"><pose>4.83781558551362 1.1273540904335415 0.002 0 0 0.9875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_40"><pose>4.883740085540088 1.198877261525678 0.002 0 0 1.0125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_41"><pose>4.9278623418828875 1.2715260757002855 0.002 0 0 1.0375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_42"><pose>4.970154779568041 1.3452551298133248 0.002 0 0 1.0625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_43"><pose>5.010590967198678 1.4200183456059605 0.002 0 0 1.0875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_44"><pose>5.049145633473781 1.495768998501969 0.002 0 0 1.1125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_45"><pose>5.085794682981939 1.572459746809081 0.002 0 0 1.1375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_46"><pose>5.1205152112601855 1.6500426613059966 0.002 0 0 1.1625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_-1_47"><pose>5.15328551910855 1.7284692551965872 0.002 0 0 1.1875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_18"><pose>3.1600858062007564 0.6731564465457631 0.002 0 0 0.4625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_19"><pose>3.2178883278048223 0.7028826714778424 0.002 0 0 0.48750000000000004</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_20"><pose>3.274929708847986 0.7340445199658512 0.002 0 0 0.5125000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_21"><pose>3.331174300323873 0.7666225168688463 0.002 0 0 0.5375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_22"><pose>3.386586951193652 0.8005963019992235 0.002 0 0 0.5625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_23"><pose>3.441133030354289 0.8359446428471697 0.002 0 0 0.5875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_24"><pose>3.49477844828186 0.8726454478502941 0.002 0 0 0.6125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_25"><pose>3.547489678336393 0.910675780200132 0.002 0 0 0.6375000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_26"><pose>3.5992337777149292 0.9500118721769053 0.002 0 0 0.6625000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_27"><pose>3.6499784080397006 0.9906291400035738 0.002 0 0 0.6875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_28"><pose>3.6996918555685623 1.0325021992098955 0.002 0 0 0.7125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_29"><pose>3.748343051015053 1.0756048804968927 0.002 0 0 0.7375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_30"><pose>3.7959015889656813 1.1199102460918144 0.002 0 0 0.7625000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_31"><pose>3.8423377468823263 1.1653906065833652 0.002 0 0 0.7875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_32"><pose>3.8876225036778527 1.2120175382266873 0.002 0 0 0.8125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_33"><pose>3.9317275578533453 1.2597619007072764 0.002 0 0 0.8375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_34"><pose>3.9746253451856264 1.308593855352728 0.002 0 0 0.8625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_35"><pose>4.016289055953996 1.358482883780938 0.002 0 0 0.8875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_36"><pose>4.056692651695435 1.4093978069730955 0.002 0 0 0.9125000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_37"><pose>4.095810881477802 1.4613068047595585 0.002 0 0 0.9375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_38"><pose>4.133619297680834 1.514177435706421 0.002 0 0 0.9625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_39"><pose>4.170094271275121 1.567976657390355 0.002 0 0 0.9875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_40"><pose>4.20521300658948 1.6226708470490476 0.002 0 0 1.0125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_41"><pose>4.238953555557503 1.6782258225943358 0.002 0 0 1.0375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_42"><pose>4.2712948314343855 1.7346068639748953 0.002 0 0 1.0625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_43"><pose>4.30221662197546 1.7917787348751462 0.002 0 0 1.0875000000000001</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_44"><pose>4.331699602068186 1.8497057047367997 0.002 0 0 1.1125</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_45"><pose>4.359725345809718 1.908351571089297 0.002 0 0 1.1375</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_46"><pose>4.386276338022496 1.9676796821751739 0.002 0 0 1.1625</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-<visual name="curve_1_47"><pose>4.411335985200656 2.027652959856214 0.002 0 0 1.1875</pose><geometry><box><size>0.09 0.035 0.002</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
-</link></model>
-<model name="obstacle"><static>true</static><pose>4.440246514368122 1.2549507316083492 0.15 0 0 0.95</pose><link name="box"><collision name="collision"><geometry><box><size>0.25 0.35 0.30</size></box></geometry></collision><visual name="visual"><geometry><box><size>0.25 0.35 0.30</size></box></geometry><material><ambient>0.8 0.1 0.05 1</ambient><diffuse>0.8 0.1 0.05 1</diffuse></material></visual></link></model>
-</world></sdf>
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.9">
+  <world name="practice">
+    <physics name="physics" type="ignored">
+      <max_step_size>0.002</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu" />
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>-0.4 0.1 -0.9</direction>
+    </light>
+    <model name="ground">
+      <static>true</static>
+      <link name="ground_link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="surface">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.12 0.12 0.12 1</ambient>
+            <diffuse>0.12 0.12 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="lane">
+      <static>true</static>
+      <link name="markings">
+        <visual name="lane_left_straight">
+          <pose>1.000000000 0.242500000 0.002000000 0.000000000 0.000000000 0.000000000</pose>
+          <geometry>
+            <box>
+              <size>2.002000000 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_straight">
+          <pose>1.000000000 -0.242500000 0.002000000 0.000000000 0.000000000 0.000000000</pose>
+          <geometry>
+            <box>
+              <size>2.002000000 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0000">
+          <pose>2.034467852 0.242715427 0.002000000 0.000000000 0.000000000 0.012500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0000">
+          <pose>2.040530195 -0.242246683 0.002000000 0.000000000 0.000000000 0.012500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0001">
+          <pose>2.103382016 0.244438640 0.002000000 0.000000000 0.000000000 0.037500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0001">
+          <pose>2.121565253 -0.240220384 0.002000000 0.000000000 0.000000000 0.037500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0002">
+          <pose>2.172231569 0.247883989 0.002000000 0.000000000 0.000000000 0.062500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0002">
+          <pose>2.202524338 -0.236169053 0.002000000 0.000000000 0.000000000 0.062500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0003">
+          <pose>2.240973483 0.253049321 0.002000000 0.000000000 0.000000000 0.087500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0003">
+          <pose>2.283356852 -0.230095222 0.002000000 0.000000000 0.000000000 0.087500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0004">
+          <pose>2.309564796 0.259931408 0.002000000 0.000000000 0.000000000 0.112500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0004">
+          <pose>2.364012276 -0.222002687 0.002000000 0.000000000 0.000000000 0.112500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0005">
+          <pose>2.377962642 0.268525949 0.002000000 0.000000000 0.000000000 0.137500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0005">
+          <pose>2.444440205 -0.211896504 0.002000000 0.000000000 0.000000000 0.137500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0006">
+          <pose>2.446124273 0.278827572 0.002000000 0.000000000 0.000000000 0.162500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0006">
+          <pose>2.524590373 -0.199782991 0.002000000 0.000000000 0.000000000 0.162500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0007">
+          <pose>2.514007091 0.290829839 0.002000000 0.000000000 0.000000000 0.187500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0007">
+          <pose>2.604412690 -0.185669718 0.002000000 0.000000000 0.000000000 0.187500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0008">
+          <pose>2.581568671 0.304525249 0.002000000 0.000000000 0.000000000 0.212500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0008">
+          <pose>2.683857268 -0.169565504 0.002000000 0.000000000 0.000000000 0.212500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0009">
+          <pose>2.648766790 0.319905244 0.002000000 0.000000000 0.000000000 0.237500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0009">
+          <pose>2.762874457 -0.151480416 0.002000000 0.000000000 0.000000000 0.237500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0010">
+          <pose>2.715559451 0.336960210 0.002000000 0.000000000 0.000000000 0.262500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0010">
+          <pose>2.841414875 -0.131425755 0.002000000 0.000000000 0.000000000 0.262500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0011">
+          <pose>2.781904910 0.355679490 0.002000000 0.000000000 0.000000000 0.287500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0011">
+          <pose>2.919429436 -0.109414054 0.002000000 0.000000000 0.000000000 0.287500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0012">
+          <pose>2.847761704 0.376051383 0.002000000 0.000000000 0.000000000 0.312500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0012">
+          <pose>2.996869384 -0.085459072 0.002000000 0.000000000 0.000000000 0.312500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0013">
+          <pose>2.913088675 0.398063159 0.002000000 0.000000000 0.000000000 0.337500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0013">
+          <pose>3.073686320 -0.059575777 0.002000000 0.000000000 0.000000000 0.337500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0014">
+          <pose>2.977844995 0.421701061 0.002000000 0.000000000 0.000000000 0.362500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0014">
+          <pose>3.149832238 -0.031780347 0.002000000 0.000000000 0.000000000 0.362500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0015">
+          <pose>3.041990193 0.446950316 0.002000000 0.000000000 0.000000000 0.387500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0015">
+          <pose>3.225259547 -0.002090154 0.002000000 0.000000000 0.000000000 0.387500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0016">
+          <pose>3.105484182 0.473795144 0.002000000 0.000000000 0.000000000 0.412500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0016">
+          <pose>3.299921110 0.029476249 0.002000000 0.000000000 0.000000000 0.412500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0017">
+          <pose>3.168287279 0.502218768 0.002000000 0.000000000 0.000000000 0.437500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0017">
+          <pose>3.373770264 0.062899131 0.002000000 0.000000000 0.000000000 0.437500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0018">
+          <pose>3.230360235 0.532203424 0.002000000 0.000000000 0.000000000 0.462500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0018">
+          <pose>3.446760856 0.098157607 0.002000000 0.000000000 0.000000000 0.462500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0019">
+          <pose>3.291664255 0.563730372 0.002000000 0.000000000 0.000000000 0.487500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0019">
+          <pose>3.518847270 0.135229639 0.002000000 0.000000000 0.000000000 0.487500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0020">
+          <pose>3.352161028 0.596779909 0.002000000 0.000000000 0.000000000 0.512500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0020">
+          <pose>3.589984454 0.174092060 0.002000000 0.000000000 0.000000000 0.512500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0021">
+          <pose>3.411812744 0.631331381 0.002000000 0.000000000 0.000000000 0.537500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0021">
+          <pose>3.660127950 0.214720581 0.002000000 0.000000000 0.000000000 0.537500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0022">
+          <pose>3.470582122 0.667363193 0.002000000 0.000000000 0.000000000 0.562500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0022">
+          <pose>3.729233919 0.257089811 0.002000000 0.000000000 0.000000000 0.562500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0023">
+          <pose>3.528432435 0.704852828 0.002000000 0.000000000 0.000000000 0.587500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0023">
+          <pose>3.797259173 0.301173271 0.002000000 0.000000000 0.000000000 0.587500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0024">
+          <pose>3.585327527 0.743776855 0.002000000 0.000000000 0.000000000 0.612500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0024">
+          <pose>3.864161199 0.346943409 0.002000000 0.000000000 0.000000000 0.612500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0025">
+          <pose>3.641231842 0.784110948 0.002000000 0.000000000 0.000000000 0.637500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0025">
+          <pose>3.929898185 0.394371622 0.002000000 0.000000000 0.000000000 0.637500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0026">
+          <pose>3.696110439 0.825829899 0.002000000 0.000000000 0.000000000 0.662500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0026">
+          <pose>3.994429048 0.443428268 0.002000000 0.000000000 0.000000000 0.662500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0027">
+          <pose>3.749929023 0.868907636 0.002000000 0.000000000 0.000000000 0.687500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0027">
+          <pose>4.057713457 0.494082687 0.002000000 0.000000000 0.000000000 0.687500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0028">
+          <pose>3.802653958 0.913317236 0.002000000 0.000000000 0.000000000 0.712500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0028">
+          <pose>4.119711862 0.546303223 0.002000000 0.000000000 0.000000000 0.712500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0029">
+          <pose>3.854252294 0.959030945 0.002000000 0.000000000 0.000000000 0.737500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0029">
+          <pose>4.180385517 0.600057240 0.002000000 0.000000000 0.000000000 0.737500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0030">
+          <pose>3.904691781 1.006020194 0.002000000 0.000000000 0.000000000 0.762500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0030">
+          <pose>4.239696501 0.655311143 0.002000000 0.000000000 0.000000000 0.762500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0031">
+          <pose>3.953940899 1.054255614 0.002000000 0.000000000 0.000000000 0.787500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0031">
+          <pose>4.297607748 0.712030401 0.002000000 0.000000000 0.000000000 0.787500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0032">
+          <pose>4.001968867 1.103707062 0.002000000 0.000000000 0.000000000 0.812500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0032">
+          <pose>4.354083065 0.770179565 0.002000000 0.000000000 0.000000000 0.812500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0033">
+          <pose>4.048745670 1.154343631 0.002000000 0.000000000 0.000000000 0.837500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0033">
+          <pose>4.409087156 0.829722293 0.002000000 0.000000000 0.000000000 0.837500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0034">
+          <pose>4.094242073 1.206133675 0.002000000 0.000000000 0.000000000 0.862500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0034">
+          <pose>4.462585647 0.890621375 0.002000000 0.000000000 0.000000000 0.862500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0035">
+          <pose>4.138429643 1.259044828 0.002000000 0.000000000 0.000000000 0.887500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0035">
+          <pose>4.514545102 0.952838750 0.002000000 0.000000000 0.000000000 0.887500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0036">
+          <pose>4.181280764 1.313044020 0.002000000 0.000000000 0.000000000 0.912500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0036">
+          <pose>4.564933047 1.016335534 0.002000000 0.000000000 0.000000000 0.912500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0037">
+          <pose>4.222768656 1.368097505 0.002000000 0.000000000 0.000000000 0.937500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0037">
+          <pose>4.613717994 1.081072044 0.002000000 0.000000000 0.000000000 0.937500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0038">
+          <pose>4.262867390 1.424170877 0.002000000 0.000000000 0.000000000 0.962500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0038">
+          <pose>4.660869451 1.147007821 0.002000000 0.000000000 0.000000000 0.962500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0039">
+          <pose>4.301551905 1.481229090 0.002000000 0.000000000 0.000000000 0.987500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0039">
+          <pose>4.706357952 1.214101658 0.002000000 0.000000000 0.000000000 0.987500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0040">
+          <pose>4.338798025 1.539236485 0.002000000 0.000000000 0.000000000 1.012500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0040">
+          <pose>4.750155067 1.282311624 0.002000000 0.000000000 0.000000000 1.012500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0041">
+          <pose>4.374582473 1.598156810 0.002000000 0.000000000 0.000000000 1.037500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0041">
+          <pose>4.792233425 1.351595088 0.002000000 0.000000000 0.000000000 1.037500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0042">
+          <pose>4.408882884 1.657953241 0.002000000 0.000000000 0.000000000 1.062500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0042">
+          <pose>4.832566727 1.421908752 0.002000000 0.000000000 0.000000000 1.062500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0043">
+          <pose>4.441677821 1.718588408 0.002000000 0.000000000 0.000000000 1.087500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0043">
+          <pose>4.871129768 1.493208672 0.002000000 0.000000000 0.000000000 1.087500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0044">
+          <pose>4.472946790 1.780024416 0.002000000 0.000000000 0.000000000 1.112500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0044">
+          <pose>4.907898446 1.565450288 0.002000000 0.000000000 0.000000000 1.112500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0045">
+          <pose>4.502670247 1.842222868 0.002000000 0.000000000 0.000000000 1.137500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0045">
+          <pose>4.942849782 1.638588450 0.002000000 0.000000000 0.000000000 1.137500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0046">
+          <pose>4.530829616 1.905144894 0.002000000 0.000000000 0.000000000 1.162500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0046">
+          <pose>4.975961933 1.712577450 0.002000000 0.000000000 0.000000000 1.162500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_left_arc_0047">
+          <pose>4.557407300 1.968751168 0.002000000 0.000000000 0.000000000 1.187500000</pose>
+          <geometry>
+            <box>
+              <size>0.070935705 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <visual name="lane_right_arc_0047">
+          <pose>5.007214205 1.787371047 0.002000000 0.000000000 0.000000000 1.187500000</pose>
+          <geometry>
+            <box>
+              <size>0.083060389 0.035000000 0.002000000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="obstacle">
+      <static>true</static>
+      <pose>4.440246514 1.254950732 0.150000000 0.000000000 0.000000000 0.950000000</pose>
+      <link name="box">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>.25 .35 .30</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>.25 .35 .30</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>.8 .1 .05 1</ambient>
+            <diffuse>.8 .1 .05 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

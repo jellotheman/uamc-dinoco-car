@@ -1,5 +1,6 @@
 {
-  "lane_width_m": 0.8,
+  "clear_lane_width_m": 0.45,
+  "lane_width_m": 0.485,
   "line_width_m": 0.035,
   "centerline_length_m": 39.791148575128545,
   "segments": [

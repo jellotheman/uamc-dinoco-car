@@ -122,12 +122,17 @@ course. The source also provides a provisional longer `hairpin` scenario:
 Run one command at a time. Each scenario selects a packaged world, RViz view
 and starting pose; invalid names and missing or malformed assets are rejected
 before launching processes. Rebuild after changing scenario assets. The
-hairpin includes broad left and right U-turns and a final obstacle. Its RViz
-view shows local sensors and paths, not a full-course SDF map. Two fresh
-headless runs completed both U-turns and stopped at the final obstacle. These
-checks are simulator evidence, not physical qualification; see the
-[technical record](../development/scenario-implementation.md) for measured
-results and the limits of sampled checks and wheel odometry.
+hairpin includes broad left and right U-turns and a final obstacle. Both
+courses now provide 45 cm of nominal clear width between the inner edges of
+the white markings (48.5 cm between marking centers). The car uses the
+[supplied chassis dimensions](../../ros2_ws/src/description/README.md); sensor
+mounts and dynamics still need measurement. Launch commands are unchanged. The
+hairpin RViz view shows local sensors and paths, not a full-course SDF map.
+See the [latest minimum-width trials](../development/simulation-validation.md)
+and the
+[scenario record](../development/scenario-implementation.md) for measured
+results and the limits of sampled checks and wheel odometry. These checks
+are simulator evidence, not physical qualification.
 
 The optional `params_file:=/absolute/path/to/file.yaml` argument selects a
 ROS 2 named-node parameter file at startup. Use only validated tuning:

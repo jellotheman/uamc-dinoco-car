@@ -18,6 +18,8 @@ from .obstacle import swept_obstacle
 class ObstacleDetector(Node):
     def __init__(self):
         super().__init__('obstacle_detector')
+        # Conservative 0.40 x 0.26 m envelope around rear-axle base_link;
+        # contains the supplied 0.345 x 0.205 m car and steered tires.
         for name, value in [('base_frame', 'base_link'), ('wheelbase', 0.232),
                             ('front', 0.30), ('rear', 0.10), ('half_width', 0.13),
                             ('lookahead', 1.0), ('scan_timeout', 0.5), ('command_timeout', 0.5)]:

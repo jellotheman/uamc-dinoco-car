@@ -7,14 +7,14 @@ from uamc_perception.lane import detect_lane
 from uamc_perception.obstacle import swept_obstacle
 
 
-def scene(show_left=True, show_right=True, *, ground_z=0.0, center=0.0):
+def scene(show_left=True, show_right=True, *, ground_z=0.0, center=0.0, lane_width=0.8):
     image = np.zeros((480, 640, 3), dtype=np.uint8)
     k = np.array([[468., 0, 320], [0, 468., 240], [0, 0, 1]])
     theta = 0.30
     r = np.array([[0, -math.sin(theta), math.cos(theta)],
                   [-1, 0, 0], [0, -math.cos(theta), -math.sin(theta)]])
     t = np.array([0.20, 0, 0.17])
-    for y, enabled in [(center-0.4, show_left), (center+0.4, show_right)]:
+    for y, enabled in [(center-lane_width/2, show_left), (center+lane_width/2, show_right)]:
         if enabled:
             points = np.array([[x, y, ground_z] for x in np.linspace(.25, 2, 500)])
             optical = (points-t) @ r
@@ -108,3 +108,16 @@ def test_ground_plane_offset_preserves_metric_centerline_and_requires_both_bound
         detect_lane(image, k, np.zeros(5), r, t, ground_z=-0.045)
     with pytest.raises(ValueError, match='ground grid'):
         detect_lane(image, k, np.zeros(5), r, t, ground_z=float('nan'))
+
+
+@pytest.mark.parametrize('center', [0.0, 0.06])
+def test_minimum_width_course_preserves_metric_path_and_requires_two_lines(center):
+    # 450 mm clear track + one 35 mm line width = 485 mm between line centers.
+    image, k, r, t = scene(ground_z=-0.045, center=center, lane_width=0.485)
+    path = detect_lane(image, k, np.zeros(5), r, t, ground_z=-0.045)
+    assert len(path) == 20
+    assert np.max(np.abs(path[:, 1] - center)) < 0.02
+    image, k, r, t = scene(show_right=False, ground_z=-0.045,
+                            center=center, lane_width=0.485)
+    with pytest.raises(ValueError, match='paired lane'):
+        detect_lane(image, k, np.zeros(5), r, t, ground_z=-0.045)

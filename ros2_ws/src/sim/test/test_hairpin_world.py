@@ -40,7 +40,8 @@ def test_markings_are_paired_continuous_and_have_wide_turns():
         rp = list(map(float, r.findtext('pose').split()))
         ll, lw, _ = map(float, l.findtext('./geometry/box/size').split())
         rl, rw, _ = map(float, r.findtext('./geometry/box/size').split())
-        assert abs(math.hypot(lp[0] - rp[0], lp[1] - rp[1]) - .8) < 1e-6
+        assert abs(math.hypot(lp[0] - rp[0], lp[1] - rp[1]) - .485) < 1e-6
+        assert abs(math.hypot(lp[0] - rp[0], lp[1] - rp[1]) - (lw + rw)/2 - .45) < 1e-6
         assert abs(lw - .035) < 1e-8 and abs(rw - .035) < 1e-8
         assert abs(lp[5] - rp[5]) < 1e-8
         center = ((lp[0]+rp[0])/2, (lp[1]+rp[1])/2, lp[5], (ll+rl)/2)
@@ -108,5 +109,5 @@ def test_distant_path_sections_do_not_intersect_or_crowd():
     separated = [math.hypot(a[1]-b[1], a[2]-b[2])
                  for i, a in enumerate(points) for b in points[i+1:]
                  if b[0]-a[0] >= 3.0]
-    # With the 0.8 m lane, this leaves over 2 m between remote boundaries.
+    # The narrower lane leaves over 2 m between remote boundaries.
     assert min(separated) > 2.8

@@ -37,7 +37,30 @@ full-course track overlay. The action has no lap counter and ends on obstacle
 stop, fault, cancellation or disarm. A long run needs a longer client timeout;
 it does not require longer safety watchdogs.
 
-## Validation recorded on 2026-11-05
+## Minimum-width update on 2026-11-05
+
+Both worlds now use 0.45 m nominal clear width between inner paint edges;
+0.035 m-wide lines have centers 0.485 m apart. The practice centerline is still
+5.6 m long; the hairpin centerline is still 39.791 m long. Routes, obstacle
+poses, scenario names and RViz files are unchanged. `generate_practice.py` and
+`generate_hairpin.py` reproduce their SDF and geometry metadata; run them in
+`ros2_ws/src/sim/worlds` and rebuild after changes. `lane_width_m` records
+line-center separation and `clear_lane_width_m` records the drivable width.
+The 205 mm nominal car width leaves 122.5 mm on each side when straight and
+centered; steering and tracking error consume part of that space.
+
+The [vehicle model](../../ros2_ws/src/description/README.md) records the supplied
+stock dimensions and remaining assumptions. Existing lane-width acceptance
+limits already cover the narrower markings. Wheelbase and tire radius already
+matched, so controller curvature and ground projection values stay unchanged.
+The conservative 0.40 x 0.26 m obstacle envelope remains in use and contains
+the modeled tires at steering limits.
+
+The following earlier trials used the previous 0.80 m line-center separation.
+Current minimum-width trials are recorded in
+[simulation validation](simulation-validation.md).
+
+## Earlier validation recorded on 2026-11-05
 
 The `uamc_sim` and `uamc_bringup` packages built successfully. Scenario,
 geometry and lifecycle tests passed (35 simulator and one bringup test), including rejection of missing profiles,

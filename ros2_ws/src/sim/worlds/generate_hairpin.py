@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the deterministic, open 0.8 m lane in hairpin.sdf.
+"""Generate the deterministic hairpin course with 0.45 m clear lane width.
 
 The geometry is authored here so both sides of the markings and the final box
 come from one sequence of straight/constant-curvature centerline segments.
@@ -10,8 +10,10 @@ import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-LANE_WIDTH = 0.8
+# Clear width is measured between inner paint edges, not line centers.
+CLEAR_LANE_WIDTH = 0.45
 LINE_WIDTH = 0.035
+LANE_WIDTH = CLEAR_LANE_WIDTH + LINE_WIDTH
 ARC_STEP = 0.15
 # Signed turn angle and radius must have the same sign; all motion is forward.
 SEGMENTS = (
@@ -72,7 +74,8 @@ def centerline_metadata():
         record.update(start=start, end=[x, y, heading])
         records.append(record)
     fx, fy, fh = records[-1]['start']
-    return {'lane_width_m': LANE_WIDTH, 'line_width_m': LINE_WIDTH,
+    return {'clear_lane_width_m': CLEAR_LANE_WIDTH,
+            'lane_width_m': LANE_WIDTH, 'line_width_m': LINE_WIDTH,
             'centerline_length_m': total, 'segments': records,
             'obstacle': {'pose': [fx + BOX_DISTANCE_ON_FINAL * math.cos(fh),
                                   fy + BOX_DISTANCE_ON_FINAL * math.sin(fh), fh],
@@ -143,7 +146,7 @@ def generate():
             h = heading + a
             for side, offset in (('left', LANE_WIDTH / 2), ('right', -LANE_WIDTH / 2)):
                 # Each side travels a different chord length, while corresponding
-                # chord midpoints remain 0.8 m apart on the centerline normal.
+                # chord midpoints remain LANE_WIDTH apart on the centerline normal.
                 boundary_radius = abs(radius - offset)
                 chord = 2 * boundary_radius * math.sin(abs(delta) / 2)
                 add_visual(markings, f'lane_{side}_{index:04}', mx - offset * math.sin(h),
