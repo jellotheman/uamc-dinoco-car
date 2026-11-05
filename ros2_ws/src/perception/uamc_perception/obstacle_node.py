@@ -2,6 +2,7 @@ import math
 import time
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import ExternalShutdownException
 from rclpy.clock import Clock, ClockType
 from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
@@ -102,6 +103,8 @@ def main(args=None):
     node = ObstacleDetector()
     try:
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()

@@ -25,12 +25,21 @@ non-package placeholder and is ignored by colcon.
 
 ## Simulation
 
+Recommended WSL entry point: `cd ~/projects/uamc && ./scripts/sim.sh`
+(RViz plus the Gazebo server); add `gui:=true` for the Gazebo world window.
+The helper checks Windows committed-memory headroom. A launch can also be
+started directly from a sourced terminal:
+
 ```bash
 ros2 launch uamc_bringup sim.launch.py
 # In another sourced terminal, when lane, sensors and simulated status are healthy:
 ros2 service call /safety/arm std_srvs/srv/SetBool '{data: true}'
 ros2 action send_goal /round1/run uamc_interfaces/action/DriveRound1 '{}'
 ```
+
+Close the launch with Ctrl+C and wait for its terminal prompt before restarting.
+Closing its RViz or Gazebo GUI also ends the session. A duplicate simulator
+launch is rejected while an existing session holds the OS lock.
 
 Optional launch arguments: `rviz:=true`, `gui:=true` (or set
 `gz_extra_args:=-v4`), and `mode:=manual`. Manual mode launches `joy` and the

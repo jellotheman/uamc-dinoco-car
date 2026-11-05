@@ -24,7 +24,7 @@ def generate_launch_description():
         Node(package='joy', executable='joy_node', condition=manual, parameters=[common], output='screen'),
         Node(package='uamc_io', executable='manual_joy', condition=manual, parameters=[common], output='screen'),
         Node(package='uamc_io', executable='vehicle_io', parameters=[common, {'transport': 'fake'}], output='screen'),
-        Node(package='uamc_perception', executable='lane_detector', parameters=[common], output='screen'),
+        Node(package='uamc_perception', executable='lane_detector', parameters=[common, {'ground_z': -0.045}], output='screen'),
         Node(package='uamc_perception', executable='obstacle_detector', parameters=[common], output='screen'),
         Node(package='uamc_control', executable='lane_planner', parameters=[common], output='screen'),
         Node(package='uamc_control', executable='path_controller', parameters=[common], output='screen'),

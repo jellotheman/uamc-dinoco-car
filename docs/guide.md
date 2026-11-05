@@ -95,11 +95,19 @@ The Pi needs its own ROS setup and the eventual hardware drivers.
 
 ## 4. Run and watch the simulator
 
-In terminal A, start the complete simulated stack with both graphical tools:
+In terminal A, from the project root, start the simulation with RViz:
 
 ```bash
-ros2 launch uamc_bringup sim.launch.py gui:=true rviz:=true
+cd ~/projects/uamc
+./scripts/sim.sh
 ```
+
+This helper sources ROS and the built workspace, checks Windows committed
+memory in WSL, and opens RViz with the Gazebo server. To also open Gazebo's
+3D world window, use `./scripts/sim.sh gui:=true`. For no windows, use
+`./scripts/sim.sh rviz:=false`. The full ROS launch remains available as
+`ros2 launch uamc_bringup sim.launch.py gui:=true rviz:=true` in a prepared
+terminal. The helper is the recommended entry point on this Windows machine.
 
 Wait for Gazebo to load the track and car. The simulation starts automatically,
 but the car starts **disarmed**. Gazebo shows the simulated car, lane and box;
@@ -135,7 +143,12 @@ ros2 service call /safety/reset std_srvs/srv/Trigger '{}'
 
 Then arm and send a **new** goal. The obstacle remains in the same place after
 a stop, so restarting the simulator is the practical way to repeat the course.
-Stop the whole launch with Ctrl+C in terminal A; close any separate rqt windows.
+Stop the whole launch with Ctrl+C in terminal A and wait for its prompt.
+Closing an RViz or Gazebo window owned by this launch also shuts down the
+session. A second simulation is rejected while one is already running; this
+prevents overlapping worlds, clocks and sensor publishers. Close separate
+rqt windows yourself. A stale lock file after a crash is harmless because the
+operating system releases the lock; do not delete it to force a second run.
 A headless run uses `ros2 launch uamc_bringup sim.launch.py` without the GUI
 arguments. `mode:=manual` is a separate opt-in simulated joystick profile; see
 the runbook. Do not expect arbitrary stationary steering in the current
@@ -228,3 +241,23 @@ source, mount and calibrate the sensors, and perform the specified
 wheels-lifted checks. Do not assume the reference project's STM32 firmware or
 stock receiver wiring applies to this modified car. The physical competition
 video and technical design document remain team deliverables.
+
+
+## 9. If WSL reconnects or the windows disappear
+
+A reconnect of the VS Code WSL extension can mean the WSL VM restarted. This
+machine logged Windows Event 2004 (low virtual memory) near the observed
+resets. Free RAM and Windows committed memory are different readings; in Task
+Manager > Performance > Memory, inspect **Committed**, and add **Commit size**
+in Details to identify consumers. The helper refuses to start at 95% host
+commit use. It does not terminate any Windows applications or services.
+
+If the helper reports another simulation is running, return to its terminal
+and stop it with Ctrl+C. If its terminal is gone, inspect `ps -ef` before
+stopping the specific launch process; do not launch another copy or delete the
+lock file. For RViz, the supplied configuration explicitly enables displays
+and provides a close camera view. A blank window is not the expected view:
+check the Displays panel status and `/robot_description`, `/scan`, and TF.
+
+See [the incident and verification notes](launch-troubleshooting.md) for the
+evidence gathered, fixes, and limits of the investigation.

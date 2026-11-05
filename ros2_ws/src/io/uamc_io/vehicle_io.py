@@ -7,6 +7,7 @@ import time
 from ackermann_msgs.msg import AckermannDriveStamped
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import ExternalShutdownException
 from rclpy.clock import Clock, ClockType
 from uamc_interfaces.msg import VehicleStatus
 
@@ -61,12 +62,18 @@ class VehicleIO(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = VehicleIO()
+    node = None
     try:
+        node = VehicleIO()
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
-        node.destroy_node()
-        rclpy.shutdown()
+        try:
+            if node is not None:
+                node.destroy_node()
+        finally:
+            rclpy.try_shutdown()
 
 
 if __name__ == '__main__':

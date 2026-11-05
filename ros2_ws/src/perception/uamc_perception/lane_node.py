@@ -2,6 +2,7 @@ import cv2
 from cv_bridge import CvBridgeError
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import ExternalShutdownException
 from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
 from cv_bridge import CvBridge
@@ -19,7 +20,8 @@ class LaneDetector(Node):
         super().__init__('lane_detector')
         for name, value in [('base_frame', 'base_link'), ('near', 0.25), ('far', 1.5),
                             ('half_width', 0.75), ('min_width', 0.35), ('max_width', 0.95),
-                            ('threshold', 190), ('min_rows', 12), ('image_timeout', 0.5)]:
+                            ('threshold', 190), ('min_rows', 12), ('image_timeout', 0.5),
+                            ('ground_z', 0.0)]:
             self.declare_parameter(name, value)
         self.info = None
         self.bridge = CvBridge()
@@ -58,7 +60,7 @@ class LaneDetector(Node):
                                  near=self.p('near'), far=self.p('far'),
                                  half_width=self.p('half_width'), min_width=self.p('min_width'),
                                  max_width=self.p('max_width'), threshold=self.p('threshold'),
-                                 min_rows=self.p('min_rows'))
+                                 min_rows=self.p('min_rows'), ground_z=self.p('ground_z'))
             for x, y in points:
                 pose = PoseStamped()
                 pose.header = path.header
@@ -76,6 +78,8 @@ def main(args=None):
     node = LaneDetector()
     try:
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()

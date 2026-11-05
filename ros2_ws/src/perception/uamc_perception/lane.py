@@ -5,7 +5,7 @@ import numpy as np
 
 def detect_lane(image, k, d, rotation, translation, *, near=0.25, far=1.5,
                 half_width=0.75, min_width=0.35, max_width=0.9,
-                threshold=190, min_rows=12):
+                threshold=190, min_rows=12, ground_z=0.0):
     if image is None or image.ndim not in (2, 3) or image.size == 0:
         raise ValueError('empty camera image')
     k = np.asarray(k, dtype=float).reshape(3, 3)
@@ -13,14 +13,14 @@ def detect_lane(image, k, d, rotation, translation, *, near=0.25, far=1.5,
     if (not np.isfinite(k).all() or not np.isfinite(d).all() or
             k[0, 0] <= 0 or k[1, 1] <= 0 or k[2, 2] == 0):
         raise ValueError('invalid camera calibration')
-    if not (0 < near < far and 0 < min_width < max_width <= 2 * half_width):
+    if not np.isfinite(ground_z) or not (0 < near < far and 0 < min_width < max_width <= 2 * half_width):
         raise ValueError('invalid ground grid parameters')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if image.ndim == 3 else image
     gray = cv2.undistort(gray, k, d)
     xs = np.linspace(near, far, 75)
     ys = np.linspace(-half_width, half_width, 241)
     gx, gy = np.meshgrid(xs, ys, indexing='ij')
-    ground = np.stack((gx, gy, np.zeros_like(gx)), axis=-1)
+    ground = np.stack((gx, gy, np.full_like(gx, ground_z)), axis=-1)
     # TF provides camera optical -> base; transform points in the other direction.
     camera = (ground - translation) @ rotation
     z = camera[:, :, 2]

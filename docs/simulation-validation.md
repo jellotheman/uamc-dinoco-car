@@ -27,3 +27,15 @@ The simulator uses a fake vehicle status, a simplified vehicle and a fixed
 sensor coverage or cutoff. Not every planned fault-injection and joystick
 check has been demonstrated end-to-end. The competition requires a physical
 car video and a technical design document; neither is supplied by these runs.
+
+## Later graphical regression check
+
+Subsequent restart investigation found that the original 1.2-radian simulated
+camera could lose an inner boundary while the car was still centered on the
+curve. The camera now uses a provisional 1.5-radian field of view and the
+lane detector projects onto ground 45 mm below rear-axle `base_link`. A full
+Gazebo GUI + RViz run with these corrections completed the obstacle-stop
+action at approximately (3.413 m, 0.336 m), near-zero measured wheel speed,
+and 1 m detector clearance. The earlier three-run table above records the
+earlier configuration, not a repeated acceptance result for the new camera.
+See `launch-troubleshooting.md` for restart, RViz and shutdown verification.

@@ -5,6 +5,8 @@ import time
 from ackermann_msgs.msg import AckermannDriveStamped
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import ExternalShutdownException
+from rclpy.impl.implementation_singleton import rclpy_implementation as _rclpy
 from rclpy.clock import Clock, ClockType
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Joy
@@ -86,13 +88,26 @@ class ManualJoy(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ManualJoy()
+    node = None
     try:
+        node = ManualJoy()
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
-        node.publish(False)
-        node.destroy_node()
-        rclpy.shutdown()
+        try:
+            if node is not None:
+                try:
+                    if rclpy.ok():
+                        try:
+                            node.publish(False)
+                        except _rclpy.RCLError:
+                            if rclpy.ok():
+                                raise
+                finally:
+                    node.destroy_node()
+        finally:
+            rclpy.try_shutdown()
 
 
 if __name__ == '__main__':

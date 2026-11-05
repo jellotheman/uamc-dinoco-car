@@ -1,5 +1,6 @@
 """The first local planner forwards the validated lane centerline unchanged."""
 import rclpy
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from nav_msgs.msg import Path
 
@@ -16,6 +17,8 @@ def main():
     node = LanePlanner()
     try:
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()

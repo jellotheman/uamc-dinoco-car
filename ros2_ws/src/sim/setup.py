@@ -14,5 +14,5 @@ setup(
     install_requires=['setuptools'], tests_require=['pytest'], zip_safe=True,
     maintainer='UAMC team', maintainer_email='team@example.com',
     description='Harmonic practice world and watchdog adapter', license='Apache-2.0',
-    entry_points={'console_scripts': ['ackermann_adapter = uamc_sim.ackermann_adapter:main']},
+    entry_points={'console_scripts': ['ackermann_adapter = uamc_sim.ackermann_adapter:main', 'gazebo_supervisor = uamc_sim.gazebo_supervisor:main']},
 )

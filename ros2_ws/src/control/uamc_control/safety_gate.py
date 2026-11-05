@@ -5,6 +5,7 @@ import threading
 from functools import wraps
 
 import rclpy
+from rclpy.executors import ExternalShutdownException
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.clock import Clock, ClockType
@@ -262,9 +263,12 @@ def main():
     executor.add_node(node)
     try:
         executor.spin()
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
         node.armed = False
-        node.tick()
+        if rclpy.ok():
+            node.tick()
         executor.shutdown()
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()

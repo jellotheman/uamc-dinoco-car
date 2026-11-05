@@ -5,6 +5,7 @@ import time
 from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import Twist
 import rclpy
+from rclpy.executors import ExternalShutdownException
 from rclpy.clock import Clock, ClockType
 from rclpy.node import Node
 
@@ -47,7 +48,10 @@ def main(args=None):
     node = AckermannAdapter()
     try:
         rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
     finally:
-        node.publisher.publish(Twist())
+        if rclpy.ok():
+            node.publisher.publish(Twist())
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
