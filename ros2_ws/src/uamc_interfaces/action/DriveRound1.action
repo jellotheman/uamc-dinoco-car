@@ -1,0 +1,7 @@
+# Run at the configured speed; no external target is accepted.
+---
+bool success
+string message
+---
+string state
+float32 clearance_m
