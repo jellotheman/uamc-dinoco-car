@@ -1,0 +1,11 @@
+std_msgs/Header header
+string mode
+bool armed
+bool running
+bool obstacle_hold
+string fault
+string health_reason
+bool measured_standstill
+string[] input_names
+bool[] input_fresh
+float32[] input_age_sec

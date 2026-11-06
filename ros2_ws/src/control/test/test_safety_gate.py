@@ -33,6 +33,9 @@ class Harness:
     tick = SafetyGate.tick
     arm = SafetyGate.arm
     reset = SafetyGate.reset
+    goal = SafetyGate.goal
+    status_snapshot = SafetyGate.status_snapshot
+    publish_status = SafetyGate.publish_status
 
     def __init__(self, mode='auto'):
         self.mode = mode
@@ -194,3 +197,92 @@ def test_obstacle_hold_stays_neutral_after_obstacle_disappears():
     gate.data['obstacle'].detected = False
     gate.tick()
     assert gate.obstacle_hold and gate.pub.messages[-1].drive.speed == 0.0
+
+
+def test_status_tracks_gate_transitions_and_health():
+    gate = Harness()
+    gate.armed = gate.running = False
+    snapshot = gate.status_snapshot()
+    assert not snapshot.armed and not snapshot.running
+    assert snapshot.measured_standstill and snapshot.health_reason == ''
+    assert snapshot.input_names == ['status', 'wheel', 'imu', 'obstacle', 'lane', 'path', 'auto']
+    assert all(snapshot.input_fresh)
+    assert all(age >= 0 for age in snapshot.input_age_sec)
+
+    gate.times['imu'] -= 2
+    rejected = gate.arm(SimpleNamespace(data=True), SimpleNamespace())
+    assert not rejected.success
+    snapshot = gate.status_snapshot()
+    assert snapshot.health_reason == 'stale or missing imu'
+    assert not snapshot.input_fresh[snapshot.input_names.index('imu')]
+    gate.times['imu'] = time.monotonic()
+    assert gate.arm(SimpleNamespace(data=True), SimpleNamespace()).success
+    assert gate.status_snapshot().armed
+    gate.goal(SimpleNamespace())
+    assert gate.status_snapshot().running
+
+    gate.data['obstacle'].detected = True
+    gate.data['obstacle'].clearance_m = 0.5
+    gate.tick()
+    assert gate.status_snapshot().obstacle_hold
+    gate.data['obstacle'].detected = False
+    gate.running = False
+    assert gate.reset(SimpleNamespace(), SimpleNamespace()).success
+    snapshot = gate.status_snapshot()
+    assert not snapshot.armed and not snapshot.obstacle_hold and snapshot.fault == ''
+
+
+def test_status_fault_and_missing_or_stale_inputs():
+    gate = Harness()
+    del gate.data['wheel']
+    del gate.times['wheel']
+    snapshot = gate.status_snapshot()
+    i = snapshot.input_names.index('wheel')
+    assert not snapshot.input_fresh[i] and snapshot.input_age_sec[i] == -1.0
+    assert not snapshot.measured_standstill
+    gate.tick()
+    assert gate.status_snapshot().fault == 'stale or missing wheel'
+
+    gate = Harness()
+    gate.data['wheel'].header.stamp.sec = 98
+    snapshot = gate.status_snapshot()
+    i = snapshot.input_names.index('wheel')
+    assert not snapshot.input_fresh[i] and snapshot.input_age_sec[i] >= 0
+
+
+def test_manual_status_reports_only_relevant_inputs_and_disarm():
+    gate = Harness('manual')
+    snapshot = gate.status_snapshot()
+    assert snapshot.input_names == ['status', 'wheel', 'imu', 'obstacle', 'manual', 'enable']
+    gate.arm(SimpleNamespace(data=False), SimpleNamespace())
+    assert not gate.status_snapshot().armed
+
+
+def test_status_publish_failure_does_not_break_command_path():
+    gate = Harness()
+    gate.status_pub = SimpleNamespace(publish=lambda msg: (_ for _ in ()).throw(RuntimeError('failed')))
+    gate.publish_status()
+    gate.tick()
+    assert gate.pub.messages[-1].drive.speed > 0
+
+
+def test_status_after_action_completion(monkeypatch):
+    monkeypatch.setattr('uamc_control.safety_gate.rclpy.ok', lambda: True)
+    gate = Harness()
+    gate.obstacle_hold = True
+
+    class Goal:
+        is_cancel_requested = False
+        is_active = True
+
+        def publish_feedback(self, feedback):
+            pass
+
+        def succeed(self):
+            self.succeeded = True
+
+    goal = Goal()
+    result = SafetyGate.execute(gate, goal)
+    snapshot = gate.status_snapshot()
+    assert result.success and goal.succeeded
+    assert not snapshot.running and not snapshot.armed and snapshot.obstacle_hold

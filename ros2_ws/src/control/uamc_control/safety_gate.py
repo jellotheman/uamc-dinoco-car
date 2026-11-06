@@ -19,7 +19,7 @@ from sensor_msgs.msg import Imu
 from std_msgs.msg import Bool
 from std_srvs.srv import SetBool, Trigger
 from uamc_interfaces.action import DriveRound1
-from uamc_interfaces.msg import Obstacle, VehicleStatus
+from uamc_interfaces.msg import Obstacle, SafetyStatus, VehicleStatus
 from .control_math import clamp, finite_command
 
 
@@ -57,6 +57,7 @@ class SafetyGate(Node):
         self.last_enable = False
         self.last_speed = 0.0
         self.last_tick = time.monotonic()
+        self.status_pub = self.create_publisher(SafetyStatus, '/safety/status', 10)
         self.pub = self.create_publisher(AckermannDriveStamped, '/drive/command', 10)
         self.create_subscription(Path, '/perception/lane', lambda m: self.receive('lane', m), 10)
         self.create_subscription(Path, '/planning/path', lambda m: self.receive('path', m), 10)
@@ -73,11 +74,14 @@ class SafetyGate(Node):
                                    goal_callback=self.goal, cancel_callback=lambda _: CancelResponse.ACCEPT,
                                    callback_group=ReentrantCallbackGroup())
         self.create_timer(0.05, self.tick, clock=Clock(clock_type=ClockType.STEADY_TIME))
+        self.create_timer(0.1, self.publish_status, clock=Clock(clock_type=ClockType.STEADY_TIME))
 
+    @synchronized
     def receive(self, key, msg):
         self.data[key] = msg
         self.times[key] = time.monotonic()
 
+    @synchronized
     def enable(self, msg):
         now = time.monotonic()
         enabled = bool(msg.data)
@@ -138,6 +142,36 @@ class SafetyGate(Node):
 
     def stopped(self):
         return self.fresh('wheel', self.get_parameter('sensor_timeout').value) and abs(self.data['wheel'].twist.twist.linear.x) <= self.get_parameter('standstill_speed').value
+
+    @synchronized
+    def status_snapshot(self):
+        msg = SafetyStatus()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.mode = self.mode
+        msg.armed = self.armed
+        msg.running = self.running
+        msg.obstacle_hold = self.obstacle_hold
+        msg.fault = self.fault
+        msg.health_reason = self.health()
+        msg.measured_standstill = self.stopped()
+        keys = ['status', 'wheel', 'imu', 'obstacle']
+        keys += ['lane', 'path', 'auto'] if self.mode == 'auto' else ['manual', 'enable']
+        now = time.monotonic()
+        sensor_timeout = self.get_parameter('sensor_timeout').value
+        command_timeout = self.get_parameter('command_timeout').value
+        msg.input_names = keys
+        msg.input_fresh = [self.fresh(key, command_timeout if key in ('auto', 'manual', 'enable')
+                                      else sensor_timeout) for key in keys]
+        msg.input_age_sec = [max(0.0, now - self.times[key]) if key in self.times else -1.0
+                             for key in keys]
+        return msg
+
+    def publish_status(self):
+        # Telemetry must never interrupt the command/watchdog timer.
+        try:
+            self.status_pub.publish(self.status_snapshot())
+        except Exception as exc:
+            self.get_logger().error('Safety status publication failed: ' + str(exc))
 
     @synchronized
     def arm(self, req, res):
@@ -216,7 +250,8 @@ class SafetyGate(Node):
             goal.abort()
             return result
         except Exception as exc:
-            self.fault = 'action execution failed: ' + str(exc)
+            with self.lock:
+                self.fault = 'action execution failed: ' + str(exc)
             self.get_logger().error(self.fault)
             if goal.is_active:
                 goal.abort()
