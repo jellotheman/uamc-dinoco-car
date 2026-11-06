@@ -4,7 +4,7 @@
 
 ## Real serial boundary
 
-The real adapter consumes the gate's `/drive/command` in m/s and positive-left radians. It subscribes to a separate genuine `/hardware/status` (`VehicleStatus`, reliable), combines its source and receipt freshness with link state, and publishes `/vehicle/status`. The monitor producer is not included. Serial open and an exact `READY\n` handshake establish link state only; they do not establish hardware health. No odometry is produced from commands.
+The real adapter consumes the gate's `/drive/command` in m/s and positive-left radians. It subscribes to a separate genuine `/hardware/status` (`VehicleStatus`, reliable), combines its source and receipt freshness with link state, and publishes `/vehicle/status`. The monitor producer is not included. Serial open and a `READY` line handshake establish link state only; they do not establish hardware health. No odometry is produced from commands.
 
 Select `transport=real` only with explicit `serial_device`, `serial_baud=115200`, `calibration_file`, `handshake_timeout`, `write_timeout`, `command_timeout`, `health_timeout`, `max_source_age`, `future_tolerance`, `max_speed` and `max_steer`. The real launch profile validates these separately. The handshake, write, command, health, source-age and future-tolerance maximums are respectively 30, 0.5, 5, 5, 5 and 1 seconds; choose watchdogs appropriate to the measured hardware. The selected port is opened exclusively where supported; there is no port fallback.
 
@@ -51,7 +51,7 @@ See the [embedded platform](../Embedded_Platform/README.md) and [interface resea
 
 ## Physical camera acquisition
 
-The optional `camera` executable (`real_camera`) uses the working teammate's
+The UAMC-managed `camera` executable (`real_camera`) uses the working teammate's
 OpenCV/V4L2 acquisition settings as the starting point. It is selected only by
 an explicit `sources.camera: opencv` private profile; no default device/index is
 opened. It publishes sensor-data-QoS BGR8 `/camera/image_raw` and matching
@@ -66,4 +66,4 @@ Timestamps mark host read completion, not exposure. The newest-frame worker
 keeps executor/shutdown responsive; an OS/OpenCV read ignoring cancellation may
 remain blocked until process exit. Device ownership and actual buffering/rates
 must be verified on the Pi. No health, motion feedback, TF or drive commands are
-fabricated. See the [sensor deployment instructions](../../../docs/guides/real-car.md#select-the-real-camera-and-c1-publishers).
+fabricated. See the [sensor deployment instructions](../../../docs/setup.md).

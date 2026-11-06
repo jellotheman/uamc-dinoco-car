@@ -13,7 +13,7 @@ The lane detector undistorts the camera image, uses adaptive brightness threshol
 - `lane_detector` consumes `/camera/image_raw` and `/camera/camera_info`, uses TF at the image timestamp, and publishes a `nav_msgs/Path` on `/perception/lane`.
 - `obstacle_detector` consumes `/scan` and `/drive/command`, uses TF at the scan timestamp, and publishes `uamc_interfaces/Obstacle` on `/perception/obstacle`. A watchdog reports invalid results for missing or stale scans or commands.
 
-The [vehicle description](../description/README.md) supplies simulated sensor frames; [control](../control/README.md) consumes the observations. Real camera calibration, sensor poses and vehicle dimensions must be measured and validated. See the [project guide](../../../docs/guides/guide.md) for the running stack.
+The [vehicle description](../description/README.md) supplies simulated sensor frames; [control](../control/README.md) consumes the observations. Real camera calibration, sensor poses and vehicle dimensions must be measured and validated. See the [operation guide](../../../docs/operation.md) for the running stack.
 
 ## Lane tuning
 
@@ -21,20 +21,19 @@ The `lane_detector` node exposes `adaptive_block_size` (199, odd pixel count),
 `adaptive_c` (-10.0), `window_height` (0.12 m), and `window_margin` (0.12 m).
 Adaptive thresholding compares brightness with a local mean minus
 `adaptive_c`; a negative value requires a positive contrast above that mean.
-The former fixed `threshold` parameter is no longer used: remove it from local
-tuning files and tune contrast with `adaptive_c`. Window dimensions use ground
-metres, while the threshold block size uses image pixels.
+Window dimensions use ground metres, while the threshold block size uses image
+pixels. Older tuning files should remove the obsolete fixed `threshold` key and
+use `adaptive_c` to tune contrast.
 
 Existing camera/frame, ground-plane, lane-width, `min_rows`, and image-timeout
 parameters still apply. Fit checks require shared observed coverage, bounded
 marking widths, residual consistency and valid lane separation. Invalid frames
 publish an empty path with the source image timestamp. There is no history-based
-path reuse, single-boundary inference or stop-line detection. The planner,
-controller, services and action keep their existing ROS interfaces.
+path reuse, single-boundary inference or stop-line detection.
 
 Fits interpolate between supported rows; there is currently no explicit maximum
 interruption length. The detector has not been validated for prolonged marking
-occlusion. See the [implementation and validation record](../../../docs/archive/lane-detection-implementation.md)
+occlusion. See the [simulation validation](../../../docs/archive/simulation-validation.md)
 for the scope of the tests and simulator trials.
 
 

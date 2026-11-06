@@ -1,16 +1,16 @@
 # Vehicle commands, simulation and the existing controller
 
-Research checked 2026-11-06 against ROS message definitions, Jazzy ros2_control documentation, Gazebo Harmonic documentation/source and a ROS 2 F1TENTH hardware adapter. UAMC source inspected on `v1` at `5f59dae09925008fddae69feffd60e6331a22c34`. This is a recommendation for the present project, not a record of implemented hardware support or physical validation.
+Research checked 2026-11-06 against ROS message definitions, Jazzy ros2_control documentation, Gazebo Harmonic documentation/source and a ROS 2 F1TENTH hardware adapter. UAMC source inspected on `v1` at `5f59dae09925008fddae69feffd60e6331a22c34`. This records the architectural decision and its rationale; it is not physical validation.
 
 ## Recommendation
 
-Retain the existing ESP32 firmware if it accepts the documented commands and its actual behavior meets the vehicle's requirements. Implement a small ROS serial adapter in `uamc_io`, downstream of the existing safety gate. Keep one physical-units driving interface for simulation and hardware; select a different backend in the launch profile. Do not migrate to ros2_control merely to send two normalized values over serial. The evidence and alternatives below support this project-specific recommendation.
+Retain the existing ESP32 firmware if it accepts the documented commands and its actual behavior meets the vehicle's requirements. The implemented small ROS serial adapter lives in `uamc_io`, downstream of the existing safety gate. Keep one physical-units driving interface for simulation and hardware; select a different backend in the launch profile. Do not migrate to ros2_control merely to send two normalized values over serial. The evidence and alternatives below support this project-specific recommendation.
 
 The installed program need not be rewritten or reflashed simply because the autonomy software changes. Obtaining its source/version and recovery method is still valuable for reproducibility and troubleshooting; it is separate from deciding to modify it. Arduino versus ESP-IDF is not an architectural requirement when reusing installed firmware. If the existing firmware lacks essential local timeout behavior or usable outputs, a host adapter alone cannot repair those omissions. The [Dinoco interface research](dinoco-hardware-interface.md) records what is established and what remains inferred.
 
 ## Deployment target
 
-The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [implementation plan](../archive/real-car-integration-plan.md) specifies reproducible Pi setup/build/update instructions and the future `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These launch/helper behaviors are now implemented; see the [validation record](../archive/real-car-integration-validation.md) for actual checks and unverified hardware prerequisites.
+The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [setup guide](../setup.md) provides Pi setup/build/update instructions and the `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These launch/helper behaviors are now implemented; see the [validation record](../archive/software-validation.md) for actual checks and unverified hardware prerequisites.
 
 ## One command contract, different backend outputs
 
@@ -71,7 +71,7 @@ The [vehicle I/O implementation](../../ros2_ws/src/io/README.md) now provides
 calibrated serial conversion, finite-value/source-age/receipt-age checks,
 bounded output, health qualification, timeout handling and neutral
 requalification. Fake-endpoint and PTY checks are recorded in the
-[software validation](../archive/real-car-integration-validation.md).
+[software validation](../archive/software-validation.md).
 The shared [safety gate](../../ros2_ws/src/control/README.md) already enforces
 its wheel/IMU/obstacle/status and selected-command input requirements.
 
@@ -83,16 +83,19 @@ speed regulation. No continuous wheel/IMU/cutoff feedback can be recovered from
 the teammate's recorded host protocol. Those inputs may have separate physical
 sources; neither synthetic odometry nor fake readiness satisfies them.
 
-## Automatic calibration scope
-
-An offline calibration helper can fit steering-command versus measured angle and throttle versus measured speed from recorded observations, check bounds/sign/neutral, and export a proposed configuration for review. It must label its measured operating conditions and reject missing, non-finite or insufficient data. Automatically collecting those observations by moving the car requires working actuation, independent feedback and the physical prerequisites above. A program cannot identify actual speed, steering angle or safe endpoints from outgoing normalized commands alone; repeating a throttle sweep without measurements is not calibration.
-
 ## Folder ownership and current scope
 
 `ros2_ws/src/io` is the ROS-side adapter location. `ros2_ws/src/Embedded_Platform` is the home for firmware provenance, the hardware-interface record and bench/calibration guidance. It need not acquire new firmware source if the installed program is reused, but retain its README and records instead of emptying the directory. If the teammate supplies the actual sketch later, preserve it with its version/build information there as appropriate. `ros2_ws/src/sim` remains the simulator backend.
 
-The original research pass performed only research/documentation; the later implementation is tracked in the validation record. No ros2_control packages were installed, no code path was changed, no serial device was opened and no physical firmware or actuator behavior was verified.
+The original research did not verify physical firmware or actuator behavior; the later software implementation is recorded in the validation record.
 
-## Deferred calibration automation
+## Calibration scope
 
-On 2026-11-06 the user explicitly deferred auto-calibration. No calibration tool or automatic-motion routine was implemented. Revisit offline fitting from recorded command/measurement pairs first; autonomous data collection additionally needs the real adapter, measured feedback, verified cutoff and supervised hardware tests. Calibration itself remains necessary for the real adapter even while automating that process is deferred.
+Automatic calibration is deferred. An offline helper could fit steering-command
+versus measured angle and throttle versus measured speed from recorded
+observations, validate bounds, sign and neutral, and export a proposed
+configuration for review. Collection by automatic motion requires verified
+actuation, independent measurements, cutoff and supervised testing. Outgoing
+commands alone cannot establish speed, steering angle or safe endpoints.
+Manual measured calibration remains necessary; see [setup](../setup.md) and
+the [commissioning checklist](../development/vehicle-commissioning-checklist.md).

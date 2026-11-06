@@ -6,7 +6,7 @@ Arm, disarm and reset use the existing safety services. Start sends a Round 1 ac
 
 Raw and lane debug image liveness uses steady receipt time, source timestamp advancement and ROS-time freshness. RViz Image displays can retain their last frame: check these indicators for missing or stale streams. The lane diagnostic is a bird's-eye view, not a raw calibrated camera image.
 
-The shared simulation configuration docks Raw camera above Lane diagnostics on the right (about 420 pixels wide each), leaving spatial inspection in the center and controls on the left. Saved Follow car and Overhead views work across both scenarios. Resizing and saving a personal RViz configuration retains your preferred dock sizes.
+The shared simulation configuration and views are described in the [operation guide](../../../docs/operation.md).
 
 The installed `config/real.rviz` uses the same layout with the panel's
 private clock set to real time and its Deployment Context set to hardware

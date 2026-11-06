@@ -24,10 +24,8 @@ The model uses these user-supplied stock dimensions (millimetres):
 | Tire diameter | 90 |
 | Tire width | 38 |
 
-The wheelbase, track and tire radius were already correct. Tire width is now
-38 mm rather than 30 mm, and the simplified body is 345 mm long with its top
-160 mm above level ground. Named Xacro properties supply both wheel placement
-and the Gazebo Ackermann plugin, keeping their geometry consistent.
+Named Xacro properties supply both wheel placement and the Gazebo Ackermann
+plugin, keeping their geometry consistent.
 
 `base_link` remains the rear-axle centre, 45 mm above the ground when level.
 The model assumes equal body overhang beyond the front and rear axles: its
@@ -49,16 +47,8 @@ existing conservative obstacle rectangle (300 mm forward, 100 mm rearward,
 body and tires, including steered front tires. It should not be reduced to
 the straight-wheel width without checking the steering sweep.
 
-Geometry checks expand the real Xacro, check the body and four wheels,
-compare drivetrain dimensions with the plugin, and verify containment in
-that conservative obstacle envelope:
-
-```bash
-cd ~/projects/uamc/ros2_ws
-source /opt/ros/jazzy/setup.bash
-colcon test --packages-select uamc_description
-colcon test-result --verbose
-```
+Geometry tests check the expanded model, drivetrain dimensions and containment
+in the conservative obstacle envelope.
 
 ## Real description
 

@@ -13,7 +13,7 @@ def sensor_nodes(profile):
         try:
             prefix = get_package_prefix("sllidar_ros2")
         except PackageNotFoundError as exc:
-            raise ValueError("sllidar_c1 requires the pinned sllidar_ros2 build; see docs/guides/real-car.md") from exc
+            raise ValueError("sllidar_c1 requires the pinned sllidar_ros2 build; see docs/setup.md#sensor-publishers") from exc
         if not (Path(prefix) / "lib/sllidar_ros2/sllidar_node").is_file():
             raise ValueError("sllidar_ros2 is indexed but its sllidar_node executable is missing")
         values = profile["lidar"]

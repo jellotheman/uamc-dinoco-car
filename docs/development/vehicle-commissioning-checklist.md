@@ -1,14 +1,13 @@
-# Remaining work to run UAMC on the car
+# Vehicle commissioning
 
-This is the current work list, not a preflight procedure. Each checkbox is one
-unfinished deliverable; its plain-English explanation refers to that same item.
-Routine commands are in the [Pi guide](../guides/real-car.md). Completed software
-and the source/test evidence are in the [checklist audit](commissioning-checklist-audit.md).
+This is the current work list, not a preflight procedure. Each checkbox is one unfinished deliverable.
+Routine commands are in the [operation guide](../operation.md). Completed software
+and the source/test evidence are in the [software validation](../archive/software-validation.md).
 No physical commissioning was performed from this workspace.
 
 Already implemented: serial command translation and interlocks, measured-profile
 validation, sensor/lane/command freshness handling, camera publication and
-optional official C1 launch, real.sh, RViz/viewer and MCAP recording. These do
+managed official C1 launch, real.sh, RViz/viewer and MCAP recording. These do
 not need to be written again. The teammate's working `uamc_pi 2` remains the
 hardware-access baseline; [its settings/protocol are already researched](../reference/dinoco-hardware-interface.md).
 
@@ -20,9 +19,6 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   the existing recorder. This does not require actuator calibration or arming;
   spatial displays need the measured transforms from R4.
 
-  **Plain English:** Run our existing software on the Pi and get the real camera
-  and laser data onto the screen and into a recording.
-
 - [ ] **R2 — Establish the installed controller's safe behavior.** With someone
   beside the car, identify the installed controller/firmware and relevant
   servo/ESC/cutoff wiring; demonstrate neutral at startup, local command timeout
@@ -30,9 +26,6 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   preserve its source/binary/recovery information when available. Source absence
   alone does not require replacement. Firmware changes are conditional on a
   demonstrated gap. Do not run `check.py` actuator sweeps as a passive probe.
-
-  **Plain English:** Find out what is already controlling the motor and steering,
-  and prove the car can stop when the Pi or its connection fails.
 
 - [ ] **R3 — Supply genuine motion feedback and hardware health to ROS.** Connect
   or adapt actual sources for `/odometry/wheel`, `/imu/data` and independent
@@ -42,9 +35,6 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   including sensor loss. The existing gate consumes these topics already; the
   teammate host repo does not supply them. They need not come from the ESP32.
 
-  **Plain English:** Give our software real speed, motion and stop/fault readings.
-  Camera/LiDAR data and commands sent to the motor cannot substitute for these.
-
 - [ ] **R4 — Produce the measured camera/model configuration.** Supply camera
   intrinsics/distortion, sensor mounting poses, ground reference and the modified
   car's footprint. Start from the stock dimensions already supplied in the
@@ -52,9 +42,6 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   or modified dimensions rather than restarting chassis research. Finish with
   the private CameraInfo calibration, measured URDF/TF and model profile needed
   for valid lane and obstacle geometry.
-
-  **Plain English:** Tell the software how the real camera sees and exactly where
-  the sensors and body are relative to one another.
 
 - [ ] **R5 — Produce measured steering/throttle calibration and operating limits.**
   Use a supervised bench/measurement procedure to obtain steering center, sign
@@ -65,9 +52,6 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   has no raw-output calibration mode. Reuse the team's suitable bench method or
   define one before actuating.
 
-  **Plain English:** Measure what steering and throttle commands actually do,
-  then put those results into the configuration our adapter already understands.
-
 - [ ] **R6 — Exercise the integrated control path on the restrained car.** Once
   R2–R5 provide the required hardware/configuration, test disarmed neutral,
   Reset/Arm/manual deadman, steering direction and bounded output, plus actual
@@ -76,18 +60,12 @@ hardware-access baseline; [its settings/protocol are already researched](../refe
   stop established in R2. Finish with a working wheels-lifted control session
   and recorded results; resolve any failures before driving on the ground.
 
-  **Plain English:** Test the complete system with the wheels safely off the
-  ground, including disconnects and stopping, before letting it drive freely.
-
 - [ ] **R7 — Validate low-speed driving and tune from actual runs.** Complete a
   supervised bounded manual trial, measure loaded stopping/coasting distance
   and latency, then test lane following and obstacle stopping within that
   envelope. Use recorded real data to resolve perception/control tuning and
   any remaining hardware faults. Finish with repeatable car runs and measured
   limits, not just a successful launch or simulated run.
-
-  **Plain English:** Drive slowly in a controlled area, measure stopping, then
-  get lane following and obstacle stopping working reliably on this car.
 
 R1 can start now with car access; R2–R5 can progress in parallel where their
 measurements permit. Armed UAMC trials require their relevant inputs together.
@@ -97,7 +75,7 @@ and inspect after each run. Keep actuation disabled until the physical
 prerequisites are met. Keep private profiles/calibration/bags outside Git.
 Reverse and auto-calibration are deferred.
 
-Detailed procedures/contracts: [Pi deployment](../guides/real-car.md),
+Detailed procedures/contracts: [setup](../setup.md),
 [embedded hardware](../../ros2_ws/src/Embedded_Platform/README.md),
 [calibration measurements](../../ros2_ws/src/Embedded_Platform/calibration/README.md),
 [vehicle I/O](../../ros2_ws/src/io/README.md).

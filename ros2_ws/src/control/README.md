@@ -10,8 +10,8 @@ The lane planner currently forwards the perceived lane as the planned path. The 
 
 `uamc_control` provides three nodes:
 
-- `lane_planner`: `/perception/lane` ? `/planning/path` (`nav_msgs/Path`).
-- `path_controller`: `/planning/path` ? `/drive/requested` (`ackermann_msgs/AckermannDriveStamped`).
+- `lane_planner`: `/perception/lane` → `/planning/path` (`nav_msgs/Path`).
+- `path_controller`: `/planning/path` → `/drive/requested` (`ackermann_msgs/AckermannDriveStamped`).
 - `safety_gate`: receives autonomous or manual requests and publishes the final `/drive/command`. It also consumes lane, path, obstacle, status, wheel odometry and IMU inputs. It publishes authoritative gate state on `/safety/status` (see the [status contract](../interfaces/README.md#safety-status-contract)). It exposes `/safety/arm` and `/safety/reset` services and the `/round1/run` action defined by [interfaces](../interfaces/README.md).
 
-Bringup selects auto or manual mode at launch. See the [project guide](../../../docs/guides/guide.md) for operation and the [Round 1 plan](../../../docs/archive/ROUND1_PLAN.md) for intended contracts. Parameters and geometry remain subject to real vehicle calibration.
+Bringup selects auto or manual mode at launch. See the [operation guide](../../../docs/operation.md) for operation and the [Round 1 plan](../../../docs/archive/round1-plan.md) for intended contracts. Parameters and geometry remain subject to real vehicle calibration.

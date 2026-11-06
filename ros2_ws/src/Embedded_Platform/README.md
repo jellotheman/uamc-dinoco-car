@@ -1,6 +1,11 @@
 # Embedded platform
 
-This directory is the home for the vehicle-side controller, its interface, and bench calibration. The current firmware directory is a specification and integration placeholder; **it contains no buildable or flashable firmware**. The teammate's Dinoco host code now supplies an ESP32-targeted serial command interface; the exact board and installed firmware remain unverified. See the [source-pinned interface research](../../../docs/reference/dinoco-hardware-interface.md), checked 2026-11-06. The user reports that this implementation moves the car; no physical test was performed in this workspace.
+This directory owns vehicle-controller integration and bench calibration. The
+[firmware directory](firmware/README.md) is a placeholder: it contains no
+buildable or flashable firmware. The exact board and installed firmware remain
+unverified. The team reports that its Dinoco host implementation moves the car;
+no physical test was performed in this workspace. The [interface research](../../../docs/reference/dinoco-hardware-interface.md)
+records the candidate serial protocol and its provenance.
 
 ## System boundary
 
@@ -10,55 +15,46 @@ Autonomous controller or manual input
      ROS safety gate (/drive/command)
              |
      Pi-side uamc_io calibrated serial adapter [disabled by default]
-             |  candidate USB serial: 115200 baud, S,steer,throttle + LF
-  vehicle controller [existing firmware or later verified firmware]
-       | steering          | ESC              | measured wheel speed
-       +-------------------+------------------+
-       | local command watchdog and reported health
-       + independent hardware E-stop / motor power cutoff
+             |
+     vehicle controller [local watchdog unverified]
+       | steering          | ESC
+
+     wheel-speed source and health source [unverified; may be separate]
+     independent hardware E-stop / motor power cutoff [unverified]
 ```
 
-The ROS safety gate is the only publisher of `/drive/command`, in m/s and radians. The adapter composes fresh independent `/hardware/status` with link state into `/vehicle/status`. A genuine motion source supplies `/odometry/wheel`; the serial adapter does not produce it. Sensor sources and their timestamps remain independent; controller commands are not wheel feedback. Camera, LiDAR and IMU connection paths must be based on the physical wiring.
+The gate publishes `/drive/command` in m/s and radians. The [I/O adapter](../io/README.md)
+translates it to calibrated serial fields and combines fresh independent
+`/hardware/status` with link state for `/vehicle/status`. A genuine motion
+source supplies `/odometry/wheel`; commands are not wheel feedback. Serial
+open or `READY` alone does not establish health. Fake readiness is not physical
+readiness. Camera, LiDAR and IMU connections must reflect actual wiring.
 
-The current [uamc_io package](../io/README.md) provides a calibrated serial backend, disabled mode and a simulation-only fake transport. Serial mode requires explicit measured configuration and fresh genuine `/hardware/status`; a link handshake alone never establishes readiness. A fake ready status and fake applied command are not evidence of hardware readiness. Start the real profile only in its motor-disabled configuration until the physical transport and safety path have been verified.
+## Identify and integrate the vehicle
 
-## Existing teammate interface
+With drive power disconnected and the chassis safely supported, identify and
+photograph the controller, markings, connectors and wiring. Record the ESC,
+motor, servo and receiver; trace signals, grounds, supplies and fuses, and
+identify wheel-speed hardware and the independent cutoff. Measure voltages;
+do not assume receiver power is suitable for Pi GPIO. The [hardware research](../../../docs/reference/hardware-research.md)
+provides stock inspection aids, not a wiring diagram for the modified car.
 
-Both Dinoco host variants use the same `esp_link.py`: PySerial sends newline-terminated ASCII `S,{steer:.3f},{throttle:.3f}` at 115200 baud. Both fields are normalized to [-1, 1], with steering trim applied before clamping. They are not ROS metres/second or radians. `READY` is a startup substring, not authenticated readiness or continuous health telemetry. The sender discards incoming messages after sends.
+Obtain and preserve the team's firmware source or binary, version and recovery
+procedure. Confirm the board, installed parser, neutral and watchdog behavior
+before selecting a transport or sending commands. USB identifiers alone do not
+prove board type or protocol. Retain the existing firmware if it meets the
+interface and safety requirements; replace it only after establishing a gap.
+A compatible Arduino sketch need not be replaced with ESP-IDF. The [firmware
+placeholder](firmware/README.md) describes the conditional implementation path.
 
-The host comments describe an ESP32 reset, about three seconds of ESC arming and a 300 ms embedded command watchdog. These are claims about missing firmware, not behavior established by the Python implementation. No firmware, PWM mapping, pins, wheel feedback or E-stop circuit is included. Preserve and obtain that existing firmware before deciding whether to replace it.
+Use the [calibration checklist](calibration/README.md) for vehicle-specific
+measurements. Begin with motor power disabled, then test with wheels lifted;
+verify the independent cutoff and physical stopping behavior before enabling
+actuation. The [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md)
+tracks commissioning. The [command architecture](../../../docs/reference/vehicle-command-architecture.md)
+explains the shared ROS command and output adapters.
 
-The compatible UAMC adapter is implemented in `uamc_io`, downstream of the safety gate, including calibration validation, finite-value/freshness checks and disconnect handling. Actual measured mappings, steering polarity and genuine feedback/health are tracked in the [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md). It must not keep a stale motion command alive with a serial sender timer. Serial-open success or a startup `READY` must not be turned into fake `/vehicle/status` readiness. The [research record](../../../docs/reference/dinoco-hardware-interface.md) details the protocol, variant differences and implementation prerequisites.
-
-## Recommended integration approach
-
-Retain the firmware already installed on the vehicle if its command interpretation, neutral, bounds and local timeout meet the integration requirements. A compatible Arduino sketch is firmware too; there is no requirement to replace a working Arduino implementation with ESP-IDF. The ROS serial adapter in `uamc_io` is already implemented. Current work is its integration and commissioning with the actual vehicle; replacement firmware is conditional on an established gap.
-
-Keep this directory's protocol, provenance and calibration documentation. It can contain no firmware implementation while the existing firmware is maintained elsewhere; record that source location/version and recovery procedure when supplied. A known sender format alone does not verify receiver behavior. Confirm real wheel-speed and status sources, which can be separate from the ESP32, before satisfying the safety gate's input requirements.
-
-Keep `/drive/command` as the shared `AckermannDriveStamped` command in m/s and radians for both simulation and hardware. Translate only at the output boundary: the existing simulator adapter creates a velocity/yaw-rate command; the hardware adapter creates calibrated normalized serial fields. The [architecture research](../../../docs/reference/vehicle-command-architecture.md) explains the ROS conventions, current zero-speed steering limitation, and why a small adapter fits the current car better than an immediate ros2_control migration.
-
-## Identify the vehicle first
-
-With drive power disconnected and the chassis safely supported:
-
-1. Photograph both sides of the controller and all markings, connectors and attached wires. Record the board manufacturer, exact module and chip markings, USB connector, power source and relevant cable labels. An ESP32-compatible marking is not enough to identify the board's pinout or prove existing firmware behavior.
-2. Record ESC, motor, servo and receiver part numbers; photograph any changes from stock. The [hardware research](../../../docs/reference/hardware-research.md) identifies the two stock H12Y/H12Y+ ESC variants and their documented stock receiver connections as inspection aids. These are not a wiring diagram for the modified car.
-3. Obtain the team's working firmware/source, repository or binary version and recovery procedure; confirm it matches the documented Dinoco serial sender and identify which host variant was actually used. Record tested neutral behavior and test results. Preserve the original firmware and its recovery method before considering any replacement.
-4. Trace the steering and ESC signal/ground connections, common grounds, separate supplies and fuses; identify measured wheel-speed hardware and the independent E-stop / cutoff. Measure signal and supply voltages with appropriate equipment; never assume receiver power is suitable for Pi GPIO.
-5. After the electrical arrangement and supply are verified, inspect the existing USB devices on the Pi using `lsusb`, `ls -l /dev/serial/by-id/`, and `dmesg` or `journalctl -k`; record device identifiers and interface details. USB names alone do not prove the board type or firmware protocol. Confirm transport settings and obtain an explicit wiring map from the team.
-
-## Implementation and build path
-
-1. Prefer the team's tested firmware if it provides compatible safe actuation and a local watchdog; actual motion feedback and cutoff health can have separate sources; use the implemented ROS adapter and the documented host protocol, checking compatibility against the installed parser. Do not reverse-engineer an actuator protocol by sending guessed commands to a powered car.
-2. If the board is confirmed as an ESP32 and existing firmware is unsuitable, the candidate path is an ESP-IDF project under [firmware/](firmware/README.md), pinned to a verified board target and toolchain. Firmware must start disabled, enforce an independent local command timeout, validate version, sequence and checksum of commands, constrain calibrated outputs, and report real feedback and faults. Define the actual protocol and safe output only after ESC and controller verification.
-3. If the board is another family, choose its vendor-supported build system only after identifying the exact board and recovery method. This directory intentionally has no ROS package manifest: `colcon` does not build or flash microcontroller firmware.
-
-   A custom host-to-controller interface may be necessary because the candidate host command format is known, but the installed parser, feedback and fault semantics have not been supplied. First evaluate the team's existing protocol and use a small adapter if it can satisfy the watchdog and feedback requirements; specify and implement a new versioned interface only if necessary.
-4. Before connecting actuators, build and test protocol parsing and timeout behavior with fake or motor-disabled outputs. Then use wheels-lifted tests to establish neutral, steering travel and direction, command limits, measured speed, disconnect behavior and independent cutoff. Validate low-speed stopping distance and reverse behavior on the actual ESC before enabling reverse.
-
-Calibration values are vehicle-specific. Use [calibration/README.md](calibration/README.md) as a measurement checklist and keep actual local device calibration and recordings out of Git.
-
-## Architectural reference
-
-[AD's Embedded_Platform](https://github.com/simonli357/AD/tree/main/Embedded_Platform) separates embedded firmware and steering calibration from the host autonomy stack. Its `Embedded_2022` and `Embedded_2024` folders and [build setup](https://github.com/simonli357/AD/blob/main/Embedded_Platform/buildsetup.txt) target an STM32/Mbed platform. UAMC adopts that separation, but its board, transport, pinout and firmware are unverified; the reference firmware and flashing commands cannot be assumed compatible. No AD firmware is copied into this directory.
+This directory has no ROS package manifest; `colcon` does not build or flash
+microcontroller firmware. The upstream [AD embedded platform](https://github.com/simonli357/AD/tree/main/Embedded_Platform)
+uses STM32/Mbed; its firmware and flashing commands are not assumed compatible
+with this unverified vehicle, and no AD firmware is copied here.

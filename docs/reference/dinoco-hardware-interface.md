@@ -77,9 +77,7 @@ Sources: [older configuration](https://github.com/iamepic24/dinoco-autonomous-ca
 
 Device paths identify intended USB topology/enumeration, not globally portable controller identities. Retain them as upstream evidence; rediscover devices on the actual Pi. Both use 115200 controller baud and 460800 LiDAR baud. No USB VID/PID, serial number or controller model is supplied.
 
-The webcam is read through OpenCV/V4L2 with MJPEG requested and a one-frame buffer. Successful camera opening does not establish that the requested format was negotiated: setters' return values and actual achieved rate are not checked. No camera intrinsics or distortion calibration is supplied. [Camera implementation](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py#L21-L47).
-
-The C1 reader sends standard scan bytes `A5 20`, stop bytes `A5 25`, expects descriptor `A5 5A 05 00 00 40 81`, parses five-byte nodes and converts distance by dividing the encoded value by 4000 to metres. It keeps positive-quality/nonzero returns, accepts completed point sets over 50 points, and estimates obstacle forward distance as the third-nearest point inside a straight +/-0.15 m corridor. This is a direct serial sensor connection to the Pi, independent of the actuator link; it does not confirm ROS frames, scan coverage or the measured mounting pose. [LiDAR implementation](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lidar_c1.py#L10-L92).
+The [sensor integration reference](sensor-integration.md) covers the camera and C1 acquisition settings, parser limitations and ROS-facing semantics.
 
 Updated code includes chassis values: length 0.345 m, width 0.205 m, height 0.160 m, wheelbase 0.232 m, track 0.165 m, tire diameter 0.090 m and tire width 0.038 m. Their inclusion establishes what this code assumes, not measurement provenance. LiDAR-to-front 0.08 m is explicitly photo-estimated; 0.25 m/s cruise, 0.15 m coast and base throttle are explicitly placeholders. Camera protrusion is configured as 0.05 m. Do not promote these into calibrated UAMC parameters merely because the program reportedly ran. [Geometry and assumptions](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/config.py#L3-L15).
 
@@ -89,7 +87,7 @@ STOP-sign approach timing divides a remaining estimated distance by the configur
 
 The compatible [UAMC serial adapter](../../ros2_ws/src/io/README.md) is now
 implemented, including calibrated conversion, freshness/bounds checks, neutral
-qualification and I/O failure handling. Optional [camera/C1 integration](../development/sensor-driver-integration.md)
+qualification and I/O failure handling. Managed [camera/C1 integration](sensor-integration.md)
 is implemented too. The research above establishes host behavior; it cannot
 establish installed firmware semantics, actual wheel/IMU/cutoff sources or
 measured actuator/camera/mount calibration.

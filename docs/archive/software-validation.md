@@ -1,6 +1,8 @@
-# Real-car integration validation
+# Software validation
 
-Archived 2026-11-06 at the user's request. This is the earlier implementation scope/evidence, not the next implementation task. Physical commissioning remains open; use the [corrected vehicle commissioning checklist](../development/vehicle-commissioning-checklist.md) for current work.
+Historical software evidence; physical commissioning remains open in the [commissioning checklist](../development/vehicle-commissioning-checklist.md).
+
+## Real-car integration: 2026-11-06
 
 2026-11-06, branch `v1`, Ubuntu 24.04 WSL x86_64, ROS 2 Jazzy and Gazebo
 Harmonic. This records software checks with synthetic data and test-created
@@ -26,11 +28,7 @@ these commands were run on the team's unidentified Pi configuration.
   hardware context and compatible sensor-data wheel QoS. Existing service/action
   semantics remain unchanged; measured steering is unavailable.
 
-Three GPT 6.1 Terra workers at Medium reasoning owned disjoint I/O,
-bringup/description/helper, and dashboard/control-QoS paths. The coordinator
-owned shared builds, runtime sessions, integration review, docs and Git.
-Final independent source review found no additional blocker beyond the recorded
-serial and physical limitations. No replacement firmware or ros2_control was added.
+No replacement firmware or ros2_control was added.
 
 Recording follow-up: `scripts/record.sh` records a unique MCAP run independently
 of the launch, with Git revision/dirty metadata and the sensor/TF/control/safety
@@ -108,10 +106,11 @@ under `/tmp/uamc-real-integration` and `/tmp/uamc-real-sim-regression`.
 
 ## Deliberate limits and remaining vehicle work
 
-External-source configuration is consolidated in the profile loader and real
-launch. No empty driver launch is shipped: actual device/driver versions are
-unknown, so camera, CameraInfo, C1 scan, IMU, wheel and cutoff/health producers
-must be independently supplied and commissioned. The adapter consumes genuine
+At this integration snapshot, no camera or C1 driver was included, so all sensor
+producers had to be independently supplied. Later software added optional managed
+camera and C1 publishers; see [sensor integration](../reference/sensor-integration.md).
+Those publishers still require target commissioning, and IMU, wheel and independent
+cutoff/health producers must be supplied and commissioned. The adapter consumes genuine
 `/hardware/status`; it does not implement the missing monitor. A UI context,
 READY or successful write never substitutes for it.
 
@@ -137,6 +136,85 @@ multi-operator race is not exhaustively tested.
 
 The offline integration milestone is complete; physical commissioning remains
 tracked in the [current checklist](../development/vehicle-commissioning-checklist.md).
-**Auto-calibration remains deferred.** See the [deployment guide](../guides/real-car.md)
+**Auto-calibration remains deferred.** See the [deployment guide](../setup.md)
 for operation and the [embedded procedures](../../ros2_ws/src/Embedded_Platform/README.md)
 for detailed hardware checks.
+
+## RViz dashboard checks: 2026-11-06
+
+Snapshot: 2026-11-06, Ubuntu 24.04 WSL, ROS 2 Jazzy, Gazebo Harmonic.
+This is implementation evidence, not a current operating guide or hardware qualification.
+
+### Verified
+
+- Built all eight packages up to uamc_dashboard and uamc_bringup; the SafetyStatus schema is generated and discoverable. Corrected missing ament_cmake metadata for interfaces and cleaned stale generated links from the previous build.
+- Selected package tests passed: control 31, perception 48, simulation 39, bringup 5, dashboard 6 (129 cases). The final rebuild and dashboard/perception rerun passed after request-bookkeeping and image-source liveness fixes. The workspace test-result summary reported 157 tests, zero errors, zero failures and zero skipped (including retained results from other packages).
+- Loaded the actual RViz panel and built-in displays using an optional VisualizationFrame GUI harness, with the practice and hairpin Gazebo scenarios run sequentially. This was a live ROS/Gazebo test, not a UI mock.
+- Invoked Arm, Start, Cancel own run and Disarm through Qt buttons in each scenario. Both ended disarmed, at measured standstill, without a gate fault.
+- Raw camera and bird's-eye diagnostic images were received; actual renderer captures showed them stacked at the right, about 420 pixels wide, with a central spatial view and a left dashboard.
+- Set practice WorldControl pause=true. The panel reported a paused/absent ROS clock, stale raw/debug images and stale wheel/lane/path; measured speed and obstacle assessment became unavailable. Resumed and shut down that session before starting hairpin.
+- Shared configuration uses odom and follows base_link, with saved local and overhead views. Disabled default odometry covariance visualization and reduced history arrows to prevent them obscuring the car. Corrected the MarkerArray Topic property using actual RViz-saved configuration.
+- The final ordinary RViz launch restored both image windows on the right (420 pixels wide, approximately 600 pixels high when maximized). Sending SIGINT to that owned RViz process exited it normally and its existing launch exit handler stopped all other processes cleanly.
+- GUI helper destruction returned normally. Practice headless launch shutdown returned clean process exit statuses after a narrowly guarded perception ROS-context shutdown fix.
+
+### Method and limitations
+
+Native desktop automation could not initialize (kernel asset path error), and external X11 WSLg screenshots were black. The optional developer helper in dashboard/test/dashboard_gui_smoke.cpp uses RViz itself, reads real QLabel/button state, and captures each real OGRE render target at its widget position. It can generate dock layout state with an explicit arrange argument. No screenshots are required repository assets.
+
+Image displays retain their last frame; the panel explicitly reports steady-clock liveness beside them. Odometry history is an estimate, not ground truth. The detector markers show sampled footprint poses, not measured braking distance. No full hairpin traversal, physical calibration, stopping-distance or hardware-readiness claim follows from these UI checks.
+
+Tests cover unavailable services, accepted/rejected goals, own-goal cancellation, destruction with an unfinished goal, stale data, uncertain goal timeout state, service expiry and late-arm/disarm reconciliation. Every possible delayed action-transport or multi-operator ordering is not exhaustively tested.
+
+Current operation: [operation guide](../operation.md), [dashboard module](../../ros2_ws/src/dashboard/README.md).
+
+## Commissioning checklist audit: 2026-11-06
+
+On 2026-11-06, ran **64 focused tests: all passed**, using synthetic data/PTYs
+and ROS nodes locally, without physical devices:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ros2_ws/install/setup.bash
+python3 -m pytest -q \
+  ros2_ws/src/control/test/test_safety_gate.py \
+  ros2_ws/src/perception/test/test_lane_node.py \
+  ros2_ws/src/perception/test/test_obstacle_debug.py \
+  ros2_ws/src/io/test/test_real_backend.py \
+  ros2_ws/src/bringup/test/test_real_config.py \
+  ros2_ws/src/bringup/test/test_sensor_profile.py
+```
+
+These confirm existing software behavior rather than new hardware readiness.
+The earlier 99-test result remains dated evidence from sensor integration; it
+was not rerun wholesale for this documentation change. No runtime code changed.
+
+## Camera and C1 publisher validation: 2026-11-06
+
+This was performed on Ubuntu 24.04 WSL x86_64 with ROS 2 Jazzy. No Pi, camera, C1, ESP32 or actuator was connected. These synthetic tests and the vendor build do not establish target sensor timing, coverage, calibration or physical loss behavior.
+
+- Built `uamc_io` and `uamc_bringup` with `colcon build --symlink-install
+  --packages-select uamc_io uamc_bringup`.
+- Ran both complete package suites: **57 I/O + 42 bringup = 99 tests**, zero
+  failures/errors/skips. Existing serial DDS/PTY and shutdown cases remain in
+  those suites. Reports are local under `ros2_ws/build/{uamc_io,uamc_bringup}`.
+- New camera cases use fake capture, not a device: negotiated format/dimensions,
+  one-slot consumption, expiry, startup/read timeout, bounded blocked-worker
+  cleanup, release errors, calibration matrices/dimensions/distortion rejection,
+  fixed parameters, real-time guard and clean interrupt handling.
+- Actual ROS DDS subscribers with fake capture check BGR8 payload, image header
+  and dimensions, matching calibrated CameraInfo, raw-only suppression of
+  CameraInfo and acquisition-error propagation.
+- Profile/launch cases cover explicit ownership, unknown/missing/unused blocks,
+  device paths, rates/format, non-finite/invalid values, protected tuning,
+  vendor node composition/types, missing SDK error, shared serial-port rejection
+  and critical-handler registration before processes.
+- Built pinned unmodified `sllidar_ros2` separately under `/tmp/uamc-c1-jazzy-check`
+  against Jazzy. Build passed with upstream C++ warnings (including zero-length
+  arrays and unused parameters); no physical scan was attempted.
+- Live default headless launch in a separate local ROS domain: observed disabled
+  vehicle transport and no managed camera/LiDAR nodes; SIGINT exited cleanly.
+- Live selected C1 launch with an intentionally nonexistent synthetic device:
+  the vendor driver exited 255 and the launch stopped its other owned processes.
+  Early shutdown interrupted some Python imports; this was not a fully running
+  sensor-stream loss test or a physical stop test.
+- Reviewed local relative documentation links and whitespace before commit.
