@@ -34,7 +34,7 @@ controller, services and action keep their existing ROS interfaces.
 
 Fits interpolate between supported rows; there is currently no explicit maximum
 interruption length. The detector has not been validated for prolonged marking
-occlusion. See the [implementation and validation record](../../../docs/development/lane-detection-implementation.md)
+occlusion. See the [implementation and validation record](../../../docs/archive/lane-detection-implementation.md)
 for the scope of the tests and simulator trials.
 
 

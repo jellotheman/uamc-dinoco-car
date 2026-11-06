@@ -21,19 +21,19 @@ The real-car serial adapter, launch and RViz2 profile are available with actuati
 
 - [Real-car integration plan](development/real-car-integration-plan.md): implementation scope, contracts and Terra/Medium worker ownership; physical commissioning remains open.
 - [Real-car integration validation](development/real-car-integration-validation.md): current build, tests, runtime evidence and physical blockers.
-- [Scenario implementation](development/scenario-implementation.md): selected worlds, usage and current validation status.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
-- [Lane-detection implementation](development/lane-detection-implementation.md): current algorithm, interface, review and validation.
 
 ## Archive
 
+- [Lane-detection implementation](archive/lane-detection-implementation.md): completed detector implementation and dated validation.
+- [Scenario implementation](archive/scenario-implementation.md): completed scenario implementation and dated validation.
 - [RViz dashboard implementation plan](archive/rviz-dashboard-implementation-plan.md): completed scope and agent ownership.
 - [RViz dashboard implementation checks](archive/rviz-dashboard-validation.md): dated build, test and GUI observations.
 
 - [Lane-detection comparison](archive/lane-detection-comparison.md): pre-upgrade UAMC and Simon Li AD snapshot, superseded by the current implementation record.
 - [Documentation audit](archive/documentation-audit.md): historical document organization decisions from 2026-11-05.
 - [Round 1 implementation plan](archive/ROUND1_PLAN.md): original specification and acceptance targets. It records intended scope; current implementation and validation are described in the guide and evidence files.
-- [World-selection research](archive/world-selection-research.md): dated upstream research based on the pre-scenario implementation snapshot. The current [scenario notes](development/scenario-implementation.md) describe what was implemented.
+- [World-selection research](archive/world-selection-research.md): dated upstream research based on the pre-scenario implementation snapshot. The current [scenario notes](archive/scenario-implementation.md) describe what was implemented.
 - [World-selection scope](archive/world-selection-scope.md): superseded proposal preserved for design rationale.
 - [WSL and RViz investigation](archive/launch-troubleshooting.md): dated incident and verification record; use the current guide and runbook for operation.
 

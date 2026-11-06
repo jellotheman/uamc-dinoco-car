@@ -3,7 +3,7 @@
 Research snapshot: 2026-11-05. This compares the current UAMC source with the `main` branch of [simonli357/AD](https://github.com/simonli357/AD) at commit [`cb73d5ad6a407273e125e53a8b559687431cc6f0`](https://github.com/simonli357/AD/tree/cb73d5ad6a407273e125e53a8b559687431cc6f0). These are code observations, not a benchmark or evidence of real-car performance.
 
 > Historical comparison: the UAMC algorithm below describes the pre-upgrade
-> implementation. See [the implementation record](../development/lane-detection-implementation.md)
+> implementation. See [the implementation record](lane-detection-implementation.md)
 > for the current adaptive-threshold and sliding-window detector.
 
 ## Simon Li AD

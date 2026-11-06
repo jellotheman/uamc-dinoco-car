@@ -1,8 +1,10 @@
 # Lane detection implementation: 2026-11-06
 
+Archived completed implementation record on 2026-11-06; commands and new validation belong in the current guide and module documentation. Historical results below retain their original scope.
+
 The lane detector now uses adaptive mean thresholding and histogram-seeded
 sliding windows inspired by Simon Li AD's camera-node detector. See the
-[pinned source comparison](../archive/lane-detection-comparison.md) for upstream references;
+[pinned source comparison](lane-detection-comparison.md) for upstream references;
 that comparison preserves the earlier UAMC implementation as a historical snapshot.
 This implementation adapts the method to the existing calibrated ROS 2 pipeline.
 

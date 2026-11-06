@@ -129,7 +129,7 @@ mounts and dynamics still need measurement. Launch commands are unchanged. The
 shared RViz dashboard shows local sensors and paths, not a full-course SDF map.
 See the [latest minimum-width trials](../development/simulation-validation.md)
 and the
-[scenario record](../development/scenario-implementation.md) for measured
+[scenario record](../archive/scenario-implementation.md) for measured
 results and the limits of sampled checks and wheel odometry. These checks
 are simulator evidence, not physical qualification.
 

@@ -1,5 +1,7 @@
 # Scenario selection implementation
 
+Archived completed implementation record on 2026-11-06; commands and new validation belong in the current guide and module documentation. Historical results below retain their original scope.
+
 The default scenario remains
 `practice`. To select the longer course through the usual script:
 
@@ -58,7 +60,7 @@ the modeled tires at steering limits.
 
 The following earlier trials used the previous 0.80 m line-center separation.
 Current minimum-width trials are recorded in
-[simulation validation](simulation-validation.md).
+[simulation validation](../development/simulation-validation.md).
 
 ## Earlier validation recorded on 2026-11-05
 

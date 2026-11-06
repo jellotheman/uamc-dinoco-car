@@ -45,7 +45,7 @@ Optional launch arguments: `scenario:=practice` (default) or
 `scenario:=hairpin`, `rviz:=true`, `gui:=true`, `visualization_debug:=true`, `gz_extra_args:=-v4` for
 verbose Gazebo output, and `mode:=manual`. Two fresh headless hairpin runs
 completed both U-turns and the final obstacle stop; see the
-[technical record](../development/scenario-implementation.md) for evidence and
+[technical record](../archive/scenario-implementation.md) for evidence and
 limits. Physical-car validation remains separate. An optional
 `params_file:=/absolute/path/to/file.yaml` selects a named-node parameter
 file at startup; simulation time, mode, fake transport and simulated ground

@@ -23,4 +23,4 @@ At zero speed this Twist conversion carries no steering angle, so it cannot repr
 
 `uamc_sim` contains the simulator launch, scenario handling, adapter, worlds and bridge configuration. `vehicle_sim.launch.py` starts the simulated vehicle and bridge. `config/bridge.yaml` carries simulation clock, camera, LiDAR, IMU, joint states and wheel odometry from Gazebo to ROS, and `/sim/cmd_vel` from ROS to Gazebo. The `ackermann_adapter` subscribes to `/drive/command` and publishes `/sim/cmd_vel`. The normal full-stack entry point is [bringup](../bringup/README.md), which also starts perception, control, localization and fake I/O.
 
-For setup and launch options, see the [project guide](../../../docs/guides/guide.md) and [scenario implementation notes](../../../docs/development/scenario-implementation.md). Simulated geometry and fake readiness do not establish physical vehicle performance or safety.
+For setup and launch options, see the [project guide](../../../docs/guides/guide.md) and [scenario implementation notes](../../../docs/archive/scenario-implementation.md). Simulated geometry and fake readiness do not establish physical vehicle performance or safety.
