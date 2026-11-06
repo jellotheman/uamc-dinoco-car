@@ -1,0 +1,1 @@
+<library path="uamc_dashboard"><class name="uamc_dashboard/DashboardPanel" type="uamc_dashboard::DashboardPanel" base_class_type="rviz_common::Panel"><description>UAMC safety dashboard</description></class></library>
