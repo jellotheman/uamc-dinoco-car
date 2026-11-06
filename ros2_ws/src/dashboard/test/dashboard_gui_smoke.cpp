@@ -16,7 +16,7 @@
 int main(int argc, char **argv)
 {
   if (argc < 4) {
-    std::cerr << "Usage: dashboard_gui_smoke INPUT.rviz OUTPUT.rviz SCREENSHOT.png [seconds]\n";
+    std::cerr << "Usage: dashboard_gui_smoke INPUT.rviz OUTPUT.rviz SCREENSHOT.png [seconds] [arrange|exercise|real]\n";
     return 2;
   }
   const QString input = argv[1], output = argv[2], screenshot = argv[3];
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   QApplication app(argc, argv);
   auto node =
     std::make_shared<rviz_common::ros_integration::RosNodeAbstraction>("rviz_dashboard_smoke");
-  node->get_raw_node()->set_parameter(rclcpp::Parameter("use_sim_time", true));
+  node->get_raw_node()->set_parameter(rclcpp::Parameter("use_sim_time", !(argc > 5 && std::string(argv[5]) == "real")));
   auto frame = std::make_unique<rviz_common::VisualizationFrame>(node);
   frame->setApp(&app);
   frame->setSplashPath("");

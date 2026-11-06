@@ -1,0 +1,167 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+- Class: rviz_common/Views
+  Name: Views
+- Class: uamc_dashboard/DashboardPanel
+  Name: UAMC Dashboard
+  Simulation: false
+  Deployment Context: hardware
+  Status Timeout: 0.75
+Visualization Manager:
+  Class: ''
+  Enabled: true
+  Name: root
+  Value: true
+  Global Options:
+    Background Color: 40; 44; 52
+    Fixed Frame: odom
+    Frame Rate: 30
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Value: true
+    Cell Size: 0.25
+    Plane Cell Count: 20
+    Color: 130; 130; 130
+    Alpha: 0.5
+    Reference Frame: <Fixed Frame>
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot
+    Enabled: true
+    Value: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/LaserScan
+    Name: Scan
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /scan
+      Reliability Policy: Best Effort
+    Size (m): 0.025
+    Color Transformer: FlatColor
+    Color: 100; 210; 255
+  - Class: rviz_default_plugins/Odometry
+    Name: Estimated motion history
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /odometry/filtered
+    Keep: 100
+    Covariance:
+      Value: false
+      Position:
+        Value: false
+      Orientation:
+        Value: false
+    Shape:
+      Value: Arrow
+      Shaft Length: 0.12
+      Shaft Radius: 0.008
+      Head Length: 0.06
+      Head Radius: 0.025
+      Color: 80; 180; 255
+  - Class: rviz_default_plugins/Path
+    Name: Lane
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /perception/lane
+    Color: 25; 255; 25
+    Line Style: Lines
+    Line Width: 0.03
+  - Class: rviz_default_plugins/Path
+    Name: Plan
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /planning/path
+    Color: 255; 180; 0
+    Line Style: Lines
+    Line Width: 0.015
+  - Class: rviz_default_plugins/Image
+    Name: Raw camera
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /camera/image_raw
+      Reliability Policy: Best Effort
+    Normalize Range: true
+    Queue Size: 2
+  - Class: rviz_default_plugins/Image
+    Name: Lane diagnostics
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /perception/lane/debug_image
+      Reliability Policy: Best Effort
+    Normalize Range: true
+    Queue Size: 2
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Obstacle corridor
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /perception/obstacle/debug_markers
+      Reliability Policy: Reliable
+  Tools:
+  - Class: rviz_default_plugins/Interact
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/FocusCamera
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 2.4
+      Focal Point: &id001
+        X: 0.4
+        Y: 0
+        Z: 0
+      Pitch: 0.9
+      Yaw: 0.8
+      Target Frame: base_link
+      Near Clip Distance: 0.01
+    Saved:
+    - Class: rviz_default_plugins/Orbit
+      Name: Follow car
+      Distance: 2.4
+      Focal Point: *id001
+      Pitch: 0.9
+      Yaw: 0.8
+      Target Frame: base_link
+      Near Clip Distance: 0.01
+    - Class: rviz_default_plugins/Orbit
+      Name: Overhead
+      Distance: 8.0
+      Focal Point: *id001
+      Pitch: 1.5707
+      Yaw: 0.0
+      Target Frame: base_link
+      Near Clip Distance: 0.01
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 950
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Lane diagnostics:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000002000000000000017c00000360fc0200000003fb000000100044006900730070006c006100790073010000003b000000c7000000c700fffffffb0000001c00550041004d0043002000440061007300680062006f0061007200640100000108000001ed000001a700fffffffb0000000a0056006900650077007301000002fb000000a0000000a000ffffff00000001000001a400000360fc0200000002fb00000014005200610077002000630061006d006500720061010000003b000001ad0000001600fffffffb00000020004c0061006e006500200064006900610067006e006f0073007400690063007301000001ee000001ad0000001600ffffff000003140000036000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Raw camera:
+    collapsed: false
+  UAMC Dashboard:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1600
+  X: 100
+  Y: 100

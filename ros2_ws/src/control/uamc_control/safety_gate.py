@@ -63,7 +63,7 @@ class SafetyGate(Node):
         self.create_subscription(Path, '/planning/path', lambda m: self.receive('path', m), 10)
         self.create_subscription(Obstacle, '/perception/obstacle', lambda m: self.receive('obstacle', m), 10)
         self.create_subscription(VehicleStatus, '/vehicle/status', lambda m: self.receive('status', m), 10)
-        self.create_subscription(Odometry, '/odometry/wheel', lambda m: self.receive('wheel', m), 10)
+        self.create_subscription(Odometry, '/odometry/wheel', lambda m: self.receive('wheel', m), qos_profile_sensor_data)
         self.create_subscription(Imu, '/imu/data', lambda m: self.receive('imu', m), qos_profile_sensor_data)
         self.create_subscription(AckermannDriveStamped, '/drive/requested', lambda m: self.receive('auto', m), 10)
         self.create_subscription(AckermannDriveStamped, '/drive/manual', lambda m: self.receive('manual', m), 10)

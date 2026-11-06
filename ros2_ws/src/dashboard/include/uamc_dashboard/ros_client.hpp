@@ -80,7 +80,7 @@ public:
           std::lock_guard<std::mutex> l(mu); cmd_speed.set(m->drive.speed, m->header.stamp);
           cmd_steer.set(m->drive.steering_angle, m->header.stamp);
       });
-    wheel_sub = node->create_subscription<Odom>("/odometry/wheel", 10, [this](Odom::SharedPtr m){
+    wheel_sub = node->create_subscription<Odom>("/odometry/wheel", rclcpp::SensorDataQoS(), [this](Odom::SharedPtr m){
           std::lock_guard<std::mutex> l(mu); speed.set(m->twist.twist.linear.x, m->header.stamp);
       });
     obstacle_sub = node->create_subscription<Obstacle>("/perception/obstacle", 10,

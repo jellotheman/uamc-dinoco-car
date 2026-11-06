@@ -184,3 +184,25 @@ TEST(RosClient, LateArmResponseRequestsDisarmAgain) {
  server_thread.join();
  executor.remove_node(server);
 }
+
+TEST(RosClient, RealClockAndWheelPublisherReliability) {
+  int argc = 0; char **argv = nullptr;
+  if(!rclcpp::ok()) {rclcpp::init(argc, argv);}
+  Client client(false);
+  EXPECT_FALSE(client.node->get_parameter("use_sim_time").as_bool());
+  EXPECT_GT(client.node->now().nanoseconds(), 0);
+  auto publisher_node = std::make_shared<rclcpp::Node>("dashboard_wheel_fixture");
+  for (bool reliable : {false, true}) {
+    auto qos = rclcpp::QoS(10);
+    if (reliable) {qos.reliable();} else {qos.best_effort();}
+    auto publisher = publisher_node->create_publisher<Odom>("/odometry/wheel", qos);
+    Odom msg;
+    msg.header.stamp = publisher_node->now();
+    msg.twist.twist.linear.x = reliable ? 0.2 : 0.1;
+    EXPECT_TRUE(wait_for([&]{
+      publisher->publish(msg);
+      std::lock_guard<std::mutex> lock(client.mu);
+      return client.speed.present && std::abs(client.speed.value - msg.twist.twist.linear.x) < 1e-5;
+    }));
+  }
+}

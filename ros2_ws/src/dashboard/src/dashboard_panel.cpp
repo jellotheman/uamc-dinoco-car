@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QTimer>
 
@@ -21,6 +22,15 @@ DashboardPanel::DashboardPanel(QWidget *parent)
   auto *settings = new QHBoxLayout;settings->addWidget(simulation_);
   settings->addWidget(new QLabel("Status Timeout"));settings->addWidget(timeout_);
   layout->addLayout(settings);
+  context_ = new QComboBox;
+  context_->addItem("Simulation", "simulation");
+  context_->addItem("Hardware context (unverified)", "hardware");
+  auto *context_layout = new QHBoxLayout;
+  context_layout->addWidget(new QLabel("Deployment Context"));
+  context_layout->addWidget(context_); layout->addLayout(context_layout);
+  connect(context_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this]{
+      Q_EMIT configChanged();
+    });
   status_ = new QLabel;inputs_ = new QLabel;values_ = new QLabel;io_ = new QLabel;
   message_ = new QLabel;for(auto *label:{status_, inputs_, values_, io_, message_}) {
     label->setWordWrap(true);layout->addWidget(label);
@@ -86,10 +96,16 @@ void DashboardPanel::save(rviz_common::Config config) const
 {
   rviz_common::Panel::save(config);config.mapSetValue("Simulation", simulation_->isChecked());
   config.mapSetValue("Status Timeout", timeout_->value());
+  config.mapSetValue("Deployment Context", context_->currentData().toString());
 }
 void DashboardPanel::load(const rviz_common::Config & config)
 {
-  rviz_common::Panel::load(config);bool sim;float timeout;
+  rviz_common::Panel::load(config);bool sim;float timeout; QString context;
+  // Older simulation configurations have no context field.
+  context_->setCurrentIndex(0);
+  if(config.mapGetString("Deployment Context", &context) && context == "hardware") {
+    context_->setCurrentIndex(1);
+  }
   if(config.mapGetBool("Simulation", &sim)) {
     simulation_->setChecked(sim);
   }
@@ -175,8 +191,9 @@ void DashboardPanel::refresh()
         "no").arg(c.vehicle.estop ? "yes" : "no").arg(c.vehicle.fault ? "yes" :
         "no").arg(QString::fromStdString(c.vehicle.reason));
   }
-  io_->setText(QString("Vehicle I/O %1: %2\nROS clock: %3").arg(c.simulation ? "(simulated/fake)" :
-      "").arg(io).arg(paused ? "paused or absent" : "running"));
+  io_->setText(QString("Vehicle I/O %1: %2\nROS clock: %3").arg(
+      context_->currentData().toString() == "simulation" ? "(simulation context / fake in sim)" :
+      "(hardware context; unverified)").arg(io).arg(paused ? "paused or absent" : "running"));
   auto image_text = [&](const ImageLiveness & image){
       return !image.seen ? QString("missing") :
              (image.live(Clock::now(), timeout, ros) ? QString("live") : QString("STALE"));

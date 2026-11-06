@@ -1,7 +1,7 @@
 #pragma once
 #include <rviz_common/panel.hpp>
 #include <memory>
-class QLabel; class QPushButton; class QCheckBox; class QDoubleSpinBox; class QTimer;
+class QComboBox; class QLabel; class QPushButton; class QCheckBox; class QDoubleSpinBox; class QTimer;
 namespace uamc_dashboard
 {
 class Client;
@@ -20,6 +20,6 @@ private:
   QLabel * status_; QLabel * inputs_; QLabel * values_; QLabel * io_; QLabel * message_;
   QPushButton * arm_; QPushButton * disarm_; QPushButton * reset_; QPushButton * start_;
   QPushButton * cancel_;
-  QCheckBox * simulation_; QDoubleSpinBox * timeout_; QTimer * timer_;
+  QComboBox * context_; QCheckBox * simulation_; QDoubleSpinBox * timeout_; QTimer * timer_;
 };
 }
