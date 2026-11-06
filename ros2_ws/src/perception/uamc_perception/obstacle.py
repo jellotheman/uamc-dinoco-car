@@ -7,7 +7,12 @@ import numpy as np
 # contains the supplied 0.345 x 0.205 m car and steered tires.
 def swept_obstacle(ranges, angle_min, angle_increment, range_min, range_max,
                    rotation, translation, curvature, *, front=0.30, rear=0.10,
-                   half_width=0.13, lookahead=1.0):
+                   half_width=0.13, lookahead=1.0, debug=None):
+    if debug is not None:
+        try:
+            debug.clear()
+        except Exception:
+            debug = None
     values = np.asarray(ranges, dtype=float)
     if (len(values) < 3 or not np.isfinite([angle_min, angle_increment, range_min,
             range_max, curvature, front, rear, half_width, lookahead]).all()
@@ -33,6 +38,11 @@ def swept_obstacle(ranges, angle_min, angle_increment, range_min, range_max,
     else:
         headings = steps*curvature
         cx, cy = np.sin(headings)/curvature, (1-np.cos(headings))/curvature
+    if debug is not None:
+        try:
+            debug['poses'] = np.column_stack((cx, cy, headings))
+        except Exception:
+            pass
     # Membership in each vehicle pose; first pose that intersects yields bumper clearance.
     in_corridor = np.zeros(len(points), dtype=bool)
     first = np.full(len(points), np.inf)

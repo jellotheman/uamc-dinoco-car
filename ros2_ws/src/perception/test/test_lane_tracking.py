@@ -101,3 +101,37 @@ def test_a_broad_bright_surface_is_not_two_lane_boundaries():
 def test_invalid_algorithm_parameters_are_rejected(parameters):
     with pytest.raises(ValueError):
         lane_path(*road_image(), **parameters)
+
+
+def test_debug_preserves_result_and_clears_invalid_fits():
+    debug = {}
+    args = road_image()
+    expected = lane_path(*args)
+    actual = lane_path(*args, debug=debug)
+    np.testing.assert_array_equal(actual, expected)
+    assert 'mask' in debug and 'rows' in debug and 'path' in debug
+    with pytest.raises(ValueError):
+        lane_path(*road_image(markings=()), debug=debug)
+    assert 'path' not in debug and 'left' not in debug
+
+
+@pytest.mark.parametrize('failure', ['clear', 'update', 'setitem'])
+def test_debug_collector_failure_cannot_change_lane_result(failure):
+    class Broken(dict):
+        def clear(self):
+            if failure == 'clear':
+                raise RuntimeError('collector failure')
+            super().clear()
+
+        def update(self, *args, **kwargs):
+            if failure == 'update':
+                raise RuntimeError('collector failure')
+            super().update(*args, **kwargs)
+
+        def __setitem__(self, key, value):
+            if failure == 'setitem':
+                raise RuntimeError('collector failure')
+            super().__setitem__(key, value)
+
+    args = road_image()
+    np.testing.assert_array_equal(lane_path(*args, debug=Broken()), lane_path(*args))

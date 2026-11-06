@@ -78,7 +78,12 @@ def _track_boundaries(mask, xs, ys, min_width, max_width, window_height, window_
 def detect_lane(image, k, d, rotation, translation, *, near=0.25, far=1.5,
                 half_width=0.75, min_width=0.35, max_width=0.9,
                 min_rows=12, ground_z=0.0, adaptive_block_size=199,
-                adaptive_c=-10.0, window_height=0.12, window_margin=0.12):
+                adaptive_c=-10.0, window_height=0.12, window_margin=0.12, debug=None):
+    if debug is not None:
+        try:
+            debug.clear()
+        except Exception:
+            debug = None
     if image is None or image.ndim not in (2, 3) or image.size == 0:
         raise ValueError('empty camera image')
     if image.dtype != np.uint8 or (image.ndim == 3 and image.shape[2] != 3):
@@ -111,8 +116,18 @@ def detect_lane(image, k, d, rotation, translation, *, near=0.25, far=1.5,
     xs = np.linspace(near, far, 75)
     ys = np.linspace(-half_width, half_width, 241)
     mask = _ground_mask(binary, k, rotation, translation, xs, ys, ground_z)
+    if debug is not None:
+        try:
+            debug.update(mask=mask, xs=xs, ys=ys)
+        except Exception:
+            debug = None
     rows = _track_boundaries(mask, xs, ys, min_width, max_width,
                              window_height, window_margin)
+    if debug is not None:
+        try:
+            debug['rows'] = rows
+        except Exception:
+            debug = None
     if len(rows) < min_rows:
         raise ValueError('insufficient visible paired lane markings')
     if np.ptp(rows[:, 0]) < 0.25:
@@ -133,4 +148,9 @@ def detect_lane(image, k, d, rotation, translation, *, near=0.25, far=1.5,
     path = np.column_stack((path_x, (left_fit(path_x)+right_fit(path_x))*0.5))
     if not np.isfinite(path).all():
         raise ValueError('invalid fitted lane')
+    if debug is not None:
+        try:
+            debug.update(path=path, fit_x=check_x, left=left_fit(check_x), right=right_fit(check_x))
+        except Exception:
+            pass
     return path

@@ -36,3 +36,22 @@ Fits interpolate between supported rows; there is currently no explicit maximum
 interruption length. The detector has not been validated for prolonged marking
 occlusion. See the [implementation and validation record](../../../docs/development/lane-detection-implementation.md)
 for the scope of the tests and simulator trials.
+
+
+## Optional visualization diagnostics
+
+Set each node's `debug_enabled` parameter to true to publish diagnostics;
+`debug_rate_hz` defaults to 5 Hz. Rendering is subscriber-aware and disabled by
+default. The best-effort `/perception/lane/debug_image` is a bird's-eye ground
+grid, not the raw camera image: forward x increases upward and lateral y to the
+right, with metric extent printed on the image. Orange points are observations,
+blue lines are accepted fits, and green points are the center path. Invalid
+frames are labeled and contain no fitted path. The image keeps the source stamp
+and frame; no heartbeat is emitted when images stop, so consumers must treat an
+old stamp as stale.
+
+The reliable `/perception/obstacle/debug_markers` shows the detector's sampled
+footprints in the base frame, the present footprint, and a clear/detected label.
+Markers retain the scan timestamp, expire after one second and are explicitly
+deleted when inputs become invalid or stale. They do not estimate a hit position.
+These diagnostics do not establish physical safety or sensor calibration.

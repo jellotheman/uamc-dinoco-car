@@ -121,3 +121,36 @@ def test_minimum_width_course_preserves_metric_path_and_requires_two_lines(cente
                             center=center, lane_width=0.485)
     with pytest.raises(ValueError, match='paired lane'):
         detect_lane(image, k, np.zeros(5), r, t, ground_z=-0.045)
+
+
+@pytest.mark.parametrize('curvature', [0.0, 0.65])
+def test_debug_poses_match_swept_detector_without_changing_result(curvature):
+    args = list(scan_with_point())
+    args[-1] = curvature
+    debug = {}
+    expected = swept_obstacle(*args)
+    assert swept_obstacle(*args, debug=debug) == expected
+    poses = debug['poses']
+    np.testing.assert_allclose(poses[0], [0, 0, 0])
+    if curvature:
+        np.testing.assert_allclose(poses[-1], [np.sin(curvature)/curvature,
+                                               (1-np.cos(curvature))/curvature, curvature])
+    else:
+        np.testing.assert_allclose(poses[-1], [1, 0, 0])
+
+
+@pytest.mark.parametrize('failure', ['clear', 'setitem'])
+def test_debug_collector_failure_cannot_change_obstacle_result(failure):
+    class Broken(dict):
+        def clear(self):
+            if failure == 'clear':
+                raise RuntimeError('collector failure')
+            super().clear()
+
+        def __setitem__(self, key, value):
+            if failure == 'setitem':
+                raise RuntimeError('collector failure')
+            super().__setitem__(key, value)
+
+    args = scan_with_point(.8, 0)
+    assert swept_obstacle(*args, debug=Broken()) == swept_obstacle(*args)
