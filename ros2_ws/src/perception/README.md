@@ -4,7 +4,7 @@ Perception interprets the vehicle's camera and LiDAR data so the driving system 
 
 ## How it fits together
 
-The lane detector uses camera calibration and the camera's position relative to the car to project detected lane markings onto the ground and produce a path. The obstacle detector transforms LiDAR points into the vehicle frame and checks a swept corridor based on the current steering command. Missing, stale or unusable inputs can make an observation invalid; an empty lane path or invalid obstacle result must not be treated as evidence of a clear route.
+The lane detector undistorts the camera image, uses adaptive brightness thresholding, and projects the result onto a calibrated ground-plane grid. Histogram seeds and sliding windows track the two lane markings; validated cubic boundary fits produce a 20-point center path. Both boundaries must be observed across enough common rows; a missing boundary is not inferred. The obstacle detector transforms LiDAR points into the vehicle frame and checks a swept corridor based on the current steering command. Missing, stale or unusable inputs can make an observation invalid; an empty lane path or invalid obstacle result must not be treated as evidence of a clear route.
 
 ## ROS 2 architecture
 
@@ -14,3 +14,25 @@ The lane detector uses camera calibration and the camera's position relative to 
 - `obstacle_detector` consumes `/scan` and `/drive/command`, uses TF at the scan timestamp, and publishes `uamc_interfaces/Obstacle` on `/perception/obstacle`. A watchdog reports invalid results for missing or stale scans or commands.
 
 The [vehicle description](../description/README.md) supplies simulated sensor frames; [control](../control/README.md) consumes the observations. Real camera calibration, sensor poses and vehicle dimensions must be measured and validated. See the [project guide](../../../docs/guides/guide.md) for the running stack.
+
+## Lane tuning
+
+The `lane_detector` node exposes `adaptive_block_size` (199, odd pixel count),
+`adaptive_c` (-10.0), `window_height` (0.12 m), and `window_margin` (0.12 m).
+Adaptive thresholding compares brightness with a local mean minus
+`adaptive_c`; a negative value requires a positive contrast above that mean.
+The former fixed `threshold` parameter is no longer used: remove it from local
+tuning files and tune contrast with `adaptive_c`. Window dimensions use ground
+metres, while the threshold block size uses image pixels.
+
+Existing camera/frame, ground-plane, lane-width, `min_rows`, and image-timeout
+parameters still apply. Fit checks require shared observed coverage, bounded
+marking widths, residual consistency and valid lane separation. Invalid frames
+publish an empty path with the source image timestamp. There is no history-based
+path reuse, single-boundary inference or stop-line detection. The planner,
+controller, services and action keep their existing ROS interfaces.
+
+Fits interpolate between supported rows; there is currently no explicit maximum
+interruption length. The detector has not been validated for prolonged marking
+occlusion. See the [implementation and validation record](../../../docs/development/lane-detection-implementation.md)
+for the scope of the tests and simulator trials.

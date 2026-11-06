@@ -20,7 +20,9 @@ class LaneDetector(Node):
         super().__init__('lane_detector')
         for name, value in [('base_frame', 'base_link'), ('near', 0.25), ('far', 1.5),
                             ('half_width', 0.75), ('min_width', 0.35), ('max_width', 0.95),
-                            ('threshold', 190), ('min_rows', 12), ('image_timeout', 0.5),
+                            ('adaptive_block_size', 199), ('adaptive_c', -10.0),
+                            ('window_height', 0.12), ('window_margin', 0.12),
+                            ('min_rows', 12), ('image_timeout', 0.5),
                             ('ground_z', 0.0)]:
             self.declare_parameter(name, value)
         self.info = None
@@ -59,7 +61,11 @@ class LaneDetector(Node):
             points = detect_lane(image, info.k, info.d, rotation, translation,
                                  near=self.p('near'), far=self.p('far'),
                                  half_width=self.p('half_width'), min_width=self.p('min_width'),
-                                 max_width=self.p('max_width'), threshold=self.p('threshold'),
+                                 max_width=self.p('max_width'),
+                                 adaptive_block_size=self.p('adaptive_block_size'),
+                                 adaptive_c=self.p('adaptive_c'),
+                                 window_height=self.p('window_height'),
+                                 window_margin=self.p('window_margin'),
                                  min_rows=self.p('min_rows'), ground_z=self.p('ground_z'))
             for x, y in points:
                 pose = PoseStamped()
