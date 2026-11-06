@@ -43,15 +43,20 @@ def load_profile(path, actuation="disabled"):
             data = yaml.safe_load(stream)
     except (OSError, yaml.YAMLError) as exc:
         raise ValueError(f"invalid hardware profile: {exc}") from exc
-    _mapping(data, ("schema_version", "identification", "sources"), ("model", "serial"))
+    _mapping(data, ("schema_version", "identification", "sources"), ("model", "serial", "camera", "lidar"))
     if type(data["schema_version"]) is not int or data["schema_version"] != 1:
         raise ValueError("unsupported hardware profile schema_version")
     ident = _mapping(data["identification"], ("hardware", "firmware", "measurement_record"), where="identification")
     for key, value in ident.items():
         _text(value, key)
     sources = _mapping(data["sources"], ("camera", "lidar", "imu", "wheel", "health"), where="sources")
-    if any(value != "external" for value in sources.values()):
-        raise ValueError("only external actual sensor sources are supported")
+    supported = {"camera": ("external", "opencv"), "lidar": ("external", "sllidar_c1"),
+                 "imu": ("external",), "wheel": ("external",), "health": ("external",)}
+    for key, allowed in supported.items():
+        if sources[key] not in allowed:
+            raise ValueError(f"unsupported {key} source; choose {allowed}")
+    from .sensor_config import validate_sensors
+    validate_sensors(data, path.parent)
     if actuation == "serial" and "model" not in data:
         raise ValueError("serial actuation requires a measured model and ground height")
     if "model" in data:
@@ -96,6 +101,9 @@ def validate_tuning(path):
     if not isinstance(data, dict) or not data:
         raise ValueError("tuning must be a nonempty named-node mapping")
     protected = {"use_sim_time", "transport", "mode", "serial_device", "serial_baud", "calibration_file", "handshake_timeout", "write_timeout", "command_timeout", "health_timeout", "max_source_age", "future_tolerance", "max_speed", "max_steer", "ground_z", "robot_description", "map_frame", "odom_frame", "base_link_frame", "world_frame", "odom0", "imu0", "publish_tf", "max_steering", "max_reverse", "speed", "wheelbase", "front", "rear", "half_width", "base_frame", "allow_reverse"}
+    protected.update({"device", "width", "height", "fps", "fourcc", "frame_id",
+                      "max_frame_age", "startup_timeout", "frame_timeout", "channel_type",
+                      "serial_port", "serial_baudrate", "inverted", "angle_compensate", "scan_mode"})
     for node, entry in data.items():
         if not isinstance(node, str) or not node or "*" in node or not isinstance(entry, dict) or set(entry) != {"ros__parameters"} or not isinstance(entry["ros__parameters"], dict):
             raise ValueError("tuning requires exact named-node ros__parameters entries")

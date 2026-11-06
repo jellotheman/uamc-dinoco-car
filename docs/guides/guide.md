@@ -90,7 +90,8 @@ source install/setup.bash
 
 The runbook includes `rosdep` installation for a new machine. This WSL setup
 already has ROS Jazzy, Gazebo Harmonic, RViz2 and the rqt plugins used below.
-The Pi needs its own ROS setup and the eventual hardware drivers.
+The Pi needs its own ROS setup, identified sensor publishers and physical
+commissioning. Optional camera/C1 setup is in the [Pi guide](real-car.md#select-the-real-camera-and-c1-publishers).
 
 ## 4. Run and watch the simulator
 
@@ -287,7 +288,7 @@ clearance and did not test the physical E-stop or real stopping distance.
 ## 8. Run on the physical car's Pi
 
 Follow the [real-car deployment guide](real-car.md) for GitHub clone/update,
-native Pi build, external sensor setup and commissioning prerequisites.
+native Pi build, managed or external sensor setup and commissioning prerequisites.
 From the project root, `./scripts/real.sh visualization_debug:=true` starts
 RViz2 and the real stack without Gazebo, with actuation disabled by default.
 Use `rviz:=false` for plain SSH; a sourced graphical workstation can run

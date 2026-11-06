@@ -97,8 +97,10 @@ ros2 launch uamc_bringup real_view.launch.py
 
 A complete local profile is selected with `hardware_config:=/absolute/path/vehicle.yaml`.
 No profile means no device opens or guessed model transforms. Actual camera,
-CameraInfo, scan, IMU, measured wheel odometry and `/hardware/status` must come
-from identified external drivers/monitor. Missing inputs remain unavailable.
+CameraInfo and scan can come from explicitly selected managed camera/C1
+publishers; see [sensor setup](real-car.md#select-the-real-camera-and-c1-publishers).
+IMU, measured wheel odometry and `/hardware/status` still need identified
+external drivers/monitor. Missing inputs remain unavailable.
 Serial output is an explicit commissioned opt-in; READY is only a link handshake.
 Do not bypass missing readiness, feedback or calibration. Use `rviz_frame:=base_link`
 for local observation without odometry. See [software validation and blockers](../archive/real-car-integration-validation.md).

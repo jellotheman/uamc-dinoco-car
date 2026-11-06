@@ -10,6 +10,7 @@ from launch_ros.actions import Node
 from uamc_bringup.real_config import load_profile, validate_tuning, validate_description
 from uamc_bringup.real_session import acquire_session_locks
 from uamc_bringup.real_view import rviz_action
+from uamc_bringup.sensor_launch import sensor_nodes
 
 
 def start(context):
@@ -58,6 +59,7 @@ def start(context):
             description = stream.read()
         validate_description(description)
         nodes.append(Node(package="robot_state_publisher", executable="robot_state_publisher", parameters=[common, {"robot_description": description}], output="screen"))
+    nodes.extend(sensor_nodes(profile))
     critical = list(nodes)
     if rviz:
         nodes.append(rviz)

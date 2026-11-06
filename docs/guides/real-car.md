@@ -9,7 +9,8 @@ The [current commissioning checklist](../development/vehicle-commissioning-check
 consolidates software and physical-car tasks. The teammate's latest `uamc_pi 2`
 already supplies working camera/C1 access, configured device settings and
 commissioning diagnostics to reuse. Here, external sensor interfaces mean those
-producers have not yet been integrated into this ROS stack. They do not mean
+producers were not originally included in this ROS stack. Optional managed
+camera and official C1 ROS publishers are now available below. They do not mean
 there is no working hardware-access code. Its `check.py` steering/throttle modes
 actively command hardware; they are supervised tools, not passive health gates.
 
@@ -93,14 +94,100 @@ output. Keep actual identifiers, calibration and bags outside Git. Named-node
 `params_file` tuning cannot select fake transport, simulation time or replace
 protected hardware configuration.
 
-Camera and calibrated CameraInfo, LiDAR, IMU, measured wheel odometry and the
-independent cutoff/health monitor are **external driver interfaces** in this
-release. Start only identified, tested team drivers. Their physical devices and
-protocols are not known here. See [topic contracts](../archive/real-car-integration-plan.md#5-frozen-ros-contracts-and-health-ownership)
+Camera and LiDAR may come from the explicitly selected managed sources below
+or existing external ROS drivers. IMU, measured wheel odometry and independent
+cutoff/health remain **external driver interfaces**. Start only identified,
+tested drivers; no source is selected by device enumeration or auto-detection. See [topic contracts](../archive/real-car-integration-plan.md#5-frozen-ros-contracts-and-health-ownership)
 and [hardware research](../reference/hardware-research.md). Exactly one source
 must own each topic and TF edge. The local EKF owns `odom -> base_link`; do not
 run a competing TF publisher. Without measured feedback, odom/history may be
 unavailable. A base_link view is local inspection, not valid driving odometry.
+
+## Select the real camera and C1 publishers
+
+These source choices start actual sensor acquisition even with actuation
+**disabled**. No profile still opens no devices. Stop the teammate application
+and other drivers first: exactly one process must own each device/topic. Do not
+use `check.py` steering/throttle as a startup probe.
+
+For the webcam, set `sources.camera: opencv` and add the exact `camera` block
+shown in the [inert profile template](../../ros2_ws/src/bringup/config/real_hardware.example.yaml).
+Identify the camera using `/dev/v4l/by-id/` or `/dev/v4l/by-path/`; index `0`
+from the teammate's code is a device-enumeration index, not a permanent identity.
+Its MJPG 1280x720/30 settings are useful candidates. The node verifies negotiated
+format/dimensions, logs the driver's nominal FPS and requires actual frames to
+match. It publishes full-resolution BGR8 images without the teammate's 426x240
+resize. Measure achieved rate and bandwidth on the Pi; nominal FPS is not proof.
+
+A standard ROS calibration YAML can be referenced by `camera.calibration_file`
+(relative to the profile or absolute). It must contain measured `image_width`,
+`image_height`, `distortion_model`, `camera_matrix`, `distortion_coefficients`,
+`rectification_matrix` and `projection_matrix` with their rows/cols/data.
+Supported distortion models are `plumb_bob` (5 coefficients) and
+`rational_polynomial` (8). Dimensions must match capture; calibration is not
+rescaled. Without the file, only `/camera/image_raw` is published, with **no
+CameraInfo** and no valid lane geometry. Each calibrated Image/CameraInfo pair
+has the same stamp and optical frame. Supply the measured TF and model before
+using lane perception. The provided real model names its optical frame
+`camera_optical_frame` and its LiDAR frame `laser`.
+
+Camera stamps are ROS wall-clock **read-completion receipt times**, not exposure
+timestamps. A one-frame backend buffer is requested; hardware/backend buffering
+and latency still need measurement. The reader retains only the newest frame,
+discards expired queued frames, never refreshes a stored frame, and exits on
+capture failure/startup/frame timeout. Closing is bounded; an uninterruptible
+OpenCV read may hold the device until process exit. Restart explicitly after
+correcting a fault; there is no automatic reconnect.
+
+For C1, UAMC launches the existing **Slamtec `sllidar_ros2/sllidar_node`**, not a
+new LiDAR parser. Install the pinned source in a separate sensor workspace on
+the Pi (the following clone destination must be new):
+
+```bash
+mkdir -p ~/projects/uamc-sensors/src
+git clone https://github.com/Slamtec/sllidar_ros2.git ~/projects/uamc-sensors/src/sllidar_ros2
+git -C ~/projects/uamc-sensors/src/sllidar_ros2 checkout --detach 34300099fadfc772965962dec837bf436706188f
+cd ~/projects/uamc-sensors
+source /opt/ros/jazzy/setup.bash
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install --packages-select sllidar_ros2
+source install/setup.bash
+```
+
+In every terminal starting the car, source that sensor workspace **before**
+`real.sh`. The optional package is not installed by UAMC's default rosdep
+recipe. This pin built on x86_64 Jazzy in WSL with upstream compiler warnings;
+it still requires native Pi build and actual C1 validation. Check the checkout
+revision when deploying: launch checks package/executable presence, not the
+binary's source provenance. See [upstream C1 configuration](https://github.com/Slamtec/sllidar_ros2/blob/34300099fadfc772965962dec837bf436706188f/launch/sllidar_c1_launch.py).
+
+Set `sources.lidar: sllidar_c1` with its exact `lidar` block: stable serial device,
+460800 baud, measured `frame_id`, explicit boolean `inverted` and
+`angle_compensate`, and `scan_mode: Standard`. Its vendor defaults are false/true
+for those flags; verify orientation against real objects and the measured TF.
+These are scan configuration choices, not a replacement for the mounting
+transform. The node publishes `/scan` with its SDK's host scan timestamps and
+range/angle conventions. Its reliable QoS is compatible with UAMC's best-effort
+sensor subscriptions. The SDK starts/stops the **LiDAR's scan motor**, not the
+car's drive motor. Its sensor health check does not produce `/hardware/status`.
+
+```bash
+source ~/projects/uamc-sensors/install/setup.bash
+cd ~/projects/uamc
+./scripts/real.sh rviz:=false hardware_config:=/absolute/path/vehicle.yaml
+# Separate sourced terminal, same domain:
+ros2 topic hz /camera/image_raw
+ros2 topic hz /scan
+./scripts/record.sh
+```
+
+Selected sensor processes join the launch's critical-process supervision;
+process exit ends the owned stack. A running SDK node can fail to produce scans
+without exiting, so existing obstacle freshness and safety-gate watchdogs still
+apply. A viewer may retain old sensor frames. No managed sensor publishes wheel
+odometry, IMU, cutoff state or hardware readiness. Those genuine inputs and all
+serial commissioning requirements remain outstanding. Raw-topic inspection can
+precede a model, but spatial RViz/perception needs the measured TF tree.
 
 ## View from a workstation
 

@@ -6,8 +6,8 @@ identification:
   firmware: "REPLACE ME"
   measurement_record: "REPLACE ME"
 sources:
-  camera: external
-  lidar: external
+  camera: external  # or opencv, with the camera block below
+  lidar: external   # or sllidar_c1, with the lidar block below
   imu: external
   wheel: external
   health: external
@@ -33,3 +33,26 @@ sources:
 #   future_tolerance: MEASURED
 #   max_speed: MEASURED
 #   max_steer: MEASURED
+
+# Optional managed camera (sources.camera: opencv). Candidate capture settings
+# from teammate uamc_pi 2 are shown, not verified negotiated settings/calibration.
+# camera:
+#   device: /dev/v4l/by-id/REPLACE_WITH_DISCOVERED_ID
+#   width: 1280
+#   height: 720
+#   fps: 30.0
+#   fourcc: MJPG
+#   frame_id: REPLACE_WITH_MEASURED_OPTICAL_FRAME
+#   max_frame_age: 0.3
+#   startup_timeout: 5.0
+#   frame_timeout: 1.0
+#   calibration_file: measured-camera.yaml  # omit for raw-only observation
+# Optional official C1 SDK node (sources.lidar: sllidar_c1). Install the pinned
+# sllidar_ros2 source per the real-car guide; this never starts a second RViz.
+# lidar:
+#   device: /dev/serial/by-id/REPLACE_WITH_DISCOVERED_ID
+#   baud: 460800
+#   frame_id: REPLACE_WITH_MEASURED_LIDAR_FRAME
+#   inverted: false
+#   angle_compensate: true
+#   scan_mode: Standard
