@@ -268,6 +268,7 @@ clearance and did not test the physical E-stop or real stopping distance.
 
 Read the [embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md),
 [hardware research](../reference/hardware-research.md), and the runbook with the car available. Identify the board and its existing firmware,
+use the [Dinoco serial-interface findings](../reference/dinoco-hardware-interface.md) to check the installed firmware and command format,
 trace the servo, ESC, power and independent cutoff, find a genuine wheel-speed
 source, mount and calibrate the sensors, and perform the specified
 wheels-lifted checks. Do not assume the reference project's STM32 firmware or

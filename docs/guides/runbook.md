@@ -73,8 +73,9 @@ simulation only and is not evidence of E-stop or actuator readiness.
 `ros2 launch uamc_bringup real.launch.py` starts a **disabled** transport;
 `mode:=manual` enables the joystick input but still cannot actuate hardware.
 Real camera, C1, BNO055, wheel feedback and embedded transport are not yet
-connected by this launch. No firmware is flashed or supplied. Determine the
-controller and its existing firmware/protocol, steering and ESC wiring and
+connected by this launch. No firmware is flashed or supplied. The [Dinoco interface research](../reference/dinoco-hardware-interface.md)
+records the teammate's candidate ESP32 serial commands; the ROS hardware
+adapter is still absent. Confirm the installed controller/firmware, steering and ESC wiring and
 neutral, real speed feedback, sensor mounting and the independently working
 cutoff before implementing and enabling hardware. See
 [embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md) and

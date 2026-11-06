@@ -30,3 +30,5 @@ E-stop circuit or stopping performance. Follow the identification and
 wheels-lifted procedures in the [runbook](../guides/runbook.md) and
 [hardware research](hardware-research.md) before
 any hardware actuation is enabled.
+
+On 2026-11-06 the user supplied the teammate's Dinoco repository and reported that it moves the car. The [separate source-code research](dinoco-hardware-interface.md) establishes a candidate ESP32 serial interface and host settings. It narrows the transport unknowns but does not change what the photographs establish: exact board, installed firmware, wiring, actuator mapping, speed feedback and cutoff behavior still need confirmation.
