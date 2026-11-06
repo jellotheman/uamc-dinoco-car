@@ -47,4 +47,4 @@ The above is intentionally not a usable file. Values and provenance must come fr
 
 `transport=fake` publishes bounded output on `/io/fake_applied_command` and neutralizes on timeout. It never drives hardware. `manual_joy` consumes `/joy`, publishes `/drive/manual` and `/manual/enable`, and is intended for a separately selected manual profile. It requires a fresh nonzero timestamp, observed neutral/released deadman, and a new neutral deadman press; timeout or invalid input resets eligibility. Reverse is off by default. Verify actual joystick polarity with wheels lifted.
 
-See the [embedded platform](../Embedded_Platform/README.md), [interface research](../../../docs/reference/dinoco-hardware-interface.md) and [integration plan](../../../docs/development/real-car-integration-plan.md) for missing firmware evidence, wiring and supervised physical checks.
+See the [embedded platform](../Embedded_Platform/README.md), [interface research](../../../docs/reference/dinoco-hardware-interface.md) and [integration plan](../../../docs/archive/real-car-integration-plan.md) for missing firmware evidence, wiring and supervised physical checks.

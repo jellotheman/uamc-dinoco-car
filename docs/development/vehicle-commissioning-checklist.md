@@ -72,4 +72,4 @@ Retaining verified firmware is default. Replace only if evidence shows required 
 
 [Pi deployment](../guides/real-car.md) · [runbook](../guides/runbook.md) · [command architecture](../reference/vehicle-command-architecture.md) · [Dinoco interface](../reference/dinoco-hardware-interface.md) · [embedded platform](../../ros2_ws/src/Embedded_Platform/README.md) · [calibration](../../ros2_ws/src/Embedded_Platform/calibration/README.md) · [vehicle I/O](../../ros2_ws/src/io/README.md) · [bringup](../../ros2_ws/src/bringup/README.md).
 
-Historical scope/evidence: [archived plan](../development/real-car-integration-plan.md), [archived validation](../development/real-car-integration-validation.md); use current guides and this checklist for remaining work.
+Historical scope/evidence: [archived plan](../archive/real-car-integration-plan.md), [archived validation](../archive/real-car-integration-validation.md); use current guides and this checklist for remaining work.

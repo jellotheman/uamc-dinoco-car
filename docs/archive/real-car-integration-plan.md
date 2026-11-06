@@ -1,5 +1,7 @@
 # Real-car adapter, launch and RViz2 integration plan
 
+Archived 2026-11-06 at the user's request. This is the earlier implementation scope/evidence, not the next implementation task. Physical commissioning remains open; use the [corrected vehicle commissioning checklist](../development/vehicle-commissioning-checklist.md) for current work.
+
 Status: **offline software integration implemented; physical commissioning remains open**. See the [implementation validation record](real-car-integration-validation.md) for completed software checks and remaining hardware work. The original planning snapshot follows. Prepared 2026-11-06 on `v1`, based on `0eb3e0a25003526e5905f413f73b7b441ec64607`. No adapter, script, driver, firmware or runtime configuration was implemented while preparing this plan. The user selected the small ROS adapter approach **without ros2_control** and explicitly deferred auto-calibration.
 
 This is the implementation-session handoff; it contains the decisions and evidence needed without the preceding chat. User terminology “rtviz/rtviz2” means **RViz2**, executable `rviz2`.
@@ -248,7 +250,7 @@ Paths below are repository-relative. Proposed filenames are ownership boundaries
 | Hardware model/TF | `description/urdf/vehicle_real.urdf.xacro`; expansion/TF tests | Description installation only if needed, existing model only for justified shared visual macros | 150–300 |
 | Dashboard real profile/QoS | `dashboard/config/real.rviz`; focused real-mode tests | `CMakeLists.txt`, `ros_client.hpp`, `dashboard_panel.hpp/.cpp`, state helper only if needed, existing state/client/GUI tests | 220–450 including copied config |
 | Gate feedback compatibility | Focused wheel QoS/integration test if existing harness insufficient | `control/uamc_control/safety_gate.py` wheel QoS only, tests; audit EKF without unsolicited retuning | 60–150 |
-| Documentation/evidence | `docs/development/real-car-integration-validation.md` | Module READMEs, guide/runbook/index, hardware research as evidence arrives | 220–400 |
+| Documentation/evidence | `docs/archive/real-car-integration-validation.md` | Module READMEs, guide/runbook/index, hardware research as evidence arrives | 220–400 |
 
 Every package path in the table starts at `ros2_ws/src/` (for example `io/...` means `ros2_ws/src/io/...`), except root scripts/docs. Expected baseline software scope: **roughly 45–60 files, 2,300–4,200 added/changed lines**, including tests/config/docs. These are planning ranges, not quotas; copied RViz/config and overlapping documentation inflate totals, so do not mechanically sum them. The main uncertainty is actual feedback/health driver integration and serial shutdown behavior.
 
@@ -412,11 +414,11 @@ Stop only affected work and report when contracts need schema changes, serial li
 
 Suggested related implementation commits, only if the implementation-session user authorizes committing: (1) protocol/calibration/serial core and tests; (2) IO/health integration and feedback QoS; (3) hardware description/profile/source composition; (4) real RViz config and launch/helper; (5) evidence/runbook. Cross-cutting builds may require combining groups; inspect staged diff and preserve unrelated edits. Push only if requested, to the requested branch, reporting commit IDs. The original planning request did not authorize commit/push; the subsequent user instruction explicitly authorized a documentation checkpoint commit and push to v1. That checkpoint does not authorize future implementation commits or physical operation.
 
-Maintain `docs/development/real-car-integration-validation.md` during implementation with per-milestone actual results and remaining prerequisites; keep module-local documentation with its module and root/docs navigation current. If operational local files are needed, use a documented ignored directory or outside-repo path; do not broadly ignore source/calibration test fixtures. Do not archive this plan until its scope is genuinely complete or superseded with explicit status.
+Maintain `docs/archive/real-car-integration-validation.md` during implementation with per-milestone actual results and remaining prerequisites; keep module-local documentation with its module and root/docs navigation current. If operational local files are needed, use a documented ignored directory or outside-repo path; do not broadly ignore source/calibration test fixtures. Do not archive this plan until its scope is genuinely complete or superseded with explicit status.
 
 Suggested next-session user instruction:
 
-> Implement `/home/sreer/projects/uamc/docs/development/real-car-integration-plan.md` on v1. Recheck checkout/status/drift and read the plan's prerequisites. Use batches of up to three GPT 6.1 Terra agents at Medium reasoning, with disjoint file allowlists; coordinator owns builds/Git/runtime sessions. Follow the frozen contracts and milestones, add scripts/real.sh and real-sensor RViz2 integration without ros2_control or replacement firmware. Auto-calibration remains deferred. Complete all offline work, preserve unrelated changes, and distinguish tested software from missing physical commissioning evidence. Do not fabricate feedback/readiness or run motors to bypass missing information.
+> Implement `/home/sreer/projects/uamc/docs/archive/real-car-integration-plan.md` on v1. Recheck checkout/status/drift and read the plan's prerequisites. Use batches of up to three GPT 6.1 Terra agents at Medium reasoning, with disjoint file allowlists; coordinator owns builds/Git/runtime sessions. Follow the frozen contracts and milestones, add scripts/real.sh and real-sensor RViz2 integration without ros2_control or replacement firmware. Auto-calibration remains deferred. Complete all offline work, preserve unrelated changes, and distinguish tested software from missing physical commissioning evidence. Do not fabricate feedback/readiness or run motors to bypass missing information.
 
 ## 16. Source references and planning evidence
 

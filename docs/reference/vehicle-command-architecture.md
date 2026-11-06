@@ -10,7 +10,7 @@ The installed program need not be rewritten or reflashed simply because the auto
 
 ## Deployment target
 
-The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [implementation plan](../development/real-car-integration-plan.md) specifies reproducible Pi setup/build/update instructions and the future `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These launch/helper behaviors are now implemented; see the [validation record](../development/real-car-integration-validation.md) for actual checks and unverified hardware prerequisites.
+The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [implementation plan](../archive/real-car-integration-plan.md) specifies reproducible Pi setup/build/update instructions and the future `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These launch/helper behaviors are now implemented; see the [validation record](../archive/real-car-integration-validation.md) for actual checks and unverified hardware prerequisites.
 
 ## One command contract, different backend outputs
 

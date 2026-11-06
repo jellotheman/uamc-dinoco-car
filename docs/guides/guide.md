@@ -297,5 +297,5 @@ just as in sim. The viewer does not launch another vehicle stack.
 
 Serial output needs explicit measured configuration and genuine hardware health;
 this repository does not supply the missing wheel/cutoff drivers or verify the
-installed firmware. See the [implementation validation](../development/real-car-integration-validation.md)
+installed firmware. See the [implementation validation](../archive/real-car-integration-validation.md)
 for actual software evidence and hardware blockers. Auto-calibration is deferred.

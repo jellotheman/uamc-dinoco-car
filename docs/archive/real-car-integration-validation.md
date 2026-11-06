@@ -1,5 +1,7 @@
 # Real-car integration validation
 
+Archived 2026-11-06 at the user's request. This is the earlier implementation scope/evidence, not the next implementation task. Physical commissioning remains open; use the [corrected vehicle commissioning checklist](../development/vehicle-commissioning-checklist.md) for current work.
+
 2026-11-06, branch `v1`, Ubuntu 24.04 WSL x86_64, ROS 2 Jazzy and Gazebo
 Harmonic. This records software checks with synthetic data and test-created
 PTYs. **No physical device was opened, firmware flashed or car commissioned.**

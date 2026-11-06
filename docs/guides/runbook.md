@@ -101,7 +101,7 @@ CameraInfo, scan, IMU, measured wheel odometry and `/hardware/status` must come
 from identified external drivers/monitor. Missing inputs remain unavailable.
 Serial output is an explicit commissioned opt-in; READY is only a link handshake.
 Do not bypass missing readiness, feedback or calibration. Use `rviz_frame:=base_link`
-for local observation without odometry. See [software validation and blockers](../development/real-car-integration-validation.md).
+for local observation without odometry. See [software validation and blockers](../archive/real-car-integration-validation.md).
 Auto-calibration remains deferred.
 
 ## Record and replay

@@ -2,7 +2,7 @@
 
 The real profile runs this ROS stack on the car's Pi and consumes actual sensor
 publishers. It never starts Gazebo. Software integration does not establish that
-this particular car is commissioned. See the [validation record](../development/real-car-integration-validation.md)
+this particular car is commissioned. See the [validation record](../archive/real-car-integration-validation.md)
 for checks actually performed and remaining physical prerequisites.
 
 The [current commissioning checklist](../development/vehicle-commissioning-checklist.md)
@@ -96,7 +96,7 @@ protected hardware configuration.
 Camera and calibrated CameraInfo, LiDAR, IMU, measured wheel odometry and the
 independent cutoff/health monitor are **external driver interfaces** in this
 release. Start only identified, tested team drivers. Their physical devices and
-protocols are not known here. See [topic contracts](../development/real-car-integration-plan.md#5-frozen-ros-contracts-and-health-ownership)
+protocols are not known here. See [topic contracts](../archive/real-car-integration-plan.md#5-frozen-ros-contracts-and-health-ownership)
 and [hardware research](../reference/hardware-research.md). Exactly one source
 must own each topic and TF edge. The local EKF owns `odom -> base_link`; do not
 run a competing TF publisher. Without measured feedback, odom/history may be
