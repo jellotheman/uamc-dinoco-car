@@ -30,6 +30,14 @@ The host comments describe an ESP32 reset, about three seconds of ESC arming and
 
 A compatible UAMC adapter belongs in `uamc_io`, downstream of the safety gate. It needs measured angle-to-normalized-steering and speed-to-throttle mappings, verified steering polarity (the Dinoco simulation assumes positive-right), finite-value and freshness checks, disconnect handling, and genuine status/feedback sources. It must not keep a stale motion command alive with a serial sender timer. Serial-open success or a startup `READY` must not be turned into fake `/vehicle/status` readiness. The [research record](../../../docs/reference/dinoco-hardware-interface.md) details the protocol, variant differences and implementation prerequisites.
 
+## Recommended integration approach
+
+Retain the firmware already installed on the vehicle if its command interpretation, neutral, bounds and local timeout meet the integration requirements. A compatible Arduino sketch is firmware too; there is no requirement to replace a working Arduino implementation with ESP-IDF. The immediate software work is the ROS serial adapter in `uamc_io`, not speculative replacement firmware.
+
+Keep this directory's protocol, provenance and calibration documentation. It can contain no firmware implementation while the existing firmware is maintained elsewhere; record that source location/version and recovery procedure when supplied. A known sender format alone does not verify receiver behavior. Confirm real wheel-speed and status sources, which can be separate from the ESP32, before satisfying the safety gate's input requirements.
+
+Keep `/drive/command` as the shared `AckermannDriveStamped` command in m/s and radians for both simulation and hardware. Translate only at the output boundary: the existing simulator adapter creates a velocity/yaw-rate command; the proposed hardware adapter creates calibrated normalized serial fields. The [architecture research](../../../docs/reference/vehicle-command-architecture.md) explains the ROS conventions, current zero-speed steering limitation, and why a small adapter fits the current car better than an immediate ros2_control migration.
+
 ## Identify the vehicle first
 
 With drive power disconnected and the chassis safely supported:

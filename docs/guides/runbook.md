@@ -83,6 +83,15 @@ simulation only and is not evidence of E-stop or actuator readiness.
 
 ## Physical car: currently disabled
 
+The [real-car plan](../development/real-car-integration-plan.md) targets GitHub
+clone/update and native build on the Pi, followed by `scripts/real.sh` from an
+SSH or local terminal. The planned helper defaults RViz2 on, accepts the same
+`visualization_debug:=true` diagnostics option as sim, and never runs Gazebo.
+Use its planned `rviz:=false` mode for plain SSH and a separate real-data viewer
+on the workstation. Pi setup/dependency commands and display/network details
+must be tested and documented during implementation. The helper does not exist
+yet; the following disabled launch remains the current behavior.
+
 `ros2 launch uamc_bringup real.launch.py` starts a **disabled** transport;
 `mode:=manual` enables the joystick input but still cannot actuate hardware.
 Real camera, C1, BNO055, wheel feedback and embedded transport are not yet

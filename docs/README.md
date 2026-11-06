@@ -6,6 +6,7 @@ Physical actuation and real sensor integration remain incomplete. Simulator resu
 
 ## Reference
 
+- [Vehicle command architecture](reference/vehicle-command-architecture.md): shared simulation/hardware command contract, existing-firmware reuse and adapter versus ros2_control recommendation.
 - [Dinoco hardware interface](reference/dinoco-hardware-interface.md): teammate host code, serial commands, firmware evidence, remaining unknowns and UAMC integration path.
 - [Hardware research](reference/hardware-research.md): manufacturer sources, driver provenance and measurements still needed.
 - [Vehicle observations](reference/vehicle-observations.md): what the supplied images show and what they cannot establish.
@@ -16,6 +17,7 @@ Physical actuation and real sensor integration remain incomplete. Simulator resu
 
 ## Development and evidence
 
+- [Real-car integration plan](development/real-car-integration-plan.md): self-contained future implementation scope, real.sh, serial backend, actual-sensor RViz2 and Terra/Medium worker batches.
 - [Scenario implementation](development/scenario-implementation.md): selected worlds, usage and current validation status.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
 - [Lane-detection implementation](development/lane-detection-implementation.md): current algorithm, interface, review and validation.

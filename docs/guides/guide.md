@@ -287,6 +287,15 @@ clearance and did not test the physical E-stop or real stopping distance.
 
 ## 8. Physical-car next steps
 
+The deployment target is this repository cloned/built on the car's Raspberry Pi,
+with SSH used for its terminal. The [real-car integration plan](../development/real-car-integration-plan.md)
+requires tested Pi setup/update instructions and a future `scripts/real.sh`.
+That helper will open RViz2 on actual sensor data; `visualization_debug:=true`
+will enable lane/corridor diagnostics, while `rviz:=false` will support headless
+SSH and a separate workstation viewer. It will never launch Gazebo. A plain SSH
+session does not provide a graphical display. These commands are planned;
+`real.sh` and the real hardware adapter are not implemented yet.
+
 Read the [embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md),
 [hardware research](../reference/hardware-research.md), and the runbook with the car available. Identify the board and its existing firmware,
 use the [Dinoco serial-interface findings](../reference/dinoco-hardware-interface.md) to check the installed firmware and command format,
