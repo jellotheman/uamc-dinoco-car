@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Supply every pose and body dimension from a measured mounting record. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="uamc_real">
+  <xacro:arg name="body_size" default=""/><xacro:arg name="body_xyz" default=""/>
+  <xacro:arg name="camera_xyz" default=""/><xacro:arg name="camera_rpy" default=""/>
+  <xacro:arg name="lidar_xyz" default=""/><xacro:arg name="lidar_rpy" default=""/>
+  <xacro:arg name="imu_xyz" default=""/><xacro:arg name="imu_rpy" default=""/>
+  <link name="base_link"><visual><origin xyz="$(arg body_xyz)" rpy="0 0 0"/><geometry><box size="$(arg body_size)"/></geometry></visual></link>
+  <link name="camera_optical_frame"/><joint name="camera_mount" type="fixed"><parent link="base_link"/><child link="camera_optical_frame"/><origin xyz="$(arg camera_xyz)" rpy="$(arg camera_rpy)"/></joint>
+  <link name="laser"/><joint name="lidar_mount" type="fixed"><parent link="base_link"/><child link="laser"/><origin xyz="$(arg lidar_xyz)" rpy="$(arg lidar_rpy)"/></joint>
+  <link name="imu_link"/><joint name="imu_mount" type="fixed"><parent link="base_link"/><child link="imu_link"/><origin xyz="$(arg imu_xyz)" rpy="$(arg imu_rpy)"/></joint>
+</robot>

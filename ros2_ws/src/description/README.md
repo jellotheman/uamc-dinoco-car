@@ -59,3 +59,12 @@ source /opt/ros/jazzy/setup.bash
 colcon test --packages-select uamc_description
 colcon test-result --verbose
 ```
+
+## Real description
+
+`urdf/vehicle_real.urdf.xacro` is a minimal fixed-frame template with no
+Gazebo elements or invented wheel states. Supply measured body dimensions and center offset, plus camera optical,
+LiDAR and IMU poses explicitly, expand to a local URDF, inspect its frames,
+and reference that file in the private hardware profile. Empty pose defaults
+are placeholders and must not be used as measurements. Frame names must match
+the actual publishers, and only one source may own each transform.

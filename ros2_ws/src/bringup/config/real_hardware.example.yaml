@@ -1,0 +1,35 @@
+# INERT SCHEMA EXAMPLE. Replace every placeholder with recorded values in a
+# private local file. Do not assume the profile proves hardware readiness.
+schema_version: 1
+identification:
+  hardware: "REPLACE ME"
+  firmware: "REPLACE ME"
+  measurement_record: "REPLACE ME"
+sources:
+  camera: external
+  lidar: external
+  imu: external
+  wheel: external
+  health: external
+# Optional for observation; required for serial. Values in metres.
+# model:
+#   description_file: measured-expanded.urdf
+#   ground_z: MEASURED
+#   wheelbase: MEASURED
+#   front: MEASURED
+#   rear: MEASURED
+#   half_width: MEASURED
+# Serial is opt-in and requires actual measured calibration. Durations in seconds,
+# speed in m/s, steering in rad. Never reuse an example port or guessed values.
+# serial:
+#   device: /dev/serial/by-id/REPLACE_WITH_DISCOVERED_ID
+#   baud: 115200
+#   calibration_file: measured-calibration.yaml
+#   handshake_timeout: MEASURED
+#   write_timeout: MEASURED
+#   command_timeout: MEASURED
+#   health_timeout: MEASURED
+#   max_source_age: MEASURED
+#   future_tolerance: MEASURED
+#   max_speed: MEASURED
+#   max_steer: MEASURED

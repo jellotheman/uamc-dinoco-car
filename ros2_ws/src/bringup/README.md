@@ -20,3 +20,33 @@ named-node `debug_enabled` tuning; without tuning, diagnostics are off. For the
 shared RViz dashboard, including safety controls, see [dashboard](../dashboard/README.md).
 
 From a built and sourced workspace, launch with `ros2 launch uamc_bringup sim.launch.py`; for options and setup see the [project guide](../../../docs/guides/guide.md). The real profile is not a working hardware integration; see [vehicle I/O](../io/README.md) and [embedded platform](../Embedded_Platform/README.md).
+
+## Real observation and commissioning
+
+`real.launch.py` defaults to disabled transport and external actual-topic
+sources. It does not start Gazebo or infer sensor drivers. `scripts/real.sh`
+starts the foreground stack with local RViz; pass `rviz:=false` for headless
+SSH. `real_view.launch.py` is a separate workstation viewer and owns no car
+nodes. Select `rviz_frame:=base_link` for local sensor observation when
+odometry is absent; odometry history/localization is unavailable in that view.
+Match ROS domain/discovery and synchronize clocks between hosts. A local RViz
+exit stops its stack; the remote viewer exit does not. SSH disconnect and process termination behavior depends on the session setup;
+verify it on the Pi. Embedded watchdog and cutoff behavior must be verified
+independently.
+
+Use `hardware_config:=/absolute/path.yaml` for an explicit private profile;
+`config/real_hardware.example.yaml` documents the shape and is deliberately
+invalid. Only external sensor sources are supported until driver revisions and
+actual devices are verified. An optional model points to an expanded, measured,
+Gazebo-free URDF and provides measured ground height, wheelbase and obstacle
+footprint. Without it, no model, lane detector, obstacle detector or path
+controller is started; the raw camera can still be observed. `actuation:=serial` additionally requires all serial values and a
+validated measured calibration file; startup remains disarmed. Missing health,
+wheel or sensor data must remain visible as unavailable. Do not treat this
+software as evidence that firmware, cutoff or physical motion is safe.
+
+`visualization_debug:=auto|true|false` matches simulation; the default leaves
+per-node tuning intact. `params_file` accepts named-node ROS tuning but rejects
+protected time, transport, calibration and physical parameters. The real and
+simulator session locks prevent concurrent same-user stacks on one host only;
+they do not prevent duplicate publishers on other hosts.

@@ -1,0 +1,5 @@
+# INERT: acquire calibration separately by a supervised measured procedure.
+version: 1
+provenance: {board: "REPLACE ME", firmware: "REPLACE ME", esc: "REPLACE ME", servo: "REPLACE ME", measured_on: "REPLACE ME", method: "REPLACE ME", conditions: "REPLACE ME", reference: "REPLACE ME"}
+steering: {samples: [], deadband_rad: 0.0}
+throttle: {samples: [], deadband_mps: 0.0}
