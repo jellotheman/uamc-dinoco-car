@@ -136,7 +136,7 @@ the launch registers supervision before starting its nodes. Every asynchronous
 multi-operator race is not exhaustively tested.
 
 The offline integration milestone is complete; physical commissioning remains
-open in the [plan](real-car-integration-plan.md). **Auto-calibration remains
-deferred.** See the [deployment guide](../guides/real-car.md) for operation and
-the [embedded checklist](../../ros2_ws/src/Embedded_Platform/README.md) for the
-required actual-vehicle evidence.
+tracked in the [current checklist](../development/vehicle-commissioning-checklist.md).
+**Auto-calibration remains deferred.** See the [deployment guide](../guides/real-car.md)
+for operation and the [embedded procedures](../../ros2_ws/src/Embedded_Platform/README.md)
+for detailed hardware checks.

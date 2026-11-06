@@ -66,15 +66,15 @@ A silent running vendor driver still depends on the existing freshness gates.
   sensor-stream loss test or a physical stop test.
 - Reviewed local relative documentation links and whitespace before commit.
 
-## Still required on the car
+## Limits and current work tracking
 
-Verify native Pi build, actual device identities/ownership and negotiated
-camera settings, measured intrinsics, TF mounts and ground reference, camera
-buffering/latency/rate, C1 modes/coverage/orientation/ranges/timestamps, and
-recorded sensor loss/recovery behavior. Use the inert profile template, supply
-measured values privately, start with output disabled and record observations.
-Existing wheel/IMU producers, genuine independent hardware/cutoff health,
-installed firmware/watchdog behavior, measured command calibration and physical
-commissioning remain outstanding. Sensor publishers do not satisfy those inputs
-and do not arm the car. Default actuation, gate semantics and missing-input
-inhibition were not relaxed.
+This evidence covers software with synthetic inputs and an x86_64 build. It does
+not establish native Pi operation, actual camera/C1 timing/coverage/orientation,
+measured calibration/TF, or physical loss/recovery behavior. Sensor publishers
+provide no wheel/IMU/cutoff feedback and do not arm the car. Default actuation,
+gate semantics and missing-input inhibition were not relaxed.
+
+Track actual-car deployment and measurements in the [current checklist](vehicle-commissioning-checklist.md)
+(R1 and R4); missing feedback/health integration is R3. That page also tracks
+controller, actuator calibration and physical trials; this validation record is
+not an additional backlog.

@@ -2,7 +2,7 @@
 
 Start with the [project guide](guides/guide.md) to build, run and explore the simulation. Use the shorter [developer runbook](guides/runbook.md) for commands, physical-car prerequisites and recording/replay.
 
-The real-car serial adapter, launch and RViz2 profile are available with actuation disabled by default. Actual drivers, measured configuration and physical commissioning remain required. Simulator results do not establish physical-car readiness.
+The real-car serial adapter, launch and RViz2 profile are available with actuation disabled by default. The [remaining-work checklist](development/vehicle-commissioning-checklist.md) tracks target deployment, missing feedback/health sources and physical commissioning. Simulator results do not establish physical-car readiness.
 
 - [Real-car deployment](guides/real-car.md): Pi clone/build/update, SSH, real.sh and a separate RViz viewer.
 
@@ -19,7 +19,8 @@ The real-car serial adapter, launch and RViz2 profile are available with actuati
 
 ## Development and evidence
 
-- [Vehicle commissioning checklist](development/vehicle-commissioning-checklist.md): current technical/plain-language checklist, upstream reuse, remote work and physical-car evidence.
+- [Vehicle commissioning checklist](development/vehicle-commissioning-checklist.md): seven remaining deliverables, each with a matching plain-English explanation.
+- [Checklist audit](development/commissioning-checklist-audit.md): completed capabilities, evidence and removed/merged checklist entries.
 - [Sensor-driver integration](development/sensor-driver-integration.md): optional camera/C1 publishers, source pins, software evidence and physical limits.
 - [Sensor reuse research](development/sensor-driver-reuse.md): teammate acquisition settings, parser limits and vendor-driver rationale.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.

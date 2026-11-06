@@ -18,7 +18,7 @@ Autonomous controller or manual input
        + independent hardware E-stop / motor power cutoff
 ```
 
-The ROS safety gate is the only publisher of `/drive/command`, in m/s and radians. The adapter must report actual controller readiness, E-stop and fault status on `/vehicle/status` and actual measured motion as `/odometry/wheel` when available. Sensor sources and their timestamps remain independent; controller commands are not wheel feedback. Camera, LiDAR and IMU connection paths must be based on the physical wiring.
+The ROS safety gate is the only publisher of `/drive/command`, in m/s and radians. The adapter composes fresh independent `/hardware/status` with link state into `/vehicle/status`. A genuine motion source supplies `/odometry/wheel`; the serial adapter does not produce it. Sensor sources and their timestamps remain independent; controller commands are not wheel feedback. Camera, LiDAR and IMU connection paths must be based on the physical wiring.
 
 The current [uamc_io package](../io/README.md) provides a calibrated serial backend, disabled mode and a simulation-only fake transport. Serial mode requires explicit measured configuration and fresh genuine `/hardware/status`; a link handshake alone never establishes readiness. A fake ready status and fake applied command are not evidence of hardware readiness. Start the real profile only in its motor-disabled configuration until the physical transport and safety path have been verified.
 
@@ -28,11 +28,11 @@ Both Dinoco host variants use the same `esp_link.py`: PySerial sends newline-ter
 
 The host comments describe an ESP32 reset, about three seconds of ESC arming and a 300 ms embedded command watchdog. These are claims about missing firmware, not behavior established by the Python implementation. No firmware, PWM mapping, pins, wheel feedback or E-stop circuit is included. Preserve and obtain that existing firmware before deciding whether to replace it.
 
-A compatible UAMC adapter belongs in `uamc_io`, downstream of the safety gate. It needs measured angle-to-normalized-steering and speed-to-throttle mappings, verified steering polarity (the Dinoco simulation assumes positive-right), finite-value and freshness checks, disconnect handling, and genuine status/feedback sources. It must not keep a stale motion command alive with a serial sender timer. Serial-open success or a startup `READY` must not be turned into fake `/vehicle/status` readiness. The [research record](../../../docs/reference/dinoco-hardware-interface.md) details the protocol, variant differences and implementation prerequisites.
+The compatible UAMC adapter is implemented in `uamc_io`, downstream of the safety gate, including calibration validation, finite-value/freshness checks and disconnect handling. Actual measured mappings, steering polarity and genuine feedback/health are tracked in the [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md). It must not keep a stale motion command alive with a serial sender timer. Serial-open success or a startup `READY` must not be turned into fake `/vehicle/status` readiness. The [research record](../../../docs/reference/dinoco-hardware-interface.md) details the protocol, variant differences and implementation prerequisites.
 
 ## Recommended integration approach
 
-Retain the firmware already installed on the vehicle if its command interpretation, neutral, bounds and local timeout meet the integration requirements. A compatible Arduino sketch is firmware too; there is no requirement to replace a working Arduino implementation with ESP-IDF. The immediate software work is the ROS serial adapter in `uamc_io`, not speculative replacement firmware.
+Retain the firmware already installed on the vehicle if its command interpretation, neutral, bounds and local timeout meet the integration requirements. A compatible Arduino sketch is firmware too; there is no requirement to replace a working Arduino implementation with ESP-IDF. The ROS serial adapter in `uamc_io` is already implemented. Current work is its integration and commissioning with the actual vehicle; replacement firmware is conditional on an established gap.
 
 Keep this directory's protocol, provenance and calibration documentation. It can contain no firmware implementation while the existing firmware is maintained elsewhere; record that source location/version and recovery procedure when supplied. A known sender format alone does not verify receiver behavior. Confirm real wheel-speed and status sources, which can be separate from the ESP32, before satisfying the safety gate's input requirements.
 
@@ -50,7 +50,7 @@ With drive power disconnected and the chassis safely supported:
 
 ## Implementation and build path
 
-1. Prefer the team's tested firmware if it exposes safe actuation, real feedback and fault status; document and version the existing protocol and write a small matching ROS adapter. Do not reverse-engineer an actuator protocol by sending guessed commands to a powered car.
+1. Prefer the team's tested firmware if it provides compatible safe actuation and a local watchdog; actual motion feedback and cutoff health can have separate sources; use the implemented ROS adapter and the documented host protocol, checking compatibility against the installed parser. Do not reverse-engineer an actuator protocol by sending guessed commands to a powered car.
 2. If the board is confirmed as an ESP32 and existing firmware is unsuitable, the candidate path is an ESP-IDF project under [firmware/](firmware/README.md), pinned to a verified board target and toolchain. Firmware must start disabled, enforce an independent local command timeout, validate version, sequence and checksum of commands, constrain calibrated outputs, and report real feedback and faults. Define the actual protocol and safe output only after ESC and controller verification.
 3. If the board is another family, choose its vendor-supported build system only after identifying the exact board and recovery method. This directory intentionally has no ROS package manifest: `colcon` does not build or flash microcontroller firmware.
 

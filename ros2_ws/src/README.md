@@ -5,8 +5,8 @@ Start with the [project documentation](../../docs/README.md).
 Round 1 packages target ROS 2 Jazzy. Shared messages are defined in
 `interfaces` (ROS package `uamc_interfaces`); topic, frame and safety contracts are specified in the
 repository's Round 1 plan. Physical dimensions and calibration are provisional
-until measured on the vehicle. Real actuation requires the bench checks in the
-plan.
+until measured on the vehicle. Current actual-car work is tracked in the
+[remaining-work checklist](../../docs/development/vehicle-commissioning-checklist.md).
 
 ## Module guides
 

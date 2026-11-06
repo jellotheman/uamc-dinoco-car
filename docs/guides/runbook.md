@@ -84,7 +84,8 @@ simulation only and is not evidence of E-stop or actuator readiness.
 ## Physical car
 
 See the [Pi deployment and commissioning guide](real-car.md) for initial setup,
-update, measured profiles, actual drivers and physical prerequisites.
+update and operation. Track unfinished deliverables in the
+[remaining-work checklist](../development/vehicle-commissioning-checklist.md).
 
 ```bash
 # From project root on the Pi; external observation, output disabled:

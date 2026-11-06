@@ -85,16 +85,19 @@ Updated code includes chassis values: length 0.345 m, width 0.205 m, height 0.16
 
 STOP-sign approach timing divides a remaining estimated distance by the configured constant cruise speed. It is not wheel odometry or closed-loop speed control. The watcher retains its last confirmed result indefinitely and the controller can re-use that old result after cooldown; watcher failure sets `ok=False`, but the main sensor-health condition only evaluates camera and LiDAR freshness. These limitations matter if sign behavior is reused. [Timing controller](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py#L99-L114), [watcher result/failure](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/sign.py#L101-L128).
 
-## What remains to obtain
+## UAMC implementation status
 
-1. The exact application folder/revision/configuration used for the reported physical run and the actual Pi device mapping.
-2. Controller board markings, existing firmware source/binary version, parser behavior, build/flash/recovery procedure and boot banner. Confirm the reported 300 ms watchdog and 3 s startup behavior.
-3. Servo/ESC models, signal pins, supply/ground wiring, PWM frequency/endpoints and calibrated neutral; test steering direction and angle against normalized command. Establish zero-throttle/coast/brake behavior and reverse semantics.
-4. Independent E-stop/cutoff arrangement and genuine controller health/feedback messages, if any.
-5. Measured wheel-speed source and speed-to-throttle relationship under load, plus physical stopping-distance evidence. This repository supplies neither.
-6. Actual camera calibration and camera/LiDAR/IMU transforms and connection paths. The BNO055 is not integrated in these sources.
+The compatible [UAMC serial adapter](../../ros2_ws/src/io/README.md) is now
+implemented, including calibrated conversion, freshness/bounds checks, neutral
+qualification and I/O failure handling. Optional [camera/C1 integration](../development/sensor-driver-integration.md)
+is implemented too. The research above establishes host behavior; it cannot
+establish installed firmware semantics, actual wheel/IMU/cutoff sources or
+measured actuator/camera/mount calibration.
 
-The smallest useful integration direction is a UAMC adapter that speaks the recovered serial format to the preserved existing firmware, while retaining UAMC's safety gate. Its conversion from m/s/radians to normalized commands must be calibrated: UAMC positive-left Ackermann steering must be reconciled with the upstream assumed positive-right convention, and throttle must not be treated as a measured speed. Validate finite values, command age, bounds and serial errors; stop on missing or stale safety-gate commands rather than continually retransmitting the last nonzero request and keeping the controller watchdog alive. Readiness and feedback requirements still need real evidence. Firmware may need changes if the installed implementation cannot supply the required watchdog, status or measured feedback. See [embedded integration](../../ros2_ws/src/Embedded_Platform/README.md) and [vehicle I/O](../../ros2_ws/src/io/README.md).
+Use the [remaining-work checklist](../development/vehicle-commissioning-checklist.md)
+for outstanding vehicle tasks. Retain compatible installed firmware; missing
+source alone does not require a rewrite. Detailed electrical and bench
+procedures remain with the [embedded platform](../../ros2_ws/src/Embedded_Platform/README.md).
 
 ## Verification performed
 

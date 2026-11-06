@@ -1,6 +1,6 @@
 # Vehicle I/O
 
-`uamc_io` connects the safety gate to vehicle output and provides manual joystick input. The default transport is disabled. Fake mode is a test sink and does not establish physical readiness or measured motion. Real serial support is software only: the installed firmware, independent cutoff/status source, measured actuator calibration, wheel feedback and vehicle behavior still require commissioning. Never use a simulated status to arm a real vehicle.
+`uamc_io` connects the safety gate to vehicle output and provides manual joystick input. The default transport is disabled. Fake mode is a test sink and does not establish physical readiness or measured motion. Real serial support is implemented; outstanding actual-car work is tracked in the [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md). Never use a simulated status to arm a real vehicle.
 
 ## Real serial boundary
 
@@ -47,7 +47,7 @@ The above is intentionally not a usable file. Values and provenance must come fr
 
 `transport=fake` publishes bounded output on `/io/fake_applied_command` and neutralizes on timeout. It never drives hardware. `manual_joy` consumes `/joy`, publishes `/drive/manual` and `/manual/enable`, and is intended for a separately selected manual profile. It requires a fresh nonzero timestamp, observed neutral/released deadman, and a new neutral deadman press; timeout or invalid input resets eligibility. Reverse is off by default. Verify actual joystick polarity with wheels lifted.
 
-See the [embedded platform](../Embedded_Platform/README.md), [interface research](../../../docs/reference/dinoco-hardware-interface.md) and [integration plan](../../../docs/archive/real-car-integration-plan.md) for missing firmware evidence, wiring and supervised physical checks.
+See the [embedded platform](../Embedded_Platform/README.md) and [interface research](../../../docs/reference/dinoco-hardware-interface.md) for interface and hardware procedures; use the [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md) for current tasks.
 
 ## Physical camera acquisition
 

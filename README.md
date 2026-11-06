@@ -9,6 +9,6 @@ validation results, and development history.
 
 **Status:** simulation and a real-car serial/RViz profile are implemented. See
 the [Pi deployment guide](docs/guides/real-car.md). Physical output is disabled by
-default: controller firmware, wheel-speed feedback, cutoff, calibration and
-wiring still need verification on the vehicle. Do not use simulator results as
+default. The [remaining-work checklist](docs/development/vehicle-commissioning-checklist.md)
+tracks actual-car integration and commissioning. Do not use simulator results as
 proof of physical safety or qualification.

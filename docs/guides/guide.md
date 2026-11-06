@@ -2,8 +2,9 @@
 
 This guide is for the current `v1` branch in the `Ubuntu-24.04` WSL
 distribution. It walks through the simulator first. The real-car profile now provides a serial adapter and RViz2 launch, with
-output disabled by default. Physical drivers and commissioning remain required;
-see the [Pi deployment guide](real-car.md) and [hardware research](../reference/hardware-research.md).
+output disabled by default. See the [Pi deployment guide](real-car.md) for
+operation and the [remaining-work checklist](../development/vehicle-commissioning-checklist.md)
+for actual-car integration and commissioning.
 
 ## 1. Open the correct project
 
@@ -296,7 +297,6 @@ Use `rviz:=false` for plain SSH; a sourced graphical workstation can run
 `rviz` selects the window and `visualization_debug` selects diagnostic topics,
 just as in sim. The viewer does not launch another vehicle stack.
 
-Serial output needs explicit measured configuration and genuine hardware health;
-this repository does not supply the missing wheel/cutoff drivers or verify the
-installed firmware. See the [implementation validation](../archive/real-car-integration-validation.md)
-for actual software evidence and hardware blockers. Auto-calibration is deferred.
+Serial output remains an explicit commissioned opt-in. Current unfinished
+deliverables are tracked in the [remaining-work checklist](../development/vehicle-commissioning-checklist.md);
+completed software checks are in its linked evidence. Auto-calibration is deferred.

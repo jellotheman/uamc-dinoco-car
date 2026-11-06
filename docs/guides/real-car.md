@@ -6,7 +6,8 @@ this particular car is commissioned. See the [validation record](../archive/real
 for checks actually performed and remaining physical prerequisites.
 
 The [current commissioning checklist](../development/vehicle-commissioning-checklist.md)
-consolidates software and physical-car tasks. The teammate's latest `uamc_pi 2`
+is the single list of unfinished deliverables; this guide contains operating
+procedures, not an additional backlog. The teammate's latest `uamc_pi 2`
 already supplies working camera/C1 access, configured device settings and
 commissioning diagnostics to reuse. Here, external sensor interfaces mean those
 producers were not originally included in this ROS stack. Optional managed
@@ -229,16 +230,14 @@ still requires measured feedback and starts disarmed. Missing startup inputs
 may latch a fault: resolve the cause and prove measured standstill before the
 normal Reset, Arm and manual/auto flows. Never substitute fake readiness.
 
-Obtain the installed parser/version/recovery method, electrical wiring,
-calibrated steering/neutral, measured speed map, wheel source, real cutoff monitor
-and verified local watchdog. Initial measurements come from the team's separately
-verified supervised bench procedure. If none exists, specify it separately;
-there is no raw-output bypass in this adapter. Validate wheels-lifted behavior,
-source/cable loss, reset, process death and requalification before supervised
-low-speed manual then auto trials. Measure stopping distance/latency under load.
-See the [embedded guide](../../ros2_ws/src/Embedded_Platform/README.md) and
-[calibration checklist](../../ros2_ws/src/Embedded_Platform/calibration/README.md).
-Reverse and auto-calibration remain deferred.
+The [remaining-work checklist](../development/vehicle-commissioning-checklist.md)
+tracks installed-controller/cutoff checks, actual feedback producers, measured
+configuration, bench integration and driving trials. Use the detailed
+[embedded guide](../../ros2_ws/src/Embedded_Platform/README.md) and
+[measurement guide](../../ros2_ws/src/Embedded_Platform/calibration/README.md)
+when carrying out those tasks. Initial calibration uses a suitable supervised
+bench procedure; there is no raw-output bypass in this adapter. Reverse and
+auto-calibration remain deferred.
 
 Run in the foreground. Ctrl+C stops owned processes; closing locally owned RViz
 also ends that stack. A separate viewer has independent lifetime. Shutdown

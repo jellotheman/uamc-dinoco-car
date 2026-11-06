@@ -19,7 +19,7 @@ diagnostic images and obstacle corridor markers. The default `auto` preserves
 named-node `debug_enabled` tuning; without tuning, diagnostics are off. For the
 shared RViz dashboard, including safety controls, see [dashboard](../dashboard/README.md).
 
-From a built and sourced workspace, launch with `ros2 launch uamc_bringup sim.launch.py`; for options and setup see the [project guide](../../../docs/guides/guide.md). The real profile is not a working hardware integration; see [vehicle I/O](../io/README.md) and [embedded platform](../Embedded_Platform/README.md).
+From a built and sourced workspace, launch with `ros2 launch uamc_bringup sim.launch.py`; for options and setup see the [project guide](../../../docs/guides/guide.md). The real profile software is implemented; actual-car deployment and commissioning are tracked in the [remaining-work checklist](../../../docs/development/vehicle-commissioning-checklist.md).
 
 ## Real observation and commissioning
 

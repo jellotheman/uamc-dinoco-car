@@ -65,16 +65,23 @@ With that framework, `gz_ros2_control` connects a controller manager and the sam
 
 Revisit ros2_control if joint-level controller reuse, multiple actuator systems, controller switching or detailed common actuator dynamics become active requirements. Stationary steering can be addressed independently if needed. We can keep the serial framing/calibration code separate enough to reuse inside a future hardware plugin.
 
-## What the adapter still needs
+## Implemented adapter and remaining vehicle work
 
-1. Subscribe only to the safety gate's final request; implement finite-value, source-age, receive-age and bounded-output checks. Use steady time for local disconnect/watchdog timing. Never refresh a stale nonzero command indefinitely just because a sender timer is still running.
-2. Convert positive-left radians to the verified normalized steering direction, center and endpoints. Dinoco's simulation assumes positive-right; the physical mapping needs confirmation. Keep neutral and trim behavior explicit.
-3. Treat desired speed as a target. An empirically measured feedforward throttle map may be useful initially, but throttle alone does not guarantee speed across battery voltage, load, floor and turns. Accurate speed regulation needs actual speed feedback and an appropriate controller, either on the host or the embedded board. Do not call a fixed normalized throttle a measured m/s value.
-4. Confirm startup/reset, parser, neutral, link-loss timeout and disconnect/reconnect behavior on the installed firmware. A `READY` substring or successful serial write is not proof of wheel motion, cutoff state or sustained actuator health. Maintain real actuation disabled until existing project prerequisites are satisfied.
-5. Integrate genuine wheel/IMU/status inputs required by the existing safety gate. Their physical sources may be separate sensor drivers or a dedicated cutoff monitor; they need not all come from the ESP32. The recorded host protocol supplies no usable continuous feedback. Do not fabricate `/odometry/wheel` from requested speed or publish fake readiness to get past arming checks.
-6. Test encoding, calibrated mapping and failure handling with a fake serial endpoint before physical output. On the car, verify the existing electrical/cutoff arrangement and perform the project's wheels-lifted checks, then measure low-speed stopping behavior. These are still required even if no firmware is changed.
+The [vehicle I/O implementation](../../ros2_ws/src/io/README.md) now provides
+calibrated serial conversion, finite-value/source-age/receipt-age checks,
+bounded output, health qualification, timeout handling and neutral
+requalification. Fake-endpoint and PTY checks are recorded in the
+[software validation](../archive/real-car-integration-validation.md).
+The shared [safety gate](../../ros2_ws/src/control/README.md) already enforces
+its wheel/IMU/obstacle/status and selected-command input requirements.
 
-The [vehicle I/O implementation](../../ros2_ws/src/io/uamc_io/vehicle_io.py) now has a calibrated serial backend behind explicit configuration and genuine health checks; disabled mode remains the default. The [safety gate](../../ros2_ws/src/control/uamc_control/safety_gate.py) requires fresh actual wheel, IMU, obstacle and vehicle status inputs; autonomous mode also requires lane/path inputs. Implementing an encoder for outgoing serial lines alone does not complete that integration.
+The [current checklist](../development/vehicle-commissioning-checklist.md) is the
+single list of unfinished integration/commissioning work. Measured
+angle-to-output and loaded speed-to-output tables configure the implemented
+feedforward adapter; fixed throttle is not a speed measurement or closed-loop
+speed regulation. No continuous wheel/IMU/cutoff feedback can be recovered from
+the teammate's recorded host protocol. Those inputs may have separate physical
+sources; neither synthetic odometry nor fake readiness satisfies them.
 
 ## Automatic calibration scope
 
