@@ -1,5 +1,9 @@
 # Documentation audit
 
+> Historical audit from 2026-11-05. The current [documentation index](../README.md)
+> records the active layout, including subsequent lane-detector work. This audit
+> is retained as an editorial decision record.
+
 Audit date: 2026-11-05. Scope: project-authored Markdown in the WSL repository, including the ignored handoff and source-local READMEs; generated build, install, log and cache files excluded. The index is [docs/README.md](../README.md). Editorial confidence is High, Medium or Low and gives a reason for the proposed disposition; it is not a statistical probability or a claim about unverified hardware or historical test conclusions.
 
 | Original file | Disposition and purpose | Confidence |
@@ -10,10 +14,10 @@ Audit date: 2026-11-05. Scope: project-authored Markdown in the WSL repository, 
 | `docs/runbook.md` | Moved to [guides/runbook.md](../guides/runbook.md): concise build, operation, bench and recording commands. It overlaps the guide but serves operators and developers. | High: the concise operational commands serve a different audience from the walkthrough |
 | `docs/hardware-research.md` | Moved to [reference/hardware-research.md](../reference/hardware-research.md); preserves sources, provenance and unverified-hardware warnings. | High: unique manufacturer sources, provenance and safety limitations are still needed |
 | `docs/vehicle-observations.md` | Moved to [reference/vehicle-observations.md](../reference/vehicle-observations.md); retains limits of visual evidence. | High: it preserves the limits of evidence from private media |
-| `docs/simulation-validation.md` | Moved to [development/simulation-validation.md](simulation-validation.md); retains dated measurements, configuration changes and limitations. | High: dated measurements and their limits are unique evidence |
+| `docs/simulation-validation.md` | Moved to [development/simulation-validation.md](../development/simulation-validation.md); retains dated measurements, configuration changes and limitations. | High: dated measurements and their limits are unique evidence |
 | `docs/launch-troubleshooting.md` | Moved to [archive/launch-troubleshooting.md](../archive/launch-troubleshooting.md); preserved as a dated incident and verification record, linked from the guide. | Medium: archival is reasonable for a resolved incident, though its troubleshooting evidence remains useful |
 | `docs/archive/world-selection-research.md` | Moved from development to the archive; it describes a pre-implementation snapshot and retains useful upstream citations. | High: current scenario notes supersede its runtime guidance, while citations remain useful historical context |
-| `docs/scenario-implementation.md` | Moved to [development/scenario-implementation.md](scenario-implementation.md) as the durable scenario implementation record; its author updates validation status. | High: it records current implementation and measured checks |
+| `docs/scenario-implementation.md` | Moved to [development/scenario-implementation.md](../development/scenario-implementation.md) as the durable scenario implementation record; its author updates validation status. | High: it records current implementation and measured checks |
 | `docs/world-selection-scope.md` | Moved to [archive/world-selection-scope.md](../archive/world-selection-scope.md), labeled as an earlier proposal. The plan is redundant as present-day operating guidance but useful design history; no content was discarded. | High: it is a superseded proposal, but its design rationale warrants archival |
 | `docs/HANDOFF.md` | Moved locally to `docs/archive/HANDOFF.md` and labeled historical. Its claim that ROS source is empty is superseded. The basename still matches the existing ignore rule, so this file stays local and is not tracked; it is not included in clones. | High: the empty-source claim is obsolete and the existing ignore rule preserves local-only status |
 | `ros2_ws/src/README.md` | Retained as a small workspace-local orientation, with a link to the documentation index. | High: a brief local entry point helps source navigation |
