@@ -16,3 +16,10 @@ simulation/.gz/
 *[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*.[Mm][Dd]
 
 .pytest_cache/
+
+# Local ROS bag recordings (default recorder output lives outside the checkout)
+/bags/
+*.mcap
+*.db3
+*.db3-shm
+*.db3-wal

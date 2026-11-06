@@ -7,7 +7,8 @@ Start with the [project guide](docs/guides/guide.md) for navigation and simulati
 The [documentation index](docs/README.md) links the runbook, hardware research,
 validation results, and development history.
 
-**Status:** simulation and test infrastructure are under development. Physical
-actuation is disabled: the controller, firmware, wheel-speed feedback, cutoff,
-calibration and wiring have not been verified. Do not use simulator results as
+**Status:** simulation and a real-car serial/RViz profile are implemented. See
+the [Pi deployment guide](docs/guides/real-car.md). Physical output is disabled by
+default: controller firmware, wheel-speed feedback, cutoff, calibration and
+wiring still need verification on the vehicle. Do not use simulator results as
 proof of physical safety or qualification.

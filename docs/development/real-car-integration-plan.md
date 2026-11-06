@@ -1,6 +1,6 @@
 # Real-car adapter, launch and RViz2 integration plan
 
-Status: **planning only; implement in a separate session**. Prepared 2026-11-06 on `v1`, based on `0eb3e0a25003526e5905f413f73b7b441ec64607`. No adapter, script, driver, firmware or runtime configuration was implemented while preparing this plan. The user selected the small ROS adapter approach **without ros2_control** and explicitly deferred auto-calibration.
+Status: **offline software integration implemented; physical commissioning remains open**. See the [implementation validation record](real-car-integration-validation.md) for completed software checks and remaining hardware work. The original planning snapshot follows. Prepared 2026-11-06 on `v1`, based on `0eb3e0a25003526e5905f413f73b7b441ec64607`. No adapter, script, driver, firmware or runtime configuration was implemented while preparing this plan. The user selected the small ROS adapter approach **without ros2_control** and explicitly deferred auto-calibration.
 
 This is the implementation-session handoff; it contains the decisions and evidence needed without the preceding chat. User terminology “rtviz/rtviz2” means **RViz2**, executable `rviz2`.
 
@@ -431,6 +431,6 @@ Primary external references:
 
 Three read-only planning subagents also reviewed the completed draft; their corrections clarified conditional observation validation, supervised initial calibration acquisition, sensor-launch handoff ordering and unverified UI identity. They explicitly ran as **gpt-6.1-terra / medium**: hardware/serial scope, real-launch/deployment scope, and RViz/dashboard scope. They wrote no implementation files. Coordinator inspected current code and the five commits and integrated their findings here. They identified the hidden real-work scope: actual health/feedback, model/TF/time, wheel QoS, saved panel private clock and lifecycle separation. This is not an implementation review or runtime test.
 
-Deployment clarification: real Pi operation via GitHub setup and SSH is the end goal. The user explicitly requested the same visualization_debug switch as sim, RViz without Gazebo, and a documentation checkpoint commit/push; implementation remains deferred.
+Deployment clarification: real Pi operation via GitHub setup and SSH is the end goal. The user explicitly requested the same visualization_debug switch as sim, RViz without Gazebo, and a documentation checkpoint commit/push; implementation was authorized in the subsequent session; current evidence is recorded separately.
 
 Planning verification: check relative documentation links and whitespace after writing this plan and adding navigation. No build/GUI/serial/hardware check is newly claimed. Final reminder for the user and future sessions: **auto-calibration is deferred; measured calibration remains necessary before real driving.**

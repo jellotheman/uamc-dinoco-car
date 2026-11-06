@@ -2,7 +2,9 @@
 
 Start with the [project guide](guides/guide.md) to build, run and explore the simulation. Use the shorter [developer runbook](guides/runbook.md) for commands, physical-car prerequisites and recording/replay.
 
-Physical actuation and real sensor integration remain incomplete. Simulator results use provisional geometry and fake actuator readiness; they do not establish physical-car safety or competition qualification.
+The real-car serial adapter, launch and RViz2 profile are available with actuation disabled by default. Actual drivers, measured configuration and physical commissioning remain required. Simulator results do not establish physical-car readiness.
+
+- [Real-car deployment](guides/real-car.md): Pi clone/build/update, SSH, real.sh and a separate RViz viewer.
 
 ## Reference
 
@@ -11,13 +13,14 @@ Physical actuation and real sensor integration remain incomplete. Simulator resu
 - [Hardware research](reference/hardware-research.md): manufacturer sources, driver provenance and measurements still needed.
 - [Vehicle observations](reference/vehicle-observations.md): what the supplied images show and what they cannot establish.
 - [Embedded platform](../ros2_ws/src/Embedded_Platform/README.md): board identification, transport and bench integration; its firmware folder is a placeholder.
-- [Vehicle I/O](../ros2_ws/src/io/README.md): manual input and disabled/fake transport behavior.
+- [Vehicle I/O](../ros2_ws/src/io/README.md): manual input, calibrated serial backend and disabled/fake behavior.
 - [ROS module guides](../ros2_ws/src/README.md): package-by-package purpose and ROS 2 architecture.
 - [Simon Li simulation and visualization](reference/simonli-simulation-visualization.md): upstream simulator/dashboard research and applicability to UAMC.
 
 ## Development and evidence
 
-- [Real-car integration plan](development/real-car-integration-plan.md): self-contained future implementation scope, real.sh, serial backend, actual-sensor RViz2 and Terra/Medium worker batches.
+- [Real-car integration plan](development/real-car-integration-plan.md): implementation scope, contracts and Terra/Medium worker ownership; physical commissioning remains open.
+- [Real-car integration validation](development/real-car-integration-validation.md): current build, tests, runtime evidence and physical blockers.
 - [Scenario implementation](development/scenario-implementation.md): selected worlds, usage and current validation status.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
 - [Lane-detection implementation](development/lane-detection-implementation.md): current algorithm, interface, review and validation.

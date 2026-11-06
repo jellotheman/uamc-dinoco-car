@@ -81,45 +81,48 @@ latched. Watchdog limits and the provisional geometric and speed parameters
 must be measured and tuned before use on a car. `vehicle_io` fake status is
 simulation only and is not evidence of E-stop or actuator readiness.
 
-## Physical car: currently disabled
+## Physical car
 
-The [real-car plan](../development/real-car-integration-plan.md) targets GitHub
-clone/update and native build on the Pi, followed by `scripts/real.sh` from an
-SSH or local terminal. The planned helper defaults RViz2 on, accepts the same
-`visualization_debug:=true` diagnostics option as sim, and never runs Gazebo.
-Use its planned `rviz:=false` mode for plain SSH and a separate real-data viewer
-on the workstation. Pi setup/dependency commands and display/network details
-must be tested and documented during implementation. The helper does not exist
-yet; the following disabled launch remains the current behavior.
+See the [Pi deployment and commissioning guide](real-car.md) for initial setup,
+update, measured profiles, actual drivers and physical prerequisites.
 
-`ros2 launch uamc_bringup real.launch.py` starts a **disabled** transport;
-`mode:=manual` enables the joystick input but still cannot actuate hardware.
-Real camera, C1, BNO055, wheel feedback and embedded transport are not yet
-connected by this launch. No firmware is flashed or supplied. The [Dinoco interface research](../reference/dinoco-hardware-interface.md)
-records the teammate's candidate ESP32 serial commands; the ROS hardware
-adapter is still absent. Confirm the installed controller/firmware, steering and ESC wiring and
-neutral, real speed feedback, sensor mounting and the independently working
-cutoff before implementing and enabling hardware. See
-[embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md) and
-[hardware research](../reference/hardware-research.md). Stock
-chassis wiring is a reference, not a verification of this modified car.
+```bash
+# From project root on the Pi; external observation, output disabled:
+./scripts/real.sh rviz:=false visualization_debug:=true
+# In a graphical session, same stack with local RViz and no Gazebo:
+./scripts/real.sh visualization_debug:=true
+# On a sourced graphical workstation, viewer only:
+ros2 launch uamc_bringup real_view.launch.py
+```
 
-Calibrate the webcam with ROS camera calibration, record the actual camera
-intrinsics, distortion and frame, measure all sensor transforms and vehicle
-geometry, and set the corresponding parameters. Verify LiDAR scan coverage and
-IMU axes/timestamps. Establish a measured speed cap, sensor-to-actuator
-latency, and worst coast-down distance to configure an appropriate obstacle
-stop envelope. Bench tests require wheels lifted, a proven independent E-stop,
-and fused or current-limited power before any drive output is enabled.
+A complete local profile is selected with `hardware_config:=/absolute/path/vehicle.yaml`.
+No profile means no device opens or guessed model transforms. Actual camera,
+CameraInfo, scan, IMU, measured wheel odometry and `/hardware/status` must come
+from identified external drivers/monitor. Missing inputs remain unavailable.
+Serial output is an explicit commissioned opt-in; READY is only a link handshake.
+Do not bypass missing readiness, feedback or calibration. Use `rviz_frame:=base_link`
+for local observation without odometry. See [software validation and blockers](../development/real-car-integration-validation.md).
+Auto-calibration remains deferred.
 
 ## Record and replay
 
+In another terminal, use `./scripts/record.sh` from the project root **before
+arming/starting a run**. It records a uniquely named MCAP bag under
+`~/uamc-bags`, including raw sensors, TF/model, requested/final commands,
+independent hardware health, vehicle/safety status, diagnostics and action
+feedback/status. An explicit new output directory is optional; for simulation
+add `--sim` to use `/clock`. Stop the recorder with Ctrl+C after the stack has
+stopped so the bag is finalized. It is independent of the vehicle launch and
+never starts or arms it. The [recording and replay guide](real-car.md#record-a-run-and-replay-it)
+explains checks, clock selection, limitations and isolated visualization.
+
 ```bash
-# Use a local disk or the Pi SD card; never commit recordings.
-ros2 bag record -o ~/uamc-bags/run1 /camera/image_raw /camera/camera_info /scan /imu/data /odometry/wheel /odometry/filtered /perception/lane /perception/obstacle /drive/command /vehicle/status /tf /tf_static
-ros2 bag play ~/uamc-bags/run1 --clock
+./scripts/record.sh                         # real time, unique default output
+./scripts/record.sh --sim ~/uamc-bags/sim-01 # new directory, simulator clock
+ros2 bag info ~/uamc-bags/sim-01
 ```
 
-Stop any live nodes publishing the same topics before replay and use simulated
-time on consumers. The competition qualification still requires the team's
-physical-car video and technical document; record measured results separately.
+Recordings stay outside Git. A bag is a message record, not a rendered video
+or physical qualification evidence. Record the exact private hardware profile,
+calibration, operator and bench observations with the run; do not commit private
+configuration or recordings.

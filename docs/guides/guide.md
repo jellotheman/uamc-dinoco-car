@@ -1,10 +1,9 @@
 # Using and exploring the UAMC project
 
 This guide is for the current `v1` branch in the `Ubuntu-24.04` WSL
-distribution. It walks through the simulator first. The physical-car transport
-is **disabled and incomplete**: this software cannot yet drive the car or
-read its actual sensors. See [runbook.md](runbook.md) and
-[hardware-research.md](../reference/hardware-research.md) for what remains.
+distribution. It walks through the simulator first. The real-car profile now provides a serial adapter and RViz2 launch, with
+output disabled by default. Physical drivers and commissioning remain required;
+see the [Pi deployment guide](real-car.md) and [hardware research](../reference/hardware-research.md).
 
 ## 1. Open the correct project
 
@@ -59,7 +58,7 @@ so commands use names such as `uamc_bringup` and `uamc_control`. In particular:
   `safety_gate.py` selects and limits the request and publishes the final
   command. `bringup/config/ekf.yaml` configures local state estimation.
 - `bringup/launch/sim.launch.py` joins the simulator, perception, control and
-  localization nodes. `real.launch.py` is a motor-disabled starting point.
+  localization nodes. `real.launch.py` provides disabled observation and explicitly configured serial operation.
 - Each relevant package has a `test/` directory. Test files exercise parts of
   the implementation; generated test reports appear under `ros2_ws/build/`.
 
@@ -285,42 +284,18 @@ of the full car's behavior. The three simulator runs described in
 sampled odometry as well as logs. They were not continuous proof of lane
 clearance and did not test the physical E-stop or real stopping distance.
 
-## 8. Physical-car next steps
+## 8. Run on the physical car's Pi
 
-The deployment target is this repository cloned/built on the car's Raspberry Pi,
-with SSH used for its terminal. The [real-car integration plan](../development/real-car-integration-plan.md)
-requires tested Pi setup/update instructions and a future `scripts/real.sh`.
-That helper will open RViz2 on actual sensor data; `visualization_debug:=true`
-will enable lane/corridor diagnostics, while `rviz:=false` will support headless
-SSH and a separate workstation viewer. It will never launch Gazebo. A plain SSH
-session does not provide a graphical display. These commands are planned;
-`real.sh` and the real hardware adapter are not implemented yet.
+Follow the [real-car deployment guide](real-car.md) for GitHub clone/update,
+native Pi build, external sensor setup and commissioning prerequisites.
+From the project root, `./scripts/real.sh visualization_debug:=true` starts
+RViz2 and the real stack without Gazebo, with actuation disabled by default.
+Use `rviz:=false` for plain SSH; a sourced graphical workstation can run
+`ros2 launch uamc_bringup real_view.launch.py` to view the Pi's actual data.
+`rviz` selects the window and `visualization_debug` selects diagnostic topics,
+just as in sim. The viewer does not launch another vehicle stack.
 
-Read the [embedded-platform notes](../../ros2_ws/src/Embedded_Platform/README.md),
-[hardware research](../reference/hardware-research.md), and the runbook with the car available. Identify the board and its existing firmware,
-use the [Dinoco serial-interface findings](../reference/dinoco-hardware-interface.md) to check the installed firmware and command format,
-trace the servo, ESC, power and independent cutoff, find a genuine wheel-speed
-source, mount and calibrate the sensors, and perform the specified
-wheels-lifted checks. Do not assume the reference project's STM32 firmware or
-stock receiver wiring applies to this modified car. The physical competition
-video and technical design document remain team deliverables.
-
-
-## 9. If WSL reconnects or the windows disappear
-
-A reconnect of the VS Code WSL extension can mean the WSL VM restarted. This
-machine logged Windows Event 2004 (low virtual memory) near the observed
-resets. Free RAM and Windows committed memory are different readings; in Task
-Manager > Performance > Memory, inspect **Committed**, and add **Commit size**
-in Details to identify consumers. The helper refuses to start at 95% host
-commit use. It does not terminate any Windows applications or services.
-
-If the helper reports another simulation is running, return to its terminal
-and stop it with Ctrl+C. If its terminal is gone, inspect `ps -ef` before
-stopping the specific launch process; do not launch another copy or delete the
-lock file. For RViz, the supplied configuration explicitly enables displays
-and provides a close camera view. A blank window is not the expected view:
-check the Displays panel status and `/robot_description`, `/scan`, and TF.
-
-See [the incident and verification notes](../archive/launch-troubleshooting.md) for the
-evidence gathered, fixes, and limits of the investigation.
+Serial output needs explicit measured configuration and genuine hardware health;
+this repository does not supply the missing wheel/cutoff drivers or verify the
+installed firmware. See the [implementation validation](../development/real-car-integration-validation.md)
+for actual software evidence and hardware blockers. Auto-calibration is deferred.

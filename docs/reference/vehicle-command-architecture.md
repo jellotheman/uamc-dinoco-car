@@ -10,7 +10,7 @@ The installed program need not be rewritten or reflashed simply because the auto
 
 ## Deployment target
 
-The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [implementation plan](../development/real-car-integration-plan.md) specifies reproducible Pi setup/build/update instructions and the future `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These are planned behaviors, not currently implemented commands.
+The goal is the actual car running this GitHub repository on its Raspberry Pi, operated through SSH as needed. The [implementation plan](../development/real-car-integration-plan.md) specifies reproducible Pi setup/build/update instructions and the future `scripts/real.sh` entry point. It starts the real stack with RViz2 by default; `visualization_debug:=true` enables existing lane/corridor diagnostics and `rviz:=false` supports headless SSH with a separate workstation viewer. Gazebo is never launched by the real profile. These launch/helper behaviors are now implemented; see the [validation record](../development/real-car-integration-validation.md) for actual checks and unverified hardware prerequisites.
 
 ## One command contract, different backend outputs
 
@@ -74,7 +74,7 @@ Revisit ros2_control if joint-level controller reuse, multiple actuator systems,
 5. Integrate genuine wheel/IMU/status inputs required by the existing safety gate. Their physical sources may be separate sensor drivers or a dedicated cutoff monitor; they need not all come from the ESP32. The recorded host protocol supplies no usable continuous feedback. Do not fabricate `/odometry/wheel` from requested speed or publish fake readiness to get past arming checks.
 6. Test encoding, calibrated mapping and failure handling with a fake serial endpoint before physical output. On the car, verify the existing electrical/cutoff arrangement and perform the project's wheels-lifted checks, then measure low-speed stopping behavior. These are still required even if no firmware is changed.
 
-The [current vehicle I/O implementation](../../ros2_ws/src/io/uamc_io/vehicle_io.py) only actuates its fake sink and reports a fault for real/disabled modes. The [safety gate](../../ros2_ws/src/control/uamc_control/safety_gate.py) requires fresh actual wheel, IMU, obstacle and vehicle status inputs; autonomous mode also requires lane/path inputs. Implementing an encoder for outgoing serial lines alone does not complete that integration.
+The [vehicle I/O implementation](../../ros2_ws/src/io/uamc_io/vehicle_io.py) now has a calibrated serial backend behind explicit configuration and genuine health checks; disabled mode remains the default. The [safety gate](../../ros2_ws/src/control/uamc_control/safety_gate.py) requires fresh actual wheel, IMU, obstacle and vehicle status inputs; autonomous mode also requires lane/path inputs. Implementing an encoder for outgoing serial lines alone does not complete that integration.
 
 ## Automatic calibration scope
 
@@ -84,7 +84,7 @@ An offline calibration helper can fit steering-command versus measured angle and
 
 `ros2_ws/src/io` is the ROS-side adapter location. `ros2_ws/src/Embedded_Platform` is the home for firmware provenance, the hardware-interface record and bench/calibration guidance. It need not acquire new firmware source if the installed program is reused, but retain its README and records instead of emptying the directory. If the teammate supplies the actual sketch later, preserve it with its version/build information there as appropriate. `ros2_ws/src/sim` remains the simulator backend.
 
-Only research/documentation was performed here. No ros2_control packages were installed, no code path was changed, no serial device was opened and no physical firmware or actuator behavior was verified.
+The original research pass performed only research/documentation; the later implementation is tracked in the validation record. No ros2_control packages were installed, no code path was changed, no serial device was opened and no physical firmware or actuator behavior was verified.
 
 ## Deferred calibration automation
 
