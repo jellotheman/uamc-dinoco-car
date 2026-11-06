@@ -5,6 +5,14 @@ publishers. It never starts Gazebo. Software integration does not establish that
 this particular car is commissioned. See the [validation record](../development/real-car-integration-validation.md)
 for checks actually performed and remaining physical prerequisites.
 
+The [current commissioning checklist](../development/vehicle-commissioning-checklist.md)
+consolidates software and physical-car tasks. The teammate's latest `uamc_pi 2`
+already supplies working camera/C1 access, configured device settings and
+commissioning diagnostics to reuse. Here, external sensor interfaces mean those
+producers have not yet been integrated into this ROS stack. They do not mean
+there is no working hardware-access code. Its `check.py` steering/throttle modes
+actively command hardware; they are supervised tools, not passive health gates.
+
 ## Install and build on the Pi
 
 Target native **64-bit Ubuntu 24.04 and ROS 2 Jazzy**. This checkout was tested

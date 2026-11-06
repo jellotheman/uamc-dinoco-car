@@ -19,6 +19,8 @@ The real-car serial adapter, launch and RViz2 profile are available with actuati
 
 ## Development and evidence
 
+- [Vehicle commissioning checklist](development/vehicle-commissioning-checklist.md): current technical/plain-language checklist, upstream reuse, remote work and physical-car evidence.
+
 - [Real-car integration plan](development/real-car-integration-plan.md): implementation scope, contracts and Terra/Medium worker ownership; physical commissioning remains open.
 - [Real-car integration validation](development/real-car-integration-validation.md): current build, tests, runtime evidence and physical blockers.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
