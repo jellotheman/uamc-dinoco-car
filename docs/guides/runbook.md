@@ -42,7 +42,7 @@ Closing its RViz or Gazebo GUI also ends the session. A duplicate simulator
 launch is rejected while an existing session holds the OS lock.
 
 Optional launch arguments: `scenario:=practice` (default) or
-`scenario:=hairpin`, `rviz:=true`, `gui:=true`, `gz_extra_args:=-v4` for
+`scenario:=hairpin`, `rviz:=true`, `gui:=true`, `visualization_debug:=true`, `gz_extra_args:=-v4` for
 verbose Gazebo output, and `mode:=manual`. Two fresh headless hairpin runs
 completed both U-turns and the final obstacle stop; see the
 [technical record](../development/scenario-implementation.md) for evidence and
@@ -58,6 +58,19 @@ the actual controller. The simulator's stock combined-Twist steering cannot
 hold an arbitrary steering angle at zero speed; test stationary steering on
 the bench. Use independent Gazebo steering and wheel controllers if simulator
 stationary steering is required.
+
+Both scenarios use the shared RViz dashboard with `odom` fixed frame and
+saved Follow car and Overhead views. The raw camera display is available
+normally. Debug lane images and obstacle corridor markers are disabled by
+default; enable generation with `./scripts/sim.sh visualization_debug:=true`
+and optionally `gui:=true`. The lane diagnostic is bird's-eye, distinct from
+the raw camera. The panel displays authoritative `/safety/status`; a missing
+or stale heartbeat is UNKNOWN. Its Arm, Disarm and Reset buttons use safety
+services, Start sends an action goal, and Cancel affects only its own goal.
+External runs are shown but cannot be cancelled from the panel. See the
+[dashboard guide](../../ros2_ws/src/dashboard/README.md). The default
+`visualization_debug:=auto` preserves per-node `debug_enabled` settings from
+`params_file`; explicit true or false overrides both detectors.
 
 The safety gate is the sole publisher of `/drive/command`. It starts disarmed,
 requires fresh lane/path, scan-derived obstacle status, wheel feedback, IMU,

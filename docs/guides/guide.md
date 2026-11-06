@@ -127,7 +127,7 @@ courses now provide 45 cm of nominal clear width between the inner edges of
 the white markings (48.5 cm between marking centers). The car uses the
 [supplied chassis dimensions](../../ros2_ws/src/description/README.md); sensor
 mounts and dynamics still need measurement. Launch commands are unchanged. The
-hairpin RViz view shows local sensors and paths, not a full-course SDF map.
+shared RViz dashboard shows local sensors and paths, not a full-course SDF map.
 See the [latest minimum-width trials](../development/simulation-validation.md)
 and the
 [scenario record](../development/scenario-implementation.md) for measured
@@ -188,12 +188,33 @@ Gazebo controller.
 
 ## 5. Explore RViz2 and rqt
 
-In RViz2, use the Displays panel to enable or disable **Robot**, **Scan**,
-**Lane**, and **Plan**. The fixed frame is `base_link`, the rear-axle frame.
+Both scenarios load the shared dashboard with `odom` as the fixed frame.
+The raw camera and lane diagnostic images are stacked on the right, with
+controls on the left and the spatial view in the center.
+The Views panel offers **Follow car** and **Overhead** saved viewpoints. Use
+Displays to enable or disable **Robot**, **Scan**, **Lane**, **Plan**, estimated
+odometry history, raw camera, lane diagnostics and obstacle corridor. Estimated
+history is past odometry, not the planned path or simulator ground truth. Lane
+and Plan may overlap because the planner currently forwards the lane.
+
+The UAMC Dashboard panel shows the safety gate's authoritative status and
+requested, commanded and measured values. Missing or stale status is UNKNOWN.
+Arm, Disarm and Reset call the safety services; Start sends the Round 1 action
+and Cancel applies only to a goal started by this panel. An external run is
+visible but cannot be cancelled by the panel. Simulated I/O readiness is fake,
+not physical readiness. See the [dashboard guide](../../ros2_ws/src/dashboard/README.md).
+
+Raw camera is available by default. Lane diagnostics and obstacle corridor
+generation are off by default; to enable them for either scenario, start with
+`./scripts/sim.sh visualization_debug:=true` (add `gui:=true` for the
+Gazebo window). The lane diagnostic is a bird's-eye view, not the raw camera;
+an empty debug display when disabled is expected. The default
+`visualization_debug:=auto` preserves per-node `debug_enabled` settings from
+`params_file`; explicit true or false overrides both detectors.
+
 If a display shows a red error, expand it to read the message; a missing topic,
-transform, or incompatible QoS setting can prevent display. You can add an
-Image display and select `/camera/image_raw`; sensor streams may require
-Best Effort reliability. RViz shows live messages, not a recording of the car.
+transform, or incompatible QoS setting can prevent display. Sensor image
+streams may require Best Effort reliability. RViz shows live messages, not a recording of the car.
 
 Open another prepared terminal for rqt:
 

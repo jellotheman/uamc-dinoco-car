@@ -12,6 +12,7 @@ plan.
 
 - [Bringup](bringup/README.md): launch profiles and localization configuration.
 - [Control](control/README.md): planning, steering and the safety gate.
+- [Dashboard](dashboard/README.md): RViz safety status and controls.
 - [Description](description/README.md): vehicle model and sensor frames.
 - [Embedded platform](Embedded_Platform/README.md): controller integration and bench calibration.
 - [Interfaces](interfaces/README.md): shared messages and action.

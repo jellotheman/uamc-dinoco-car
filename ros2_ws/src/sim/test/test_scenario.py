@@ -107,3 +107,13 @@ def test_nested_named_parameters_are_accepted_but_wildcards_are_not(assets):
     override.write_text('/**:\n  ros__parameters:\n    max_speed: 0.2\n')
     with pytest.raises(ValueError):
         resolve_scenario(root, 'test', str(override))
+
+
+def test_both_scenarios_share_dashboard_but_keep_world_identity():
+    root = Path(__file__).resolve().parents[1]
+    practice = resolve_scenario(root, 'practice')
+    hairpin = resolve_scenario(root, 'hairpin')
+    assert practice.rviz_config == hairpin.rviz_config
+    assert Path(practice.rviz_config).name == 'dashboard.rviz'
+    assert practice.world != hairpin.world
+    assert practice.world_name != hairpin.world_name

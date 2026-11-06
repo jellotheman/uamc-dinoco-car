@@ -14,4 +14,9 @@ The `uamc_bringup` package contains launch files, rather than its own driving no
 - `real.launch.py` starts the stack with vehicle I/O disabled. It does not provide real sensor drivers or enable actuators.
 - Both profiles start the EKF and publish its filtered output on `/odometry/filtered`.
 
+The simulation launch accepts `visualization_debug:=true` to enable lane
+diagnostic images and obstacle corridor markers. The default `auto` preserves
+named-node `debug_enabled` tuning; without tuning, diagnostics are off. For the
+shared RViz dashboard, including safety controls, see [dashboard](../dashboard/README.md).
+
 From a built and sourced workspace, launch with `ros2 launch uamc_bringup sim.launch.py`; for options and setup see the [project guide](../../../docs/guides/guide.md). The real profile is not a working hardware integration; see [vehicle I/O](../io/README.md) and [embedded platform](../Embedded_Platform/README.md).

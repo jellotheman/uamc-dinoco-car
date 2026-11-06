@@ -15,6 +15,16 @@ from launch_ros.actions import Node
 from uamc_sim.scenario import resolve_scenario
 
 
+def debug_parameters(value):
+    # auto leaves named-node tuning intact; detector defaults remain disabled.
+    value = value.lower()
+    if value == 'auto':
+        return []
+    if value not in ('true', 'false'):
+        raise ValueError('visualization_debug must be auto, true or false')
+    return [{'debug_enabled': value == 'true'}]
+
+
 def start_bringup(context):
     sim_share = get_package_share_directory('uamc_sim')
     scenario = LaunchConfiguration('scenario').perform(context)
@@ -29,6 +39,7 @@ def start_bringup(context):
             'gz_extra_args': LaunchConfiguration('gz_extra_args'),
         }.items())
     common = {'use_sim_time': True}
+    debug = debug_parameters(LaunchConfiguration('visualization_debug').perform(context))
     mode = LaunchConfiguration('mode')
     manual = IfCondition(PythonExpression(["'", mode, "' == 'manual'"]))
     # Per-node named ROS YAML entries only; fixed simulation values are applied
@@ -40,8 +51,8 @@ def start_bringup(context):
         Node(package='joy', executable='joy_node', condition=manual, parameters=tuning + [common], output='screen'),
         Node(package='uamc_io', executable='manual_joy', condition=manual, parameters=tuning + [common], output='screen'),
         Node(package='uamc_io', executable='vehicle_io', parameters=tuning + [common, {'transport': 'fake'}], output='screen'),
-        Node(package='uamc_perception', executable='lane_detector', parameters=tuning + [common, {'ground_z': -0.045}], output='screen'),
-        Node(package='uamc_perception', executable='obstacle_detector', parameters=tuning + [common], output='screen'),
+        Node(package='uamc_perception', executable='lane_detector', parameters=tuning + [common] + debug + [{'ground_z': -0.045}], output='screen'),
+        Node(package='uamc_perception', executable='obstacle_detector', parameters=tuning + [common] + debug, output='screen'),
         Node(package='uamc_control', executable='lane_planner', parameters=tuning + [common], output='screen'),
         Node(package='uamc_control', executable='path_controller', parameters=tuning + [common], output='screen'),
         Node(package='robot_localization', executable='ekf_node', name='ekf_filter_node',
@@ -59,6 +70,8 @@ def generate_launch_description():
         DeclareLaunchArgument('params_file', default_value=''),
         DeclareLaunchArgument('mode', default_value='auto'),
         DeclareLaunchArgument('rviz', default_value='false'),
+        DeclareLaunchArgument('visualization_debug', default_value='auto',
+                             description='auto preserves per-node debug_enabled tuning; true/false overrides both detectors'),
         DeclareLaunchArgument('gui', default_value='false'),
         DeclareLaunchArgument('gz_extra_args', default_value=''),
         OpaqueFunction(function=start_bringup),

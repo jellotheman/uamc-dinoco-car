@@ -1,5 +1,5 @@
 world: worlds/hairpin.sdf
-rviz_config: config/hairpin.rviz
+rviz_config: config/dashboard.rviz
 spawn:
   x: 0.0
   y: 0.0

@@ -1,5 +1,5 @@
 world: worlds/practice.sdf
-rviz_config: config/practice.rviz
+rviz_config: config/dashboard.rviz
 spawn:
   x: 0.0
   y: 0.0
