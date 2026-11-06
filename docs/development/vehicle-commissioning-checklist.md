@@ -2,7 +2,7 @@
 
 UAMC v1 already implements the real serial adapter, RViz profile and recorder; software checks do not prove physical readiness. Keep output disabled until the physical prerequisites are verified. Unchecked items describe integration/vehicle evidence still to obtain; do not recreate the already implemented adapter, profile loader, viewer or recorder.
 
-Accepted teammate baseline: latest working folder **uamc_pi 2**, repo `iamepic24/dinoco-autonomous-car` main at `6ed648f34c6c3f156d5c497a07a52db418165e89`. Reuse/adapt its working OpenCV camera, C1 reader, ESP sender and diagnostics. Missing ROS drivers here does not mean these host tools do not exist. [Pinned source](https://github.com/iamepic24/dinoco-autonomous-car/tree/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/). Record owners, revisions, hardware, conditions and evidence locations. Keep private profiles/IDs/bags out of Git. Missing evidence is a no-go; do not waive freshness, feedback, calibration or readiness gates.
+Accepted teammate baseline: latest working folder **uamc_pi 2**, repo `iamepic24/dinoco-autonomous-car` main at `6ed648f34c6c3f156d5c497a07a52db418165e89`. Reuse/adapt its working OpenCV camera settings, C1 connection information, ESP sender and diagnostics. The optional C1 integration uses the vendor ROS driver to preserve full scans; its target-hardware validation remains open. Missing ROS drivers here does not mean these host tools do not exist. [Pinned source](https://github.com/iamepic24/dinoco-autonomous-car/tree/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/). Record owners, revisions, hardware, conditions and evidence locations. Keep private profiles/IDs/bags out of Git. Missing evidence is a no-go; do not waive freshness, feedback, calibration or readiness gates.
 
 ## Baseline and diagnostics
 
@@ -15,7 +15,8 @@ Accepted teammate baseline: latest working folder **uamc_pi 2**, repo `iamepic24
 
 ## Sensors and gates
 
-- [ ] **Programmer:** Adapt existing OpenCV camera and C1 reader behind UAMC interfaces. Preserve working settings; expose validity, source/receipt timestamps and errors; one owner per device/topic. **Evidence:** ownership map, samples, loss/malformed/recovery logs.
+- [x] **Software implementation:** Added opt-in OpenCV camera Image/CameraInfo publication and managed launch of the pinned official Slamtec C1 ROS node. Default remains external/no device opens. Camera tests use fake capture; this is not hardware commissioning. See [integration evidence](sensor-driver-integration.md).
+- [ ] **Programmer + physical car:** Verify the integrated OpenCV camera and official C1 node on the Pi behind UAMC interfaces. Preserve working settings; expose validity, source/receipt timestamps and errors; one owner per device/topic. **Evidence:** ownership map, samples, loss/malformed/recovery logs.
 - [ ] **Programmer:** Reuse upstream `run.py` health-check behavior: camera age <0.3s, LiDAR age <0.5s, lane-loss duration 0.4s, commands at 25Hz. Map the checks into existing UAMC contracts; do not blindly copy thresholds or duplicate the gate. Keep current safety limits unless a justified change is separately reviewed. Do not fabricate duplicate health or equate serial READY with sensor readiness. **Evidence:** stale camera/LiDAR/lane-loss tests inhibit motion.
 - [ ] **Programmer:** Keep diagnostics, distinguish requested vs negotiated settings, raw vs derived validity, link vs health. **Evidence:** operator view and recording.
 - [ ] **Physical car:** Verify camera, C1 coverage/orientation, occlusion, vibration, cabling and dropouts at rest and approved low speed. **Evidence:** dated samples, mount measures/photos, rates and failure response.

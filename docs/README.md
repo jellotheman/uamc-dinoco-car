@@ -20,6 +20,8 @@ The real-car serial adapter, launch and RViz2 profile are available with actuati
 ## Development and evidence
 
 - [Vehicle commissioning checklist](development/vehicle-commissioning-checklist.md): current technical/plain-language checklist, upstream reuse, remote work and physical-car evidence.
+- [Sensor-driver integration](development/sensor-driver-integration.md): optional camera/C1 publishers, source pins, software evidence and physical limits.
+- [Sensor reuse research](development/sensor-driver-reuse.md): teammate acquisition settings, parser limits and vendor-driver rationale.
 - [Simulation validation](development/simulation-validation.md): dated tests and their limitations.
 
 ## Archive

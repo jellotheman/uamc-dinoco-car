@@ -1,0 +1,39 @@
+# Dinoco sensor-driver reuse research
+
+Checked 2026-11-06 against `iamepic24/dinoco-autonomous-car` `main`. The accepted checklist revision [`6ed648f`](https://github.com/iamepic24/dinoco-autonomous-car/commit/6ed648f34c6c3f156d5c497a07a52db418165e89) is still the remote `main` tip; a fresh clone had the same HEAD, so there is no upstream drift as of this check. This report covers `uamc_pi 2` camera and C1 LiDAR acquisition, not a physical-car test.
+
+## Recommendation
+
+The resulting optional implementation and build/test evidence are recorded in
+[sensor-driver integration](sensor-driver-integration.md); hardware validation
+remains open.
+
+Evaluate Slamtec's ROS 2 [`sllidar_ros2`](https://github.com/Slamtec/sllidar_ros2) for C1 instead of carrying the Dinoco byte parser as a production ROS driver. Its README documents a C1 launch, but its latest `main` commit is dated 2024-06-17 and its package description still lists only A1/A2/A3/S1. Evidence establishes vendor origin and C1 launch files, not active maintenance or Jazzy validation. Pin a revision and confirm build, baud, scan convention, frame and operation on the target. If it fails, wrap the upstream reader in an isolated ROS node and preserve the limitations below. For the webcam, a small ROS image acquisition node can retain the upstream OpenCV/V4L2 settings while publishing images; the upstream application is a standalone controller, not a sensor-driver API or ROS component ([`run.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py#L21-L52), [main loop](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py#L141-L241)).
+
+The vendor driver clone checked for this note has `sllidar_ros2` version 1.0.1, dependencies `rclcpp`, `std_srvs`, and `sensor_msgs`, C1 launch files, and package description that omits C1. Its `main` head is [`34300099`](https://github.com/Slamtec/sllidar_ros2/commit/34300099fadfc772965962dec837bf436706188f) (2024-06-17). The README's C1 launch is evidence to evaluate, not proof of current Jazzy support.
+
+Dinoco has no root/folder license file, dependency manifest, ROS metadata, or packaging declaration. Its code reuse terms are not established by the repository; resolve them with its owner before copying. Slamtec's ROS 2 driver advertises BSD-2-Clause; its linked SDK has separate SDK/demo licensing details, so review the exact code included ([driver](https://github.com/Slamtec/sllidar_ros2), [SDK](https://github.com/Slamtec/rplidar_sdk)).
+
+## What the Pi code does
+
+The camera opens V4L2 index 0, requests MJPEG 1280x720 at 30 FPS and a one-frame buffer, then resizes the newest frame to 426x240. Successful frames receive `time.monotonic()` stamps; the control loop treats frames as fresh for 0.3 s ([camera/config](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py#L21-L52), [`config.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/config.py#L25-L32)). `VideoCapture.set` return values and negotiated format/FPS are not checked; timestamps are host receipt times, not exposure timestamps. Keep these as initial acquisition candidates, not verified format or calibration. Imports show OpenCV and NumPy for perception/sign processing, PySerial for LiDAR/ESP links, and optional Tesseract OCR ([`lane.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lane.py), [`sign.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/sign.py), [`lidar_c1.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lidar_c1.py)).
+
+The C1 reader uses PySerial at 460800 baud, sends `A5 25` stop then `A5 20` scan, and searches for the seven-byte standard scan descriptor `A5 5A 05 00 00 40 81`. It parses five-byte standard nodes: start/inverse flags, angle check bit, quality, Q6 angle in degrees, and distance word divided by 4000 to metres. It slides one byte when node flags or angle range fail, carrying trailing incomplete bytes between reads ([parser/start](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lidar_c1.py#L10-L33), [serial setup/grouping](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lidar_c1.py#L50-L97)).
+
+Only positive-quality, nonzero-distance nodes are retained. At a start marker, a point set is accepted only if it has more than 50 points. A completed set updates obstacle distance and host monotonic scan-completion time; freshness is age < 0.5 s. There is no sensor hardware timestamp, per-scan checksum, count/coverage validation, ROS header, or lock around shared scan state. An undersized scan is not explicitly rejected as a fault: points can accumulate across start markers until the threshold is met. These are limitations of this parser, not claims about Slamtec's driver.
+
+`nearest_in_corridor` projects polar values using configured `LIDAR_FORWARD_DEG=0`, keeps forward points within a 0.15 m half-width corridor and at least 0.12 m range, then returns the third-nearest forward distance (or `None` with fewer than three points). It is an obstacle heuristic, not a `LaserScan`. The angle zero direction, rotation sign, coverage and sensor-to-car transform are not established on hardware; `LIDAR_TO_FRONT_M=0.08` is explicitly photo-estimated ([config](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/config.py#L61-L72)).
+
+## ROS-facing semantics and open evidence
+
+Publish camera frames as `sensor_msgs/Image` with encoding and `frame_id` matching negotiated output and measured optical frame. Use ROS acquisition/publication time unless the camera provides a trustworthy device timestamp; do not label monotonic receipt time as exposure time. For LiDAR, use the driver's `sensor_msgs/LaserScan` and scan timestamp, then verify `angle_min`, `angle_max`, `angle_increment`, ranges in metres, range limits, and frame orientation against C1 observations and ROS coordinates. Measure TF translation/rotation. Freshness checks should use header age in the selected clock domain, reject invalid/non-finite ranges by contract, and separate acquisition health from obstacle classification.
+
+Source review cannot establish the Pi camera/device, negotiated camera settings, camera intrinsics/distortion, C1 serial identity/firmware, achieved scan rate/coverage, installed unit's exact angle zero and sign, mounting pose, actual timing, detection performance, or stopping distance. It also cannot establish legal permission to copy Dinoco code without a license. Resolve through owner confirmation, target build and sensor-only captures, calibration, frame checks, and controlled commissioning. No hardware was accessed for this research.
+
+## Sources and method
+
+- [Pinned `uamc_pi 2` tree](https://github.com/iamepic24/dinoco-autonomous-car/tree/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/)
+- [`run.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/run.py), [`config.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/config.py), [`lidar_c1.py`](https://github.com/iamepic24/dinoco-autonomous-car/blob/6ed648f34c6c3f156d5c497a07a52db418165e89/uamc_pi%202/lidar_c1.py)
+- Slamtec [ROS 2 driver](https://github.com/Slamtec/sllidar_ros2) and [SDK](https://github.com/Slamtec/rplidar_sdk).
+
+Reviewed by cloning upstream `main` and reading these sources and repository contents. No sensor or vehicle hardware commands were run.
