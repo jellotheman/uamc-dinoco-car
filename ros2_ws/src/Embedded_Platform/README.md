@@ -9,7 +9,7 @@ Autonomous controller or manual input
              |
      ROS safety gate (/drive/command)
              |
-     Pi-side uamc_io hardware adapter [not yet implemented]
+     Pi-side uamc_io calibrated serial adapter [disabled by default]
              |  candidate USB serial: 115200 baud, S,steer,throttle + LF
   vehicle controller [existing firmware or later verified firmware]
        | steering          | ESC              | measured wheel speed
@@ -20,7 +20,7 @@ Autonomous controller or manual input
 
 The ROS safety gate is the only publisher of `/drive/command`, in m/s and radians. The adapter must report actual controller readiness, E-stop and fault status on `/vehicle/status` and actual measured motion as `/odometry/wheel` when available. Sensor sources and their timestamps remain independent; controller commands are not wheel feedback. Camera, LiDAR and IMU connection paths must be based on the physical wiring.
 
-The current [uamc_io package](../io/README.md) provides a fake transport for tests; its default disabled mode and its real placeholder both fail closed. A fake ready status and fake applied command are not evidence of hardware readiness. Start the real profile only in its motor-disabled configuration until the real transport and physical safety path have been verified.
+The current [uamc_io package](../io/README.md) provides a calibrated serial backend, disabled mode and a simulation-only fake transport. Serial mode requires explicit measured configuration and fresh genuine `/hardware/status`; a link handshake alone never establishes readiness. A fake ready status and fake applied command are not evidence of hardware readiness. Start the real profile only in its motor-disabled configuration until the physical transport and safety path have been verified.
 
 ## Existing teammate interface
 
@@ -36,7 +36,7 @@ Retain the firmware already installed on the vehicle if its command interpretati
 
 Keep this directory's protocol, provenance and calibration documentation. It can contain no firmware implementation while the existing firmware is maintained elsewhere; record that source location/version and recovery procedure when supplied. A known sender format alone does not verify receiver behavior. Confirm real wheel-speed and status sources, which can be separate from the ESP32, before satisfying the safety gate's input requirements.
 
-Keep `/drive/command` as the shared `AckermannDriveStamped` command in m/s and radians for both simulation and hardware. Translate only at the output boundary: the existing simulator adapter creates a velocity/yaw-rate command; the proposed hardware adapter creates calibrated normalized serial fields. The [architecture research](../../../docs/reference/vehicle-command-architecture.md) explains the ROS conventions, current zero-speed steering limitation, and why a small adapter fits the current car better than an immediate ros2_control migration.
+Keep `/drive/command` as the shared `AckermannDriveStamped` command in m/s and radians for both simulation and hardware. Translate only at the output boundary: the existing simulator adapter creates a velocity/yaw-rate command; the hardware adapter creates calibrated normalized serial fields. The [architecture research](../../../docs/reference/vehicle-command-architecture.md) explains the ROS conventions, current zero-speed steering limitation, and why a small adapter fits the current car better than an immediate ros2_control migration.
 
 ## Identify the vehicle first
 

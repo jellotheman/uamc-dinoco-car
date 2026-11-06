@@ -1,21 +1,50 @@
 # Vehicle I/O
 
-Vehicle I/O is the boundary between driving decisions and a vehicle controller, and between a joystick and the manual driving path. It converts inputs into the ROS messages used by the rest of the system; the physical controller connection is not implemented yet.
+`uamc_io` connects the safety gate to vehicle output and provides manual joystick input. The default transport is disabled. Fake mode is a test sink and does not establish physical readiness or measured motion. Real serial support is software only: the installed firmware, independent cutoff/status source, measured actuator calibration, wheel feedback and vehicle behavior still require commissioning. Never use a simulated status to arm a real vehicle.
 
-## ROS 2 architecture
+## Real serial boundary
 
-`uamc_io` supplies two nodes. `vehicle_io` subscribes to the safety gate's `/drive/command` and publishes `/vehicle/status`; fake mode also publishes `/io/fake_applied_command` for testing. `manual_joy` turns `/joy` into `/drive/manual` and `/manual/enable`, which the [control safety gate](../control/README.md) evaluates in manual mode. The [embedded platform](../Embedded_Platform/README.md) describes the intended controller boundary and remaining bench work.
+The real adapter consumes the gate's `/drive/command` in m/s and positive-left radians. It subscribes to a separate genuine `/hardware/status` (`VehicleStatus`, reliable), combines its source and receipt freshness with link state, and publishes `/vehicle/status`. The monitor producer is not included. Serial open and an exact `READY\n` handshake establish link state only; they do not establish hardware health. No odometry is produced from commands.
 
-## Shared command and planned hardware adapter
+Select `transport=real` only with explicit `serial_device`, `serial_baud=115200`, `calibration_file`, `handshake_timeout`, `write_timeout`, `command_timeout`, `health_timeout`, `max_source_age`, `future_tolerance`, `max_speed` and `max_steer`. The real launch profile validates these separately. The handshake, write, command, health, source-age and future-tolerance maximums are respectively 30, 0.5, 5, 5, 5 and 1 seconds; choose watchdogs appropriate to the measured hardware. The selected port is opened exclusively where supported; there is no port fallback.
 
-Both simulation and hardware should consume the same final `/drive/command` (`AckermannDriveStamped`, speed in m/s and virtual steering angle in radians, positive-left). The existing [simulator adapter](../sim/README.md) converts it into Gazebo velocity/yaw rate. The future serial backend here should instead convert it into calibrated normalized `S,steer,throttle` lines for the preserved controller firmware. Steering polarity and endpoints, speed-to-throttle behavior, command freshness and serial faults belong at that boundary; a throttle command is not measured wheel odometry.
+A new session sends calibrated neutral after handshake and requires a fresh independent health sample and a fresh zero-speed, zero-steering command before motion. Invalid, replayed or expired commands and health loss invalidate authority; a new fresh neutral command is required after health returns. A command fault is reported until that neutral requalification. Link failure does not reconnect automatically; restart and requalify. Status can report link and independent health ready while disarmed, without requiring a nonzero command. The safety gate retains its separate reset/arm semantics.
 
-For the current single-car integration, prefer this small ROS adapter over migrating both backends to ros2_control. Reassess when controller/joint reuse or richer measured actuator interfaces justify that work. See the [sourced architecture recommendation](../../../docs/reference/vehicle-command-architecture.md). This is a plan; real transport remains disabled.
+Frames are ASCII `S,steer,throttle\n` with three decimals. The sender does not interpret unknown firmware telemetry. A worker uses bounded serial read/write timeouts and drops expired pending commands; it never refreshes a stored motion command. An already in-flight write can finish during invalidation, after which a neutral attempt is queued. A blocked or disconnected device, process death, or cable failure can prevent neutral delivery. A verified local controller watchdog and independent cutoff are therefore essential; a serial packet is not evidence of physical standstill. This implementation does not establish a physical stop-time guarantee.
 
-## Current behavior
+## Measured calibration
 
-`ros2 run uamc_io vehicle_io` defaults to disabled: it reports a fault and never touches hardware. `transport:=fake` is a test sink, not hardware or measured feedback. Its bounded output on `/io/fake_applied_command` goes neutral on command timeout. `transport:=real` also fails closed: no firmware protocol, PWM output, E-stop, physical feedback or wiring is assumed. The [Dinoco interface research](../../../docs/reference/dinoco-hardware-interface.md) now supplies a candidate 115200-baud USB serial sender using normalized `S,steer,throttle` lines. It does not implement this ROS transport. Obtain the installed firmware, board/ESC identity, measured speed/steering mappings, wheel-speed source and bench results before enabling real actuation. A ROS adapter must convert m/s and radians, check source freshness and actual controller health, and preserve the safety gate's ownership of `/drive/command`; the upstream `READY` substring and discarded serial messages do not establish E-stop status or measured feedback. Never use fake readiness to arm a real vehicle.
+Keep the actual file outside Git. `load_calibration(path)` accepts a strict version 1 YAML mapping with these exact keys:
 
-`ros2 run uamc_io manual_joy` consumes `/joy`, publishes `/drive/manual` and `/manual/enable`, and is intended only for a separately selected manual profile. Axis and button indices, limits, neutral tolerance and timeout are parameters. Reverse is off by default. At startup and after disconnect the joystick must be seen with both axes neutral and deadman released, followed by a fresh deadman press while still neutral. A released button, invalid input or timeout disables control. Joystick messages must carry a nonzero ROS-clock timestamp no older than `max_source_age` (default 0.3 s) and no more than `future_tolerance` (default 0.05 s) in the future. Invalid or stale timestamps reset the deadman; valid commands preserve their source timestamp. The separate disconnect watchdog uses steady time. Start a separate `joy_node`; verify the device's actual axis polarity and neutral values with the wheels lifted.
+```yaml
+version: 1
+provenance:
+  board: "<measured board identity>"
+  firmware: "<installed firmware identity>"
+  esc: "<ESC identity>"
+  servo: "<servo identity>"
+  measured_on: "<measurement date>"
+  method: "<measurement method>"
+  conditions: "<loaded setup, battery and surface conditions>"
+  reference: "<measurement record>"
+steering:
+  deadband_rad: <measured nonnegative angle>
+  samples:
+    - [<negative measured radians>, <normalized output>]
+    - [0, <measured center output>]
+    - [<positive measured radians>, <normalized output>]
+throttle:
+  deadband_mps: <measured nonnegative speed>
+  samples:
+    - [0, <measured neutral output>]
+    - [<minimum measured moving speed>, <normalized output>]
+    - [<higher measured speed>, <normalized output>]
+```
 
-The real vehicle requires an independent E-stop, power protection, physical wheel-speed feedback, calibration and bench verification. No synthetic `/odometry/wheel` is published.
+The above is intentionally not a usable file. Values and provenance must come from supervised measurements, not simulator defaults. Sample inputs must be strictly increasing and outputs strictly monotonic, finite and within [-1, 1]. Steering supports asymmetric travel, either output polarity and a measured center. Caps must fit both measured steering directions and include at least the minimum measured moving speed. Reverse and extrapolation are rejected. Zero speed uses measured neutral; positive speed below the first moving sample also uses neutral, with the reason reported, rather than inventing crawl behavior. The tables are open-loop feedforward, not speed regulation or wheel feedback. Automatic calibration is not implemented.
+
+## Fake and manual modes
+
+`transport=fake` publishes bounded output on `/io/fake_applied_command` and neutralizes on timeout. It never drives hardware. `manual_joy` consumes `/joy`, publishes `/drive/manual` and `/manual/enable`, and is intended for a separately selected manual profile. It requires a fresh nonzero timestamp, observed neutral/released deadman, and a new neutral deadman press; timeout or invalid input resets eligibility. Reverse is off by default. Verify actual joystick polarity with wheels lifted.
+
+See the [embedded platform](../Embedded_Platform/README.md), [interface research](../../../docs/reference/dinoco-hardware-interface.md) and [integration plan](../../../docs/development/real-car-integration-plan.md) for missing firmware evidence, wiring and supervised physical checks.
