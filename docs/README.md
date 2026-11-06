@@ -22,6 +22,9 @@ Physical actuation and real sensor integration remain incomplete. Simulator resu
 
 ## Archive
 
+- [RViz dashboard implementation plan](archive/rviz-dashboard-implementation-plan.md): completed scope and agent ownership.
+- [RViz dashboard implementation checks](archive/rviz-dashboard-validation.md): dated build, test and GUI observations.
+
 - [Lane-detection comparison](archive/lane-detection-comparison.md): pre-upgrade UAMC and Simon Li AD snapshot, superseded by the current implementation record.
 - [Documentation audit](archive/documentation-audit.md): historical document organization decisions from 2026-11-05.
 - [Round 1 implementation plan](archive/ROUND1_PLAN.md): original specification and acceptance targets. It records intended scope; current implementation and validation are described in the guide and evidence files.

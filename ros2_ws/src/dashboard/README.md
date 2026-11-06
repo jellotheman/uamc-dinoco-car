@@ -4,7 +4,7 @@ Add the UAMC Dashboard panel in RViz. It reads the authoritative safety heartbea
 
 Arm, disarm and reset use the existing safety services. Start sends a Round 1 action goal; Cancel applies only to a goal started by this panel. An external run is visible through safety status but cannot be cancelled here. A timed-out start is treated as uncertain until its late response arrives, so it cannot be blindly retried. Service and action responses do not replace the safety status. Image and spatial displays are standard RViz displays.
 
-Raw and lane debug image receipt ages are shown using steady time. RViz Image displays can retain their last frame: check these indicators for missing or stale streams. The lane diagnostic is a bird's-eye view, not a raw calibrated camera image.
+Raw and lane debug image liveness uses steady receipt time, source timestamp advancement and ROS-time freshness. RViz Image displays can retain their last frame: check these indicators for missing or stale streams. The lane diagnostic is a bird's-eye view, not a raw calibrated camera image.
 
 The shared simulation configuration docks Raw camera above Lane diagnostics on the right (about 420 pixels wide each), leaving spatial inspection in the center and controls on the left. Saved Follow car and Overhead views work across both scenarios. Resizing and saving a personal RViz configuration retains your preferred dock sizes.
 
