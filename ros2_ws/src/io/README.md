@@ -48,3 +48,22 @@ The above is intentionally not a usable file. Values and provenance must come fr
 `transport=fake` publishes bounded output on `/io/fake_applied_command` and neutralizes on timeout. It never drives hardware. `manual_joy` consumes `/joy`, publishes `/drive/manual` and `/manual/enable`, and is intended for a separately selected manual profile. It requires a fresh nonzero timestamp, observed neutral/released deadman, and a new neutral deadman press; timeout or invalid input resets eligibility. Reverse is off by default. Verify actual joystick polarity with wheels lifted.
 
 See the [embedded platform](../Embedded_Platform/README.md), [interface research](../../../docs/reference/dinoco-hardware-interface.md) and [integration plan](../../../docs/archive/real-car-integration-plan.md) for missing firmware evidence, wiring and supervised physical checks.
+
+## Physical camera acquisition
+
+The optional `camera` executable (`real_camera`) uses the working teammate's
+OpenCV/V4L2 acquisition settings as the starting point. It is selected only by
+an explicit `sources.camera: opencv` private profile; no default device/index is
+opened. It publishes sensor-data-QoS BGR8 `/camera/image_raw` and matching
+`/camera/camera_info` only when measured standard ROS calibration is supplied.
+No calibration means raw-only observation, without invented intrinsics.
+
+The profile owns the stable `/dev/v4l/by-*` path, dimensions, requested FPS,
+MJPG format, optical frame, optional calibration and bounded startup/frame/queue
+age limits. Parameters are fixed for the session. Resolution/format mismatch,
+read failure and timeouts fail the process; no stale-frame replay or reconnect.
+Timestamps mark host read completion, not exposure. The newest-frame worker
+keeps executor/shutdown responsive; an OS/OpenCV read ignoring cancellation may
+remain blocked until process exit. Device ownership and actual buffering/rates
+must be verified on the Pi. No health, motion feedback, TF or drive commands are
+fabricated. See the [sensor deployment instructions](../../../docs/guides/real-car.md#select-the-real-camera-and-c1-publishers).
